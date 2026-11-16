@@ -1,4 +1,5 @@
 import { isAdminRequest } from "../../../lib/admin";
+import { isOperatorRequest } from "../../../lib/operator";
 import { isPublicSite } from "../../../lib/queries";
 import { openShot, siteCacheTag } from "../../../lib/shots";
 
@@ -9,7 +10,7 @@ const notFound = () => new Response("Not found", { status: 404 });
 // Streams a captured WebP (lib/shots.js: private Blob, or SQRAP_DATA_DIR/shots
 // locally). The first segment is the site id, so images of sites that are not
 // public (unjudged, rejected, opted out) are not served either, except to the
-// local admin.
+// local admin and the operator API's token (lib/operator.js).
 //
 // Public images are cached for a year and tagged with the site, so
 // purgeSiteShots (lib/shots.js) can drop them from the CDN the moment the site
@@ -19,7 +20,7 @@ export async function GET(request, { params }) {
   if (!parts.length || parts.some((p) => !p || p === "." || p === ".." || /[\\/\0]/.test(p))) return notFound();
   if (!parts[parts.length - 1].endsWith(".webp")) return notFound();
   const isPublic = await isPublicSite(parts[0]);
-  if (!isPublic && !isAdminRequest(request.headers)) return notFound();
+  if (!isPublic && !isAdminRequest(request.headers) && !isOperatorRequest(request.headers)) return notFound();
 
   const shot = await openShot(parts.join("/"));
   if (!shot) return notFound();

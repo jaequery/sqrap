@@ -454,6 +454,31 @@ a hosted deployment; the guard is the only protection, there are no accounts.
 | `POST /api/admin/seeds` | `{ urls }`, one per line, added as `discovered` |
 | `GET/PATCH /api/admin/optouts` | removal requests / `{ domain, status: "approved" \| "dismissed" }` |
 
+## Operator API (add sites remotely)
+
+For adding sites from a machine without `DATABASE_URL` (a cloud agent, a
+script), the deployment answers two routes to whoever sends
+`Authorization: Bearer $SQRAP_INGEST_TOKEN`. Set the token (at least 32
+random characters, e.g. `openssl rand -hex 32`) as a sensitive env var; without
+it, or with a wrong token, the routes and private shots answer a plain 404.
+Treat the token like a database password: it can add sites and read every
+site's pipeline state, rejected ones included.
+
+| Route | Does |
+| --- | --- |
+| `POST /api/operator/sites` | `{ urls: [..] }` (or one per line), at most 100, JSON only. Each is added as `discovered`, like `npm run seed`; the result per URL is `inserted`, `known` (already a site, any status) or why it was refused (opted out, not a site). Cron then captures and judges them. |
+| `GET /api/operator/sites?domains=a.com,b.com` | per domain, at most 100: `site` (`status`, `quality`, judge `reasons` and `scores`, `captureProblem`, `lastError`, …) or `null`, `optout`, and `home` screens with `/shots/…` URLs, which serve private (unjudged, rejected) shots to the same token |
+
+```sh
+curl -X POST https://www.sqrap.com/api/operator/sites -H "Authorization: Bearer $SQRAP_INGEST_TOKEN" \
+  -H "Content-Type: application/json" -d '{"urls":["https://example.com"]}'
+curl "https://www.sqrap.com/api/operator/sites?domains=example.com" -H "Authorization: Bearer $SQRAP_INGEST_TOKEN"
+```
+
+Cron takes about 6 sites per 30-minute run (`RUN.limit` in
+`app/api/cron/pipeline/route.js`), so a large batch drains over hours; it does
+not need to be split, the queue only grows.
+
 ## Removal requests
 
 "Request removal" in the About dialog posts `{ domain, email, reason }` to
@@ -758,6 +783,7 @@ after verifying the sqrap.com domain.
 - `pipeline/judge/`: the Claude vision judge, tagger and styler (rubric, image prep, output schema, style calibration set); `scripts/judge.js` and `scripts/style-calibration.js` are its CLIs
 - `pipeline/run.js`: the orchestrator (claims, resume, AI budget, logging); `scripts/pipeline.js` and `scripts/pipeline-status.js` are its CLIs
 - `app/admin/`, `app/api/admin/**`: the local admin; `lib/admin.js` (loopback + env guard), `lib/admin-data.js` (its queries and actions), `lib/jobs.js` (in-process job queue)
+- `app/api/operator/**`, `lib/operator.js`: the operator API (Bearer `SQRAP_INGEST_TOKEN`, else 404) for adding sites and reading their pipeline state remotely; it reuses `lib/admin-data.js`
 - `app/api/removal/route.js`: public removal requests
 - `app/terms/page.jsx`: the terms for agents and API use
 - `app/mcp/route.js`, `lib/agent-mcp.js`, `app/agents/`, `skills/sqrap/`, `app/llms.txt/route.js`, `server.json`: the MCP server, its setup page, the Claude Code skill, llms.txt and the MCP Registry entry (see MCP server)

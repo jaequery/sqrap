@@ -160,6 +160,7 @@ first pages.
 | Dark Design | working, one page lists every site, cards link straight to the site, categories mapped to industry, sponsored cards skipped |
 | I/O 3000 | working, paged with /page/<n>/ newest first, cards link straight to the site |
 | Responsive Web Design JP | working, paged with /page/<n> newest first, cards link straight to the site |
+| Ikesai | working, paged with ?p=<n> newest first, cards link straight to the site |
 | Godly | not adapted: redirects to recent.design, a client-rendered app |
 | The FWA | not adapted: client-rendered |
 | Land-book, Lapa Ninja, Web Design Inspiration, Saaspo, Maxibestof | not adapted: 403 behind a bot challenge |

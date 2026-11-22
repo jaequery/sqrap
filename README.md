@@ -86,7 +86,7 @@ runs at most `--max-queries` (default 30) queries per run.
 `--limit` caps the new sites a run adds. Sites already in the library do not
 count toward it, so each run reads past the gallery entries earlier runs took,
 up to ten times the limit in candidates. Refero, Site of Sites, Details Inspo, SiteSee
-Landing Gallery, A1 Gallery, Landings, Webinspoo, Wall of Portfolios, Gallereee, Mosaic and the Gatsby showcase are read from their sitemaps, and they, Admire the Web,
+Landing Gallery, A1 Gallery, Landings, Webinspoo, Wall of Portfolios, Gallereee, Mosaic, SaaS UI and the Gatsby showcase are read from their sitemaps, and they, Admire the Web,
 Typewolf, SaaS Pages, Orpetron, Unmatched Style, See*Saw and Killer Portfolio skip the detail pages already stored
 as a site's source.
 
@@ -156,6 +156,7 @@ first pages.
 | Awwwards (Honorable Mentions) | working, same card markup as Sites of the Day |
 | Wall of Portfolios | working, read from its sitemap newest first, one portfolio page fetched per new site, every site tagged Agency & Portfolio |
 | Mosaic | working, every category page its sitemap lists, cards link straight to the site, category label mapped to industry |
+| SaaS UI | working, read from its sitemap newest first, one app page fetched per new site, category mapped to industry, falling back to SaaS |
 | Osmo showcase | working, one page of about 100 sites, no detail page fetched |
 | Made with Wagtail | working, paged with /page/<n> newest first, cards link straight to the site |
 | Dark Design | working, one page lists every site, cards link straight to the site, categories mapped to industry, sponsored cards skipped |
@@ -213,6 +214,7 @@ first pages.
 | S5-Style, 81-web.com, SANKOU! | not adapted: no outbound site links in the listings or RSS feed; client-rendered; mostly recruiting subpages |
 | GDWEB, Webzooo, Bookma!, The Whimsical Web, A Fresh Website, Good Cart | not adapted: robots.txt disallows every crawler; now a reading app; a small webring of personal pages; behind Vercel's bot checkpoint |
 | Minimal Sites, LP-web, Lately, design.fish, Inspiration Supply | not adapted: dormant since about 2011; campaign landing pages deep inside corporate sites; interaction clips on X, not sites; no site links in the served HTML |
+| Awwwards (Developer Award, Sites of the Month), landingpage.fyi, CTA Examples | not adapted: nearly every entry is already a Site of the Day; affiliate tool links and CTA section clips, not a list of sites |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

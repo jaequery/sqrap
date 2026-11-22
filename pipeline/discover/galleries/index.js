@@ -48,7 +48,8 @@
 // Drupal case studies (robots.txt asks a 10s crawl delay), Cargo examples and the Webflow,
 // Builder.io, Concrete CMS and Contao showcases (404), Elementor and Bricks showcases (no
 // site links in the served HTML), October CMS, Grav, Jamstack, Neos, TYPO3 and Umbraco
-// showcases (404).
+// showcases (404), S5-Style (its listings and RSS feed carry no outbound site links),
+// 81-web.com (client-rendered), SANKOU! (mostly recruiting subpages of corporate sites).
 import * as awwwards from "./awwwards.js";
 import * as cssdesignawards from "./cssdesignawards.js";
 import * as refero from "./refero.js";
@@ -106,5 +107,6 @@ import * as wallofportfolios from "./wallofportfolios.js";
 import * as osmo from "./osmo.js";
 import * as wagtail from "./wagtail.js";
 import * as darkdesign from "./darkdesign.js";
+import * as io3000 from "./io3000.js";
 
-export const GALLERIES = [awwwards, cssdesignawards, refero, onepagelove, curated, httpster, cssnectar, minimalGallery, darkmodedesign, siteofsites, admiretheweb, bestwebsitegallery, typewolf, hoverstates, siiimple, landinglove, ecommdesign, brutalistwebsites, footerdesign, mindsparklemag, deadsimplesites, landingfolio, csswinner, navbargallery, designnominees, semplice, webdesignclip, csslight, details, saaspages, saaslandingpage, sitesee, landinggallery, cssline, orpetron, unmatchedstyle, a1gallery, seesaw, landingsdev, pricingpages, typio, fourohfours, killerportfolio, webinspoo, astro, gatsby, nuxt, lenis, kirby, wordpress, statamic, muuuuu, awwwardshonorable, wallofportfolios, osmo, wagtail, darkdesign];
+export const GALLERIES = [awwwards, cssdesignawards, refero, onepagelove, curated, httpster, cssnectar, minimalGallery, darkmodedesign, siteofsites, admiretheweb, bestwebsitegallery, typewolf, hoverstates, siiimple, landinglove, ecommdesign, brutalistwebsites, footerdesign, mindsparklemag, deadsimplesites, landingfolio, csswinner, navbargallery, designnominees, semplice, webdesignclip, csslight, details, saaspages, saaslandingpage, sitesee, landinggallery, cssline, orpetron, unmatchedstyle, a1gallery, seesaw, landingsdev, pricingpages, typio, fourohfours, killerportfolio, webinspoo, astro, gatsby, nuxt, lenis, kirby, wordpress, statamic, muuuuu, awwwardshonorable, wallofportfolios, osmo, wagtail, darkdesign, io3000];

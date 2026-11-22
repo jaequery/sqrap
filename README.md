@@ -157,6 +157,7 @@ first pages.
 | Wall of Portfolios | working, read from its sitemap newest first, one portfolio page fetched per new site, every site tagged Agency & Portfolio |
 | Mosaic | working, every category page its sitemap lists, cards link straight to the site, category label mapped to industry |
 | SaaS UI | working, read from its sitemap newest first, one app page fetched per new site, category mapped to industry, falling back to SaaS |
+| CursorUp | working, the four category pages its sitemap lists, then the home page, cards link straight to the site, category mapped to industry |
 | Osmo showcase | working, one page of about 100 sites, no detail page fetched |
 | Made with Wagtail | working, paged with /page/<n> newest first, cards link straight to the site |
 | Dark Design | working, one page lists every site, cards link straight to the site, categories mapped to industry, sponsored cards skipped |
@@ -215,6 +216,7 @@ first pages.
 | GDWEB, Webzooo, Bookma!, The Whimsical Web, A Fresh Website, Good Cart | not adapted: robots.txt disallows every crawler; now a reading app; a small webring of personal pages; behind Vercel's bot checkpoint |
 | Minimal Sites, LP-web, Lately, design.fish, Inspiration Supply | not adapted: dormant since about 2011; campaign landing pages deep inside corporate sites; interaction clips on X, not sites; no site links in the served HTML |
 | Awwwards (Developer Award, Sites of the Month), landingpage.fyi, CTA Examples | not adapted: nearly every entry is already a Site of the Day; affiliate tool links and CTA section clips, not a list of sites |
+| Craftwork inspiration, Saved, Webpo, Websites on Display | not adapted: mirrors Curated's entries and images; no site links in the served HTML |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

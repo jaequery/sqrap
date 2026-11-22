@@ -86,7 +86,7 @@ runs at most `--max-queries` (default 30) queries per run.
 `--limit` caps the new sites a run adds. Sites already in the library do not
 count toward it, so each run reads past the gallery entries earlier runs took,
 up to ten times the limit in candidates. Refero, Site of Sites, Details Inspo, SiteSee
-Landing Gallery, A1 Gallery, Landings, Webinspoo, Wall of Portfolios and the Gatsby showcase are read from their sitemaps, and they, Admire the Web,
+Landing Gallery, A1 Gallery, Landings, Webinspoo, Wall of Portfolios, Gallereee and the Gatsby showcase are read from their sitemaps, and they, Admire the Web,
 Typewolf, SaaS Pages, Orpetron, Unmatched Style, See*Saw and Killer Portfolio skip the detail pages already stored
 as a site's source.
 
@@ -161,6 +161,7 @@ first pages.
 | I/O 3000 | working, paged with /page/<n>/ newest first, cards link straight to the site |
 | Responsive Web Design JP | working, paged with /page/<n> newest first, cards link straight to the site |
 | Ikesai | working, paged with ?p=<n> newest first, cards link straight to the site |
+| Gallereee | working, read from its sitemap newest first, one portfolio page fetched per new site, every site tagged Agency & Portfolio |
 | Godly | not adapted: redirects to recent.design, a client-rendered app |
 | The FWA | not adapted: client-rendered |
 | Land-book, Lapa Ninja, Web Design Inspiration, Saaspo, Maxibestof | not adapted: 403 behind a bot challenge |

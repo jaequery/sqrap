@@ -183,6 +183,8 @@ first pages.
 | OG Image Gallery | working, paged with ?55263efb_page=<n> newest first, cards link straight to the site, a page that does not link back to the one before it ends the listing |
 | Design Details | working, read from its sitemap newest first, one page fetched per new site, Industry category mapped to industry |
 | Inspolanding | working, paged with ?page=<n> newest first, site records read from each page's Next.js flight data, no detail page fetched, category mapped to industry (else agency and portfolio types are Agency & Portfolio) |
+| Dragdropship | working, every entry read from the JSON its /showcase page serves newest first, one page fetched per new site, first mappable industry tag mapped to industry |
+| Sections.wtf | working, section cards on its home page grouped by site newest first, one section page fetched per new site, ad cards skipped |
 | Osmo showcase | working, one page of about 100 sites, no detail page fetched |
 | Made with Wagtail | working, paged with /page/<n> newest first, cards link straight to the site |
 | Dark Design | working, one page lists every site, cards link straight to the site, categories mapped to industry, sponsored cards skipped |
@@ -258,6 +260,7 @@ first pages.
 | Commerce Cream, SITEJOY, oolala.space, siteu.io, BuildinFramer | not adapted: the domain no longer resolves; a domain for sale; client-rendered, a handful of sites in the served HTML; client-rendered, no sitemap; the domain does not resolve |
 | posts.design, Social Proof Examples, UI Bits, PFolios, Speedlify Eleventy community | not adapted: no site links in the served HTML; video clips of testimonials, not sites; a newsletter; client-rendered, "available soon"; mostly developer blogs |
 | Coherent Design, Web Design Pub | not adapted: app UI screens, not sites; the domain does not resolve |
+| WebCurate, Inspiration UI, HyperFramer, Calltoidea, LandingPicks | not adapted: a directory of useful sites and tools, not a design gallery; no new entries in years; Framer templates; UI elements, not sites; client-rendered |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

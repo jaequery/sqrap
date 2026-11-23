@@ -67,7 +67,10 @@
 // CSS Luxury (403 behind a bot challenge), Design Spells (429), Framer Awards (about
 // 25 winners a year), Best Designs On X (posts on X, not sites), delights.design and
 // Inspiration Index (403 behind a bot challenge), save.design, Inspo MCP, swaggin and
-// Step1's gallery (no site links in the served HTML).
+// Step1's gallery (no site links in the served HTML), refs.gallery (behind Vercel's
+// bot checkpoint), Deslove (mostly Dribbble and Behance shots, not sites), The Index
+// (studio pages link to Instagram, not the studio's site) and Awesome Marketing
+// Websites (only the featured site in the served HTML).
 import * as awwwards from "./awwwards.js";
 import * as cssdesignawards from "./cssdesignawards.js";
 import * as refero from "./refero.js";
@@ -137,5 +140,8 @@ import * as desengs from "./desengs.js";
 import * as wpgallery from "./wpgallery.js";
 import * as storefolio from "./storefolio.js";
 import * as curategallery from "./curategallery.js";
+import * as browsingmode from "./browsingmode.js";
+import * as herogallery from "./herogallery.js";
+import * as threedwebsites from "./threedwebsites.js";
 
-export const GALLERIES = [awwwards, cssdesignawards, refero, onepagelove, curated, httpster, cssnectar, minimalGallery, darkmodedesign, siteofsites, admiretheweb, bestwebsitegallery, typewolf, hoverstates, siiimple, landinglove, ecommdesign, brutalistwebsites, footerdesign, mindsparklemag, deadsimplesites, landingfolio, csswinner, navbargallery, designnominees, semplice, webdesignclip, csslight, details, saaspages, saaslandingpage, sitesee, landinggallery, cssline, orpetron, unmatchedstyle, a1gallery, seesaw, landingsdev, pricingpages, typio, fourohfours, killerportfolio, webinspoo, astro, gatsby, nuxt, lenis, kirby, wordpress, statamic, muuuuu, awwwardshonorable, wallofportfolios, osmo, wagtail, darkdesign, io3000, responsivejp, ikesai, gallereee, mosaic, saasui, cursorup, oneguu, desengs, wpgallery, storefolio, curategallery];
+export const GALLERIES = [awwwards, cssdesignawards, refero, onepagelove, curated, httpster, cssnectar, minimalGallery, darkmodedesign, siteofsites, admiretheweb, bestwebsitegallery, typewolf, hoverstates, siiimple, landinglove, ecommdesign, brutalistwebsites, footerdesign, mindsparklemag, deadsimplesites, landingfolio, csswinner, navbargallery, designnominees, semplice, webdesignclip, csslight, details, saaspages, saaslandingpage, sitesee, landinggallery, cssline, orpetron, unmatchedstyle, a1gallery, seesaw, landingsdev, pricingpages, typio, fourohfours, killerportfolio, webinspoo, astro, gatsby, nuxt, lenis, kirby, wordpress, statamic, muuuuu, awwwardshonorable, wallofportfolios, osmo, wagtail, darkdesign, io3000, responsivejp, ikesai, gallereee, mosaic, saasui, cursorup, oneguu, desengs, wpgallery, storefolio, curategallery, browsingmode, herogallery, threedwebsites];

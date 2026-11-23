@@ -185,6 +185,8 @@ first pages.
 | Inspolanding | working, paged with ?page=<n> newest first, site records read from each page's Next.js flight data, no detail page fetched, category mapped to industry (else agency and portfolio types are Agency & Portfolio) |
 | Dragdropship | working, every entry read from the JSON its /showcase page serves newest first, one page fetched per new site, first mappable industry tag mapped to industry |
 | Sections.wtf | working, section cards on its home page grouped by site newest first, one section page fetched per new site, ad cards skipped |
+| Top CSS Gallery | working, Site of the Day archive paged with /page/<n>/ newest first, cards link straight to the site, category mapped to industry, templates skipped |
+| BRIK GALLERY | working, paged with ?p=<n> newest first, 120 cards a page link straight to the site, Japanese categories mapped to industry, banner and recruiting cards skipped |
 | Osmo showcase | working, one page of about 100 sites, no detail page fetched |
 | Made with Wagtail | working, paged with /page/<n> newest first, cards link straight to the site |
 | Dark Design | working, one page lists every site, cards link straight to the site, categories mapped to industry, sponsored cards skipped |

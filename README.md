@@ -175,6 +175,8 @@ first pages.
 | ui-design.studio | working, one page lists every site in category sections, cards link straight to the site, section mapped to industry |
 | FinPantheon | working, one page lists every site, cards link straight to the site, Crypto or DeFi tags are Crypto, the rest Finance |
 | Landing Page Gallery | working, read from its sitemap newest first, one page fetched per new site |
+| Just a Design List | working, design studios read from its sitemap newest first, one page fetched per new studio, country mapped to an ISO code, every studio Agency & Portfolio |
+| Glance | working, SaaS hero sections read from its sitemap, dated snapshots and A/B variants skipped, one page fetched per new site, category tags mapped to industry (else SaaS) |
 | Osmo showcase | working, one page of about 100 sites, no detail page fetched |
 | Made with Wagtail | working, paged with /page/<n> newest first, cards link straight to the site |
 | Dark Design | working, one page lists every site, cards link straight to the site, categories mapped to industry, sponsored cards skipped |
@@ -245,6 +247,7 @@ first pages.
 | CreateToday examples, Web Design Garden, Gendai Design | not adapted: 403 behind a bot challenge, mostly small businesses; many recruiting and campaign subpages of corporate sites; no new entries since August 2023 |
 | Best Web Gallery, CSS Crème showcase, Uncommon Gallery, Foxora Showcase | not adapted: no new entries since 2016; behind Vercel's bot checkpoint; the domain now redirects to a parked lander; a registry of rebuild prompts, about 100 references |
 | DTC Patterns, Awwwesome, Designeer Recent Design, aiwebsites.design, saasy.design | not adapted: brand pages carry no outbound site links; about 18 sites, ignores paging, no new entries since September 2025; 403 behind a bot challenge; a domain for sale; a parked lander |
+| CSS Remix, Unicorn Studio showcase, The Inspiration, PagesThatPrint, CTA Gallery, steep.design | not adapted: now a page of CSS links; client-rendered; design articles of every kind, not websites; indie SaaS submissions, mostly launch-directory badges; CTA sections, many of them templates; no site links in the served HTML |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

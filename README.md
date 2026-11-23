@@ -159,6 +159,7 @@ first pages.
 | SaaS UI | working, read from its sitemap newest first, one app page fetched per new site, category mapped to industry, falling back to SaaS |
 | CursorUp | working, the four category pages its sitemap lists, then the home page, cards link straight to the site, category mapped to industry |
 | 1GUU | working, paged with /page/<n>/ newest first back to page 100 (mid-2020), cards link straight to the site, the operator's own card skipped |
+| DesEngs | working, its inspiration page and its portfolios page, cards link straight to the site, portfolios tagged Agency & Portfolio, sponsored cards skipped |
 | Osmo showcase | working, one page of about 100 sites, no detail page fetched |
 | Made with Wagtail | working, paged with /page/<n> newest first, cards link straight to the site |
 | Dark Design | working, one page lists every site, cards link straight to the site, categories mapped to industry, sponsored cards skipped |
@@ -219,6 +220,7 @@ first pages.
 | Awwwards (Developer Award, Sites of the Month), landingpage.fyi, CTA Examples | not adapted: nearly every entry is already a Site of the Day; affiliate tool links and CTA section clips, not a list of sites |
 | Craftwork inspiration, Saved, Webpo, Websites on Display | not adapted: mirrors Curated's entries and images; no site links in the served HTML |
 | Straightline bookmark, RDLP LP Archive, Inspirationde | not adapted: 403 behind a bot challenge |
+| stunning.design, regards.design, Memorables, curateDB | not adapted: no site links in the served HTML; a directory of design resources, not sites |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

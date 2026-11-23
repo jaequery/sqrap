@@ -25,6 +25,7 @@ export const BLOCKLIST = Object.freeze([
   "gallereee.com", "mosaic.select", "saasui.design",
   "cursorup.com", "1guu.jp", "desengs.com",
   "wp.gallery", "storefolio.co", "curate.gallery",
+  "browsingmode.com", "hero.gallery", "3dwebsites.design",
 ]);
 
 // Link shorteners and ad trackers whose real target is behind a redirect.

@@ -86,7 +86,7 @@ runs at most `--max-queries` (default 30) queries per run.
 `--limit` caps the new sites a run adds. Sites already in the library do not
 count toward it, so each run reads past the gallery entries earlier runs took,
 up to ten times the limit in candidates. Refero, Site of Sites, Details Inspo, SiteSee
-Landing Gallery, A1 Gallery, Landings, Webinspoo, Wall of Portfolios, Gallereee, Mosaic, SaaS UI and the Gatsby showcase are read from their sitemaps, and they, Admire the Web,
+Landing Gallery, A1 Gallery, Landings, Webinspoo, Wall of Portfolios, Gallereee, Mosaic, SaaS UI, Hero Gallery and the Gatsby showcase are read from their sitemaps, and they, Admire the Web,
 Typewolf, SaaS Pages, Orpetron, Unmatched Style, See*Saw and Killer Portfolio skip the detail pages already stored
 as a site's source.
 
@@ -163,6 +163,9 @@ first pages.
 | WP Gallery | working, paged with ?query-1-page=<n> newest first, cards link straight to the site, category mapped to industry |
 | Storefolio | working, one page lists every store, only the home page cards are read, cards link straight to the store, category mapped to industry |
 | Curate Gallery | working, one page, read from the plain site list the page serves beside its client-rendered cards, category mapped to industry, template entries skipped |
+| Browsing Mode | working, its six category pages and three type pages, which together list every site, cards link straight to the site, page mapped to industry |
+| Hero Gallery | working, read from its sitemap, one page fetched per new site, subject tags mapped to industry |
+| 3D Websites | working, paged with ?page=<n> newest first, cards link straight to the site |
 | Osmo showcase | working, one page of about 100 sites, no detail page fetched |
 | Made with Wagtail | working, paged with /page/<n> newest first, cards link straight to the site |
 | Dark Design | working, one page lists every site, cards link straight to the site, categories mapped to industry, sponsored cards skipped |
@@ -226,6 +229,7 @@ first pages.
 | stunning.design, regards.design, Memorables, curateDB | not adapted: no site links in the served HTML; a directory of design resources, not sites |
 | Japan Web Design Gallery, Rebrand Gallery, Startup Inspire, CSS Luxury, Design Spells | not adapted: robots.txt asks a 10s crawl delay; brand identities, not websites; 403 behind a bot challenge; 429 |
 | Framer Awards, Best Designs On X, delights.design, Inspiration Index, save.design, Inspo MCP, swaggin, Step1 gallery | not adapted: about 25 winners a year; posts on X, not sites; 403 behind a bot challenge; no site links in the served HTML |
+| refs.gallery, Deslove, The Index, Awesome Marketing Websites | not adapted: behind Vercel's bot checkpoint; mostly Dribbble and Behance shots, not sites; studio pages link to Instagram, not the studio's site; only the featured site in the served HTML |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

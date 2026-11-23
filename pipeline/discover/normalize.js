@@ -27,6 +27,7 @@ export const BLOCKLIST = Object.freeze([
   "wp.gallery", "storefolio.co", "curate.gallery",
   "browsingmode.com", "hero.gallery", "3dwebsites.design",
   "mesh3d.gallery", "klikkentheke.com",
+  "cryptodesign.club", "choooodoii.com",
 ]);
 
 // Link shorteners and ad trackers whose real target is behind a redirect.

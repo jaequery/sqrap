@@ -177,6 +177,8 @@ first pages.
 | Landing Page Gallery | working, read from its sitemap newest first, one page fetched per new site |
 | Just a Design List | working, design studios read from its sitemap newest first, one page fetched per new studio, country mapped to an ISO code, every studio Agency & Portfolio |
 | Glance | working, SaaS hero sections read from its sitemap, dated snapshots and A/B variants skipped, one page fetched per new site, category tags mapped to industry (else SaaS) |
+| tiny blocks | working, e-commerce stores read from its sitemap's brand pages, one page fetched per new store, fashion and food tags mapped to industry (else E-commerce) |
+| Lowww | working, low-carbon sites paged with /page:<n> newest first, cards link straight to the site, the 404 past the last page ends the listing |
 | Osmo showcase | working, one page of about 100 sites, no detail page fetched |
 | Made with Wagtail | working, paged with /page/<n> newest first, cards link straight to the site |
 | Dark Design | working, one page lists every site, cards link straight to the site, categories mapped to industry, sponsored cards skipped |
@@ -248,6 +250,7 @@ first pages.
 | Best Web Gallery, CSS Crème showcase, Uncommon Gallery, Foxora Showcase | not adapted: no new entries since 2016; behind Vercel's bot checkpoint; the domain now redirects to a parked lander; a registry of rebuild prompts, about 100 references |
 | DTC Patterns, Awwwesome, Designeer Recent Design, aiwebsites.design, saasy.design | not adapted: brand pages carry no outbound site links; about 18 sites, ignores paging, no new entries since September 2025; 403 behind a bot challenge; a domain for sale; a parked lander |
 | CSS Remix, Unicorn Studio showcase, The Inspiration, PagesThatPrint, CTA Gallery, steep.design | not adapted: now a page of CSS links; client-rendered; design articles of every kind, not websites; indie SaaS submissions, mostly launch-directory badges; CTA sections, many of them templates; no site links in the served HTML |
+| Supercharge Design, Interface Index, WeLoveWP, dbcut, Websites That Convert | not adapted: a UI course whose site list is mostly corporate home pages; B2B interface elements, not sites; 403 behind a bot challenge; 403 behind a bot challenge; no site links in the served HTML |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

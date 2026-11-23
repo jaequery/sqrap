@@ -170,6 +170,8 @@ first pages.
 | Klikkentheke | working, paged with /catalogue/page/<n>/ newest first, cards link straight to the site |
 | Crypto Design Club | working, read from its sitemap, one page fetched per new site, category tag mapped to industry (else Crypto) |
 | Choooodoii | working, paged with /page/<n>/ newest first, cards link straight to the site, industry class mapped to industry, recruiting pages and ad cards skipped |
+| Shop Site Awards | working, paged with /page/<n>/ newest first, cards link straight to the store, every store E-commerce |
+| DesignforB2B | working, one page lists every site, cards link straight to the site, industry tag mapped to industry (else SaaS) |
 | Osmo showcase | working, one page of about 100 sites, no detail page fetched |
 | Made with Wagtail | working, paged with /page/<n> newest first, cards link straight to the site |
 | Dark Design | working, one page lists every site, cards link straight to the site, categories mapped to industry, sponsored cards skipped |
@@ -238,6 +240,7 @@ first pages.
 | Brutal Web, movin.design, Inspora, OKAY DEV, The Colophon | not adapted: entries link to Are.na; motion components, not sites; posts and creators, not sites; a community of articles and profiles; no site links in the served HTML |
 | Prettyfolio, foliofolio, Visual Journal, Web3Inspiration | not adapted: the domain now serves gambling spam; a parked domain; brand identity projects linking to their designers, not sites; 32 sites, no new entries since January 2025 |
 | CreateToday examples, Web Design Garden, Gendai Design | not adapted: 403 behind a bot challenge, mostly small businesses; many recruiting and campaign subpages of corporate sites; no new entries since August 2023 |
+| Best Web Gallery, CSS Crème showcase, Uncommon Gallery, Foxora Showcase | not adapted: no new entries since 2016; behind Vercel's bot checkpoint; the domain now redirects to a parked lander; a registry of rebuild prompts, about 100 references |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

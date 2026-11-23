@@ -119,7 +119,14 @@
 // Webstudio's showcase (403 behind a bot challenge), Good Design Web (520), Webframe
 // (archived), Minimal Exhibit (a WordPress error page), pages.xyz (a parked lander),
 // NavNav+ (the domain now serves gambling spam), The Best Designs, Web Design
-// Ranked and webdesignsample.net (the domains do not respond).
+// Ranked and webdesignsample.net (the domains do not respond), Web Anatomy (no site
+// links in the served HTML), MyCodelessWebsite (robots.txt asks a 50s crawl delay),
+// HTML5 Gallery (now casino spam), CartFrenzy and SaaS CSS (no new entries in years),
+// StyleTheWeb (mostly small local businesses), Sites Gallery (a design blog that
+// links to other galleries), PageCrush, GalleryRush, The CSS Gallery List and Design
+// Everywhere (403 behind a bot challenge), Foleo (no site links in the served HTML),
+// UI Sections (sections only, no site links), Tau Magazine (no new entries since 2020),
+// sps collection (no new entries since 2023) and web-selection.com (a domain for sale).
 import * as awwwards from "./awwwards.js";
 import * as cssdesignawards from "./cssdesignawards.js";
 import * as refero from "./refero.js";
@@ -219,5 +226,7 @@ import * as brilliantdesign from "./brilliantdesign.js";
 import * as designnokoto from "./designnokoto.js";
 import * as koreawebdesign from "./koreawebdesign.js";
 import * as reeoo from "./reeoo.js";
+import * as arche from "./arche.js";
+import * as lowwwcarbon from "./lowwwcarbon.js";
 
-export const GALLERIES = [awwwards, cssdesignawards, refero, onepagelove, curated, httpster, cssnectar, minimalGallery, darkmodedesign, siteofsites, admiretheweb, bestwebsitegallery, typewolf, hoverstates, siiimple, landinglove, ecommdesign, brutalistwebsites, footerdesign, mindsparklemag, deadsimplesites, landingfolio, csswinner, navbargallery, designnominees, semplice, webdesignclip, csslight, details, saaspages, saaslandingpage, sitesee, landinggallery, cssline, orpetron, unmatchedstyle, a1gallery, seesaw, landingsdev, pricingpages, typio, fourohfours, killerportfolio, webinspoo, astro, gatsby, nuxt, lenis, kirby, wordpress, statamic, muuuuu, awwwardshonorable, wallofportfolios, osmo, wagtail, darkdesign, io3000, responsivejp, ikesai, gallereee, mosaic, saasui, cursorup, oneguu, desengs, wpgallery, storefolio, curategallery, browsingmode, herogallery, threedwebsites, mesh3d, klikkentheke, cryptodesignclub, choooodoii, shopsiteawards, designforb2b, uidesignstudio, finpantheon, landingpagegallery, justadesignlist, glance, tinyblocks, lowww, perfolios, ogimagegallery, designdetails, inspolanding, dragdropship, sectionswtf, topcssgallery, brik, goodwebdesign, nook, brilliantdesign, designnokoto, koreawebdesign, reeoo];
+export const GALLERIES = [awwwards, cssdesignawards, refero, onepagelove, curated, httpster, cssnectar, minimalGallery, darkmodedesign, siteofsites, admiretheweb, bestwebsitegallery, typewolf, hoverstates, siiimple, landinglove, ecommdesign, brutalistwebsites, footerdesign, mindsparklemag, deadsimplesites, landingfolio, csswinner, navbargallery, designnominees, semplice, webdesignclip, csslight, details, saaspages, saaslandingpage, sitesee, landinggallery, cssline, orpetron, unmatchedstyle, a1gallery, seesaw, landingsdev, pricingpages, typio, fourohfours, killerportfolio, webinspoo, astro, gatsby, nuxt, lenis, kirby, wordpress, statamic, muuuuu, awwwardshonorable, wallofportfolios, osmo, wagtail, darkdesign, io3000, responsivejp, ikesai, gallereee, mosaic, saasui, cursorup, oneguu, desengs, wpgallery, storefolio, curategallery, browsingmode, herogallery, threedwebsites, mesh3d, klikkentheke, cryptodesignclub, choooodoii, shopsiteawards, designforb2b, uidesignstudio, finpantheon, landingpagegallery, justadesignlist, glance, tinyblocks, lowww, perfolios, ogimagegallery, designdetails, inspolanding, dragdropship, sectionswtf, topcssgallery, brik, goodwebdesign, nook, brilliantdesign, designnokoto, koreawebdesign, reeoo, arche, lowwwcarbon];

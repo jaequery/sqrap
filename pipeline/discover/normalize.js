@@ -32,6 +32,7 @@ export const BLOCKLIST = Object.freeze([
   "ui-design.studio", "finpantheon.com", "landingpagegallery.com",
   "justadesignlist.com", "glance.fyi",
   "tinyblocks.cc", "lowww.directory",
+  "directoryyy.com", "perfolios.shwn.design",
 ]);
 
 // Link shorteners and ad trackers whose real target is behind a redirect.

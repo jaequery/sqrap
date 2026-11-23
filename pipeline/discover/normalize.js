@@ -38,6 +38,7 @@ export const BLOCKLIST = Object.freeze([
   "dragdropship.com", "sections.wtf",
   "topcssgallery.com", "brik.co.jp",
   "good-web-design.com", "nookref.com",
+  "brilliantdesign.work", "designnokoto.com",
 ]);
 
 // Link shorteners and ad trackers whose real target is behind a redirect.

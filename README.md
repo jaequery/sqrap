@@ -189,6 +189,8 @@ first pages.
 | BRIK GALLERY | working, paged with ?p=<n> newest first, 120 cards a page link straight to the site, Japanese categories mapped to industry, banner and recruiting cards skipped |
 | Good Web Design | working, paged with /webdesign/page/<n> newest first, 24 cards a page link straight to the site, recruiting sites skipped |
 | NOOK | working, every /site/<id> page read from its sitemap newest first, one page fetched per new site for its JSON-LD url, industry slug mapped to industry, recruiting sites skipped |
+| Brilliant Design Collect | working, paged with /page/<n> newest first, 84 cards a page link straight to the site, recruiting sites skipped, a 404 past the last page ends it |
+| デザインのこと (designnokoto) | working, PC list paged with /_____wd_/page/<n> newest first, cards link straight to the site, post id from the quick-look modal kept as the source, closed, sponsored and recruiting cards skipped |
 | Osmo showcase | working, one page of about 100 sites, no detail page fetched |
 | Made with Wagtail | working, paged with /page/<n> newest first, cards link straight to the site |
 | Dark Design | working, one page lists every site, cards link straight to the site, categories mapped to industry, sponsored cards skipped |

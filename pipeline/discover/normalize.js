@@ -40,6 +40,7 @@ export const BLOCKLIST = Object.freeze([
   "good-web-design.com", "nookref.com",
   "brilliantdesign.work", "designnokoto.com",
   "koreawebdesign.com", "reeoo.com",
+  "arche.directory", "lowwwcarbon.com",
 ]);
 
 // Link shorteners and ad trackers whose real target is behind a redirect.

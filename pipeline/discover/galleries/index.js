@@ -7,7 +7,6 @@
 // Saaspo and Maxibestof (403 behind a bot challenge), SiteInspire (403/429),
 // CSS Reel (now a casino affiliate page), Unsection (lists sections, not sites;
 // the site link is only on each section page),
-// Framer's community gallery (?page= is ignored; later items load client-side),
 // Supahero (hero sections, now folded into screensdesign.com), Made in Webflow and
 // SaaSFrame (no outbound site links in the served HTML), CSSMania (links behind bit.ly),
 // Web Guru Awards (winners page and site pages render client-side), bestcss.in
@@ -126,7 +125,11 @@
 // links to other galleries), PageCrush, GalleryRush, The CSS Gallery List and Design
 // Everywhere (403 behind a bot challenge), Foleo (no site links in the served HTML),
 // UI Sections (sections only, no site links), Tau Magazine (no new entries since 2020),
-// sps collection (no new entries since 2023) and web-selection.com (a domain for sale).
+// sps collection (no new entries since 2023), web-selection.com (a domain for sale),
+// Stash (a directory of about 190 tools, foundries and studios), ListOfWebsites (an
+// SEO directory whose counts contradict themselves), Browse.Cool and wwwtf.site (no site
+// links in the served HTML), Insposite (a handful of sites in the served HTML)
+// and Motion Sites (403 behind a bot challenge).
 import * as awwwards from "./awwwards.js";
 import * as cssdesignawards from "./cssdesignawards.js";
 import * as refero from "./refero.js";
@@ -228,5 +231,7 @@ import * as koreawebdesign from "./koreawebdesign.js";
 import * as reeoo from "./reeoo.js";
 import * as arche from "./arche.js";
 import * as lowwwcarbon from "./lowwwcarbon.js";
+import * as framergallery from "./framergallery.js";
+import * as bestsaaswebdesigns from "./bestsaaswebdesigns.js";
 
-export const GALLERIES = [awwwards, cssdesignawards, refero, onepagelove, curated, httpster, cssnectar, minimalGallery, darkmodedesign, siteofsites, admiretheweb, bestwebsitegallery, typewolf, hoverstates, siiimple, landinglove, ecommdesign, brutalistwebsites, footerdesign, mindsparklemag, deadsimplesites, landingfolio, csswinner, navbargallery, designnominees, semplice, webdesignclip, csslight, details, saaspages, saaslandingpage, sitesee, landinggallery, cssline, orpetron, unmatchedstyle, a1gallery, seesaw, landingsdev, pricingpages, typio, fourohfours, killerportfolio, webinspoo, astro, gatsby, nuxt, lenis, kirby, wordpress, statamic, muuuuu, awwwardshonorable, wallofportfolios, osmo, wagtail, darkdesign, io3000, responsivejp, ikesai, gallereee, mosaic, saasui, cursorup, oneguu, desengs, wpgallery, storefolio, curategallery, browsingmode, herogallery, threedwebsites, mesh3d, klikkentheke, cryptodesignclub, choooodoii, shopsiteawards, designforb2b, uidesignstudio, finpantheon, landingpagegallery, justadesignlist, glance, tinyblocks, lowww, perfolios, ogimagegallery, designdetails, inspolanding, dragdropship, sectionswtf, topcssgallery, brik, goodwebdesign, nook, brilliantdesign, designnokoto, koreawebdesign, reeoo, arche, lowwwcarbon];
+export const GALLERIES = [awwwards, cssdesignawards, refero, onepagelove, curated, httpster, cssnectar, minimalGallery, darkmodedesign, siteofsites, admiretheweb, bestwebsitegallery, typewolf, hoverstates, siiimple, landinglove, ecommdesign, brutalistwebsites, footerdesign, mindsparklemag, deadsimplesites, landingfolio, csswinner, navbargallery, designnominees, semplice, webdesignclip, csslight, details, saaspages, saaslandingpage, sitesee, landinggallery, cssline, orpetron, unmatchedstyle, a1gallery, seesaw, landingsdev, pricingpages, typio, fourohfours, killerportfolio, webinspoo, astro, gatsby, nuxt, lenis, kirby, wordpress, statamic, muuuuu, awwwardshonorable, wallofportfolios, osmo, wagtail, darkdesign, io3000, responsivejp, ikesai, gallereee, mosaic, saasui, cursorup, oneguu, desengs, wpgallery, storefolio, curategallery, browsingmode, herogallery, threedwebsites, mesh3d, klikkentheke, cryptodesignclub, choooodoii, shopsiteawards, designforb2b, uidesignstudio, finpantheon, landingpagegallery, justadesignlist, glance, tinyblocks, lowww, perfolios, ogimagegallery, designdetails, inspolanding, dragdropship, sectionswtf, topcssgallery, brik, goodwebdesign, nook, brilliantdesign, designnokoto, koreawebdesign, reeoo, arche, lowwwcarbon, framergallery, bestsaaswebdesigns];

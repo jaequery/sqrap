@@ -86,7 +86,7 @@ runs at most `--max-queries` (default 30) queries per run.
 `--limit` caps the new sites a run adds. Sites already in the library do not
 count toward it, so each run reads past the gallery entries earlier runs took,
 up to ten times the limit in candidates. Refero, Site of Sites, Details Inspo, SiteSee
-Landing Gallery, A1 Gallery, Landings, Webinspoo, Wall of Portfolios, Gallereee, Mosaic, SaaS UI, Hero Gallery, Mesh3D, Crypto Design Club, Arche Directory and the Gatsby showcase are read from their sitemaps, and they, Admire the Web,
+Landing Gallery, A1 Gallery, Landings, Webinspoo, Wall of Portfolios, Gallereee, Mosaic, SaaS UI, Hero Gallery, Mesh3D, Crypto Design Club, Arche Directory, BestSaaSWebDesigns and the Gatsby showcase are read from their sitemaps, and they, Admire the Web,
 Typewolf, SaaS Pages, Orpetron, Unmatched Style, See*Saw and Killer Portfolio skip the detail pages already stored
 as a site's source.
 
@@ -195,6 +195,8 @@ first pages.
 | Reeoo | working, paged with /website/page/<n>/ newest first, one page fetched per new site, industry pills mapped to industry, a 404 past the last page ends it |
 | Arche Directory | working, every /sites/<slug> page read from its sitemap newest first, one page fetched per new site for its JSON-LD url, portfolios mapped to Agency & Portfolio, a landing page's first keyword mapped to industry |
 | lowwwcarbon | working, low-carbon sites paged with /showcase/page/<n>/ newest first, cards link straight to the site, an empty page past the last ends it |
+| Framer Gallery | working, the gallery home and its 32 category pages (up to 64 sites each in the served HTML), one page fetched per new site for its Visit Site link, category mapped to industry |
+| BestSaaSWebDesigns | working, every /site/<slug> page read from its sitemap newest first, one page fetched per new site for its JSON-LD url, category mapped to industry |
 | Osmo showcase | working, one page of about 100 sites, no detail page fetched |
 | Made with Wagtail | working, paged with /page/<n> newest first, cards link straight to the site |
 | Dark Design | working, one page lists every site, cards link straight to the site, categories mapped to industry, sponsored cards skipped |
@@ -208,7 +210,6 @@ first pages.
 | SiteInspire | not adapted: 403/429 to plain requests |
 | CSS Reel | not adapted: now a casino affiliate page |
 | Unsection | not adapted: lists sections, not sites; the site link is only on each section page |
-| Framer community gallery | not adapted: `?page=` is ignored and later items load client-side |
 | Supahero | not adapted: hero sections only, now folded into screensdesign.com |
 | Made in Webflow, SaaSFrame | not adapted: no outbound site links in the served HTML |
 | CSSMania | not adapted: every site link goes through bit.ly |
@@ -271,6 +272,7 @@ first pages.
 | posts.design, Social Proof Examples, UI Bits, PFolios, Speedlify Eleventy community | not adapted: no site links in the served HTML; video clips of testimonials, not sites; a newsletter; client-rendered, "available soon"; mostly developer blogs |
 | Coherent Design, Web Design Pub | not adapted: app UI screens, not sites; the domain does not resolve |
 | WebCurate, Inspiration UI, HyperFramer, Calltoidea, LandingPicks | not adapted: a directory of useful sites and tools, not a design gallery; no new entries in years; Framer templates; UI elements, not sites; client-rendered |
+| Stash, ListOfWebsites, Browse.Cool, wwwtf.site, Insposite, Motion Sites | not adapted: a directory of tools, foundries and studios; an SEO directory whose counts contradict themselves; no site links in the served HTML; a handful of sites in the served HTML; 403 behind a bot challenge |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

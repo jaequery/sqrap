@@ -55,12 +55,13 @@ export const BLOCKLIST = Object.freeze([
   "communicatorawards.com", "horizoninteractiveawards.com",
   "webaward.org", "webmarketingassociation.org",
   "europeandesign.org", "german-design-award.com", "german-design-council.de",
+  "commarts.com",
 ]);
 
 // Link shorteners and ad trackers whose real target is behind a redirect.
 const REDIRECTORS = new Set([
   "bit.ly", "t.co", "ow.ly", "buff.ly", "tinyurl.com", "lnkd.in", "goo.gl", "rebrand.ly",
-  "grsm.io", "fas.st", "geni.us", "shareasale.com", "go.skimresources.com",
+  "grsm.io", "fas.st", "geni.us", "shareasale.com", "go.skimresources.com", "nyti.ms",
 ]);
 
 const NON_HTML = /\.(pdf|jpe?g|png|gif|webp|svg|mp4|mov|zip|docx?|xlsx?|pptx?)$/i;

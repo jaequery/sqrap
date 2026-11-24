@@ -125,12 +125,24 @@ export async function fetchHtml(url) {
   return res.text();
 }
 
+// Like fetchHtml, but also returns the cookies the page sets as one Cookie
+// header value, for a search whose POST needs the page's session (Laravel's
+// CSRF check).
+export async function fetchHtmlSession(url) {
+  if (!(await allowedByRobots(url))) throw new Error(`robots.txt disallows ${url}`);
+  const res = await rawFetch(url, { headers: { accept: "text/html" } });
+  if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+  const cookie = res.headers.getSetCookie().map((c) => c.split(";")[0]).join("; ");
+  return { html: await res.text(), cookie };
+}
+
 // Like fetchHtml, but POSTs a form (a search that only answers POST).
-export async function postHtml(url, form) {
+// `cookie` sends a session from fetchHtmlSession.
+export async function postHtml(url, form, { cookie } = {}) {
   if (!(await allowedByRobots(url))) throw new Error(`robots.txt disallows ${url}`);
   const res = await rawFetch(url, {
     method: "POST",
-    headers: { accept: "text/html", "content-type": "application/x-www-form-urlencoded" },
+    headers: { accept: "text/html", "content-type": "application/x-www-form-urlencoded", ...(cookie ? { cookie } : {}) },
     body: new URLSearchParams(form).toString(),
   });
   if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);

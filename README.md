@@ -168,6 +168,7 @@ first pages.
 | The Communicator Awards | working, the Websites gallery of its two kept seasons found in its winners sitemaps, newest season first, filtered to the Award of Excellence, each card's view project button links straight to the site, category mapped to industry |
 | Horizon Interactive Awards | working, each web site category page of its showcases read newest year first (2023 on; older years use other markup), Gold and Best Overall Design winners link straight to the site, category mapped to industry |
 | The WebAwards | working, Best of Show and Best of Industry winners of its latest four years read from its winners search (a POST), newest year first, one winner page fetched per new site for the site its headline links to, category mapped to industry, Small Business skipped |
+| The European Design Awards | working, Gold, Silver and Bronze winners of its website categories (Brand & Campaign, Information, E-Commerce, Self-Promotion Digital) in its latest ten years, read from its winners search (a POST that needs the page's session and CSRF token), newest year first, one winner page fetched per new site for the site linked under its headline, links to agency case studies and staging hosts skipped |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -316,6 +317,7 @@ first pages.
 | Red Dot (Brands & Communication), iF Design Award, dotCOMM Awards | not adapted: robots.txt bars AI crawlers; 403 behind a bot challenge; 403 behind a bot challenge |
 | The Davey Awards | not adapted: its Gold website winners are mostly small local businesses and law offices |
 | Vega Digital Awards, UX Design Awards | not adapted: robots.txt bars AI crawlers; product and service UX, not websites |
+| Indigo Design Award, Interactive Media Awards, Clio Awards | not adapted: robots.txt disallows every crawler; the domain does not respond; robots.txt asks a 10s crawl delay |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

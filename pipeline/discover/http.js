@@ -125,6 +125,27 @@ export async function fetchHtml(url) {
   return res.text();
 }
 
+// Like fetchHtml, but POSTs a form (a search that only answers POST).
+export async function postHtml(url, form) {
+  if (!(await allowedByRobots(url))) throw new Error(`robots.txt disallows ${url}`);
+  const res = await rawFetch(url, {
+    method: "POST",
+    headers: { accept: "text/html", "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams(form).toString(),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
+  // Decoded in the charset the response or its <meta> declares (old ASP
+  // pages send iso-8859-1 without saying so in the header).
+  const bytes = new Uint8Array(await res.arrayBuffer());
+  const head = new TextDecoder("latin1").decode(bytes.subarray(0, 2048));
+  const charset = (res.headers.get("content-type") ?? "").match(/charset=([\w-]+)/i)?.[1] ?? head.match(/<meta[^>]+charset=["']?([\w-]+)/i)?.[1] ?? "utf-8";
+  try {
+    return new TextDecoder(charset).decode(bytes);
+  } catch {
+    return new TextDecoder().decode(bytes);
+  }
+}
+
 // For APIs (no robots check): returns parsed JSON or throws.
 export async function fetchJson(url, init = {}) {
   const res = await rawFetch(url, { ...init, headers: { accept: "application/json", ...init.headers } });

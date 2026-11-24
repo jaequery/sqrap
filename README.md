@@ -167,6 +167,7 @@ first pages.
 | The W3 Awards | working, the Websites gallery of its two kept seasons found in its winners sitemaps, newest season first, 27 winners a page sorted by award, Best in Show and Gold read and Silver skipped, each card's Visit button links straight to the site, category mapped to industry |
 | The Communicator Awards | working, the Websites gallery of its two kept seasons found in its winners sitemaps, newest season first, filtered to the Award of Excellence, each card's view project button links straight to the site, category mapped to industry |
 | Horizon Interactive Awards | working, each web site category page of its showcases read newest year first (2023 on; older years use other markup), Gold and Best Overall Design winners link straight to the site, category mapped to industry |
+| The WebAwards | working, Best of Show and Best of Industry winners of its latest four years read from its winners search (a POST), newest year first, one winner page fetched per new site for the site its headline links to, category mapped to industry, Small Business skipped |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -314,6 +315,7 @@ first pages.
 | Single-Serving Sites, VICE Awards, Case Study Club, Design Directory, Collecta, Curation of Curations | not adapted: robots.txt bars AI crawlers; about 50 Site of the Day winners, mostly personal portfolios; a newsletter of articles; design tools and schools, not sites; a bookmarking app; a directory of galleries and blogs, not sites |
 | Red Dot (Brands & Communication), iF Design Award, dotCOMM Awards | not adapted: robots.txt bars AI crawlers; 403 behind a bot challenge; 403 behind a bot challenge |
 | The Davey Awards | not adapted: its Gold website winners are mostly small local businesses and law offices |
+| Vega Digital Awards, UX Design Awards | not adapted: robots.txt bars AI crawlers; product and service UX, not websites |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

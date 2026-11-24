@@ -479,8 +479,9 @@ that suit your machine and AI budget.
 
 Production also runs the pipeline itself: `vercel.json` calls
 `/api/cron/pipeline` every 30 minutes. Each run styles up to 8 public sites
-that have no style yet (for at most a minute), then pulls up to 15 new sites
-from the galleries (for at most 90 seconds), then takes up to 6 sites, one at a
+that have no style yet (for at most a minute), then, only while fewer than 100
+sites wait for their home capture, pulls up to 15 new sites from the galleries
+(for at most 90 seconds), then takes up to 6 sites, one at a
 time and with at most 4 subpages each, through the pipeline with serverless
 Chromium (`@sparticuz/chromium`) and the judge on AI Gateway. It stops claiming
 after 5 minutes so an in-flight site finishes within the 800-second limit. The
@@ -590,9 +591,12 @@ curl -X POST https://www.sqrap.com/api/operator/sites -H "Authorization: Bearer 
 curl "https://www.sqrap.com/api/operator/sites?domains=example.com" -H "Authorization: Bearer $SQRAP_INGEST_TOKEN"
 ```
 
-Cron takes about 6 sites per 30-minute run (`RUN.limit` in
-`app/api/cron/pipeline/route.js`), so a large batch drains over hours; it does
-not need to be split, the queue only grows.
+Cron takes at most 6 sites per 30-minute run (`RUN.limit` in
+`app/api/cron/pipeline/route.js`), so a large batch drains over hours or days;
+it does not need to be split, the queue only grows. Sites added here (and by
+`npm run seed` or admin seeds, source `manual`) are captured and judged before
+gallery and search finds, and the cron skips gallery discovery while 100 or
+more sites wait for capture.
 
 ## Removal requests
 

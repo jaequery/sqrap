@@ -52,6 +52,7 @@ export const BLOCKLIST = Object.freeze([
   "ecomgallery.com", "purelanding.page",
   "madeonweb.com", "lovieawards.com",
   "w3award.com", "aiva.org",
+  "communicatorawards.com", "horizoninteractiveawards.com",
 ]);
 
 // Link shorteners and ad trackers whose real target is behind a redirect.

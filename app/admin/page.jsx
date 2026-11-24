@@ -10,8 +10,8 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
-// Local curation. Exists only with SQRAP_ADMIN=1 and a loopback request; see lib/admin.js.
+// Curation. Exists only for a loopback request with SQRAP_ADMIN=1 or a signed-in admin; see lib/admin.js.
 export default async function AdminPage() {
-  if (!isAdminRequest(await headers())) notFound();
+  if (!(await isAdminRequest(await headers()))) notFound();
   return <Admin />;
 }

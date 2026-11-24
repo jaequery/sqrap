@@ -165,6 +165,8 @@ first pages.
 | Made on Web | working, every /website/<slug>/ page read from its sitemap newest first, one page fetched per new site for its JSON-LD url, industry keyword mapped to industry, else E-commerce or Agency & Portfolio from the site type |
 | The Lovie Awards | working, the website category groups of its two kept seasons read from its winners sitemaps, newest season first, each group's /all/ page lists every winner with its Launch Project link, category mapped to industry, email newsletters skipped |
 | The W3 Awards | working, the Websites gallery of its two kept seasons found in its winners sitemaps, newest season first, 27 winners a page sorted by award, Best in Show and Gold read and Silver skipped, each card's Visit button links straight to the site, category mapped to industry |
+| The Communicator Awards | working, the Websites gallery of its two kept seasons found in its winners sitemaps, newest season first, filtered to the Award of Excellence, each card's view project button links straight to the site, category mapped to industry |
+| Horizon Interactive Awards | working, each web site category page of its showcases read newest year first (2023 on; older years use other markup), Gold and Best Overall Design winners link straight to the site, category mapped to industry |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -311,6 +313,7 @@ first pages.
 | website-inspiration.com, SQSP Weekly, Wix Studio inspiration, Best of Swiss Web, Landify, Framify, saaslandings.com, UX Collective, Super/Feather/Typedream showcases, Dutch Digital Design | not adapted: about 250 sites, mostly small local businesses; no site links in the served HTML; client-rendered; UI kits, not galleries; a parked lander; nine sites; mostly Notion-built pages; a single welcome post |
 | Single-Serving Sites, VICE Awards, Case Study Club, Design Directory, Collecta, Curation of Curations | not adapted: robots.txt bars AI crawlers; about 50 Site of the Day winners, mostly personal portfolios; a newsletter of articles; design tools and schools, not sites; a bookmarking app; a directory of galleries and blogs, not sites |
 | Red Dot (Brands & Communication), iF Design Award, dotCOMM Awards | not adapted: robots.txt bars AI crawlers; 403 behind a bot challenge; 403 behind a bot challenge |
+| The Davey Awards | not adapted: its Gold website winners are mostly small local businesses and law offices |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

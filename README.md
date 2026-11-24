@@ -548,7 +548,7 @@ npm run agent:backfill    # -- --batch 25 --limit 500
 npm run search:reindex
 ```
 
-## Curate locally (admin)
+## Curate (admin)
 
 `SQRAP_ADMIN=1 npm run dev`, then open http://localhost:3000/admin. The admin
 lists sites by status (Queue: captured, failed and in-flight; Discovered;
@@ -568,7 +568,17 @@ The admin answers 404 unless **both** `SQRAP_ADMIN=1` is set and the request
 comes over loopback: the socket address (stamped by `next.config.mjs`, so a
 client-sent `X-Forwarded-For` cannot fake it), the `Host` header and any
 `Origin` must be `localhost`, `127.0.0.1` or `::1`. Never set `SQRAP_ADMIN` on
-a hosted deployment; the guard is the only protection, there are no accounts.
+a hosted deployment; that guard is the only protection of the local path.
+
+On any deployment, production included, a signed-in admin account can open
+`/admin` too: its email must be in the `admin_emails` table (migration `012`
+adds `jaequery@gmail.com`) **and** the account must have signed in with Google
+at least once, since a password signup never proves it owns the address.
+Grant another admin with
+`INSERT INTO admin_emails (email, created_at) VALUES ('someone@example.com', '<ISO time>')`.
+Admin mutations from a session must send an `Origin` matching the host, which
+the admin page's own `fetch` calls do. Re-capture and re-judge run as in-process
+jobs, so on Vercel they are not reliable; approve, reject, edit and delete are.
 
 | Route | Does |
 | --- | --- |

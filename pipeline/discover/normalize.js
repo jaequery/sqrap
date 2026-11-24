@@ -49,6 +49,7 @@ export const BLOCKLIST = Object.freeze([
   "catalog.cool", "storeinspo.com", "uidiscovery.com", "uisections.com",
   "designatlas.in", "norrly.io",
   "studioarchives.netlify.app", "folios.gallery",
+  "ecomgallery.com", "purelanding.page",
 ]);
 
 // Link shorteners and ad trackers whose real target is behind a redirect.

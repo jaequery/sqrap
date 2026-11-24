@@ -150,6 +150,8 @@ first pages.
 | Brutalist Garden | working, one page lists every site, each card links straight to the site |
 | Type.lol | working, every foundry page read from its sitemap, foundries in its "New on Type.lol" feed first, one page fetched per new foundry, each links to the foundry's site, country mapped, every site tagged Agency & Portfolio |
 | Type Foundry Directory | working, one page lists every foundry, each card links straight to its site, country mapped, every site tagged Agency & Portfolio |
+| MABTU | working, every site page read from its sitemap, most recently captured first, one page fetched per new site, sites it rates below 7 and marketplace templates skipped, industry mapped |
+| Brian Lovin's Sites | working, one page lists every site, each row links straight to the site |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -287,6 +289,7 @@ first pages.
 | Rick Creates, Adfolio | not adapted: mirrors FWA and Awwwards entries; behind Vercel's bot checkpoint |
 | Global Web Design Awards, Web Dev Awards, CSS Awards (cssawards.org), WD Awards, Website Design Awards, Designs Creme, dailyweb.design | not adapted: mirrors Awwwards' entries and logos; 403 behind a bot challenge; read from Supabase client-side; no site links in the served HTML; a parked lander |
 | MegaMegaTypeType, Vev showcase, Eyecandy, studiodirectory.co | not adapted: links to single typeface pages, not foundry sites; 404; 403 behind a bot challenge; a GoDaddy placeholder |
+| Mega Awwards, umanmade, on.design, Scrolltide, Me, But Online, UI Coach, The Vellum, Personal Site Gallery | not adapted: mostly paid submissions from small local businesses; shots, templates and prompts, not sites; no new entries since May 2023; 402; a handful of sample projects; tens of thousands of mostly developer blogs |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

@@ -160,6 +160,8 @@ first pages.
 | Norrly | working, every breakdown page read from its sitemap, one page fetched per new site for its JSON-LD, category mapped to industry |
 | Studio Archives | working, one page lists every studio in an inline data array, no detail page fetched, country mapped to an ISO code, every studio Agency & Portfolio |
 | Folios.Gallery | working, every /sites/<slug> page read from its sitemap, one page fetched per new site for its outbound link, every site Agency & Portfolio |
+| Ecomgallery | working, read from its WordPress API newest first, two requests for the whole gallery, each post's Visit Site button links straight to the store, category mapped to industry, E-commerce when none fits |
+| Pure (purelanding.page) | working, every /inspirations/ page read from its sitemap newest first, one page fetched per new site for its Explore Site link, category then industry labels mapped to industry, templates skipped |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -302,6 +304,7 @@ first pages.
 | Headers Club, before.click, abtest.design, Clonify, Repaint, Selected Screens, The UI Index | not adapted: behind a Vercel login; App Store screenshots and A/B test results, not sites; a Framer template library; website examples from small local businesses; robots.txt bars AI crawlers |
 | WPMade, curated.cool, Kombai Gallery, Musterlab, Inspoweb, Pure Sites, styleguide.fyi | not adapted: mostly small local businesses; a dormant link list; generated UI designs, not sites; deployment disabled; behind Vercel's bot checkpoint; a coding style guide |
 | Motion Folios, Leadership Folios, Webfolios, Parts., umeboshi, Startup Web Designs, D1S1 | not adapted: client-rendered; about 40 design leaders' sites, mostly writing; about 60 portfolios, nothing new since January 2025; mostly Japanese corporate and small local business sites; the domain now serves gambling spam; behind Vercel's bot checkpoint |
+| Shops.Gallery, WhatPixel, H1 Gallery, Inspireca, Chamjo, UI Land | not adapted: an alphabetical archive of about 3,500 ordinary Shopify stores; roundups of small local business sites; startup headlines, not site design; app screens and UI resources, not sites |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

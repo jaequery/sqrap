@@ -51,6 +51,7 @@ export const BLOCKLIST = Object.freeze([
   "studioarchives.netlify.app", "folios.gallery",
   "ecomgallery.com", "purelanding.page",
   "madeonweb.com", "lovieawards.com",
+  "w3award.com", "aiva.org",
 ]);
 
 // Link shorteners and ad trackers whose real target is behind a redirect.

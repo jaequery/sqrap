@@ -47,6 +47,7 @@ export const BLOCKLIST = Object.freeze([
   "animorio.com", "brutalist-garden.webflow.io",
   "type.lol", "typefoundry.directory", "mabtu.com", "brianlovin.com",
   "catalog.cool", "storeinspo.com", "uidiscovery.com", "uisections.com",
+  "designatlas.in", "norrly.io",
 ]);
 
 // Link shorteners and ad trackers whose real target is behind a redirect.

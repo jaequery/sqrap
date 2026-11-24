@@ -156,6 +156,8 @@ first pages.
 | Storeinspo | working, every store page read from its sitemap, one page fetched per new store, categories mapped to industry, E-commerce when none fits |
 | UI Discovery | working, every site page read from its sitemap in the gallery's rank order, one page fetched per new site, category mapped to industry |
 | UI Sections | working, every company page read from its sitemap, one page fetched per new site, industries mapped, SaaS when none fits |
+| Design Atlas | working, every site page read from its sitemap newest first, one page fetched per new site for its JSON-LD, industry (else type) mapped to industry |
+| Norrly | working, every breakdown page read from its sitemap, one page fetched per new site for its JSON-LD, category mapped to industry |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -296,6 +298,7 @@ first pages.
 | Mega Awwards, umanmade, on.design, Scrolltide, Me, But Online, UI Coach, The Vellum, Personal Site Gallery | not adapted: mostly paid submissions from small local businesses; shots, templates and prompts, not sites; no new entries since May 2023; 402; a handful of sample projects; tens of thousands of mostly developer blogs |
 | Photo Web Designs, Aura++ | not adapted: a web design agency for photographers, not a gallery; a startup launch directory |
 | Headers Club, before.click, abtest.design, Clonify, Repaint, Selected Screens, The UI Index | not adapted: behind a Vercel login; App Store screenshots and A/B test results, not sites; a Framer template library; website examples from small local businesses; robots.txt bars AI crawlers |
+| WPMade, curated.cool, Kombai Gallery, Musterlab, Inspoweb, Pure Sites, styleguide.fyi | not adapted: mostly small local businesses; a dormant link list; generated UI designs, not sites; deployment disabled; behind Vercel's bot checkpoint; a coding style guide |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

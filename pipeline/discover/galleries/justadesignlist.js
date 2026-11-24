@@ -7,36 +7,13 @@
 // fetched again. Every studio is Agency & Portfolio.
 import * as cheerio from "cheerio";
 import { knownSourceRefs } from "../../../lib/db.js";
+import { countryCode } from "../country.js";
 import { fetchHtml } from "../http.js";
 
 const BASE = "https://justadesignlist.com";
 const BATCH = 50;
 
 export const name = "justadesignlist";
-
-// Country slugs the English region names do not produce.
-const COUNTRY_ALIASES = {
-  usa: "US", england: "GB", scotland: "GB", wales: "GB", "northern-ireland": "GB",
-  "the-netherlands": "NL", "czech-republic": "CZ", "south-korea": "KR", russia: "RU",
-};
-
-let countryCodes;
-function countryCode(slug) {
-  if (!slug) return null;
-  if (COUNTRY_ALIASES[slug]) return COUNTRY_ALIASES[slug];
-  if (!countryCodes) {
-    countryCodes = new Map();
-    const names = new Intl.DisplayNames(["en"], { type: "region" });
-    for (let a = 65; a <= 90; a++) {
-      for (let b = 65; b <= 90; b++) {
-        const code = String.fromCharCode(a, b);
-        const label = names.of(code);
-        if (label && label !== code) countryCodes.set(label.toLowerCase().replace(/[^a-z]+/g, "-"), code);
-      }
-    }
-  }
-  return countryCodes.get(slug) || null;
-}
 
 export async function* listing({ limit }) {
   const $map = cheerio.load(await fetchHtml(`${BASE}/sitemap.xml`), { xml: true });

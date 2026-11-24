@@ -170,6 +170,7 @@ first pages.
 | The WebAwards | working, Best of Show and Best of Industry winners of its latest four years read from its winners search (a POST), newest year first, one winner page fetched per new site for the site its headline links to, category mapped to industry, Small Business skipped |
 | The European Design Awards | working, Gold, Silver and Bronze winners of its website categories (Brand & Campaign, Information, E-Commerce, Self-Promotion Digital) in its latest ten years, read from its winners search (a POST that needs the page's session and CSRF token), newest year first, one winner page fetched per new site for the site linked under its headline, links to agency case studies and staging hosts skipped |
 | German Design Award | working, Winners and Golds of its Web category in its latest six years, read from the JSON filter route its gallery page names, newest year first, 48 a page, one winner page fetched per new site: a site named in the title, else the customer's link unless it is the designer's own, else the studio's own site when the title names it (an agency's entry that links only itself is skipped) |
+| Communication Arts Interactive Annual | working, Websites/Microsites winners of its latest ten years, read from the JSON route its gallery's filter names, newest year first, 20 a page, one winner page fetched per new site for its "Launch Site" link (in the credits on older pages), industry mapped from the category line |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -255,7 +256,7 @@ first pages.
 | Page Collective | not adapted: app flows and screens, not sites |
 | SaaS Websites | not adapted: no outbound site links |
 | GSAP showcase, Bento Grids | not adapted: client-rendered |
-| Call to Inspiration, Communication Arts Webpicks | not adapted: client-rendered |
+| Call to Inspiration, Communication Arts Webpicks | not adapted: client-rendered (Communication Arts' Interactive Annual is adapted) |
 | Web Design Awards (webdesignawards.io) | not adapted: paid submissions, mostly agencies and local businesses |
 | Fonts In Use | not adapted: robots.txt asks a 10-second crawl delay |
 | UI UX Showcase | not adapted: mostly design resources and tools, not sites |
@@ -320,6 +321,7 @@ first pages.
 | Vega Digital Awards, UX Design Awards | not adapted: robots.txt bars AI crawlers; product and service UX, not websites |
 | Indigo Design Award, Interactive Media Awards, Clio Awards | not adapted: robots.txt disallows every crawler; the domain does not respond; robots.txt asks a 10s crawl delay |
 | D&AD, The One Show, ADC Awards | not adapted: robots.txt disallows the /search/ its archive is read from; oneclub.org's robots.txt disallows every crawler |
+| Best Design Awards (NZ), Deutscher Digital Award, Swiss Typefaces and Pangram Pangram in use | not adapted: winners' pages carry no site links; mostly ad campaigns, not sites; mostly print |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

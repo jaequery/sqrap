@@ -16,6 +16,8 @@ const EMBED_LIMIT = 64;
 const EMBED_MS = 60 * 1000;
 const STYLE_LIMIT = 8;
 const STYLE_MS = 60 * 1000;
+// Discover only while fewer sites than this wait for their home capture.
+const DISCOVER_BELOW = 100;
 
 // Each run: pull a few new sites from the galleries (time-boxed, so a slow
 // gallery cannot eat the run), then take a few sites through capture → judge →
@@ -49,7 +51,10 @@ export async function GET(request) {
   const styles = judgeEnabled()
     ? await styleNew({ limit: STYLE_LIMIT, signal: AbortSignal.timeout(STYLE_MS), log: console.error }).catch((err) => ({ error: err.message }))
     : { skipped: "no AI credentials" };
-  const queued = (await queueCounts()).capture;
-  const totals = await runPipeline(RUN, { signal: AbortSignal.timeout(STOP_CLAIMING_MS) });
-  return Response.json({ data: { queued, ...totals, purges, agentUsage, embeddings, styles } }, { headers: { "Cache-Control": "no-store" } });
+  // A run captures far fewer sites than discovery can add, so discovery waits
+  // while the capture queue is long and the run's time goes to capturing.
+  const queued = Number((await queueCounts()).capture);
+  const discover = queued < DISCOVER_BELOW;
+  const totals = await runPipeline({ ...RUN, discover }, { signal: AbortSignal.timeout(STOP_CLAIMING_MS) });
+  return Response.json({ data: { queued, discoverSkipped: !discover, ...totals, purges, agentUsage, embeddings, styles } }, { headers: { "Cache-Control": "no-store" } });
 }

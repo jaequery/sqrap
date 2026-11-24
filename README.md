@@ -172,6 +172,8 @@ first pages.
 | German Design Award | working, Winners and Golds of its Web category in its latest six years, read from the JSON filter route its gallery page names, newest year first, 48 a page, one winner page fetched per new site: a site named in the title, else the customer's link unless it is the designer's own, else the studio's own site when the title names it (an agency's entry that links only itself is skipped) |
 | Communication Arts Interactive Annual | working, Websites/Microsites winners of its latest ten years, read from the JSON route its gallery's filter names, newest year first, 20 a page, one winner page fetched per new site for its "Launch Site" link (in the credits on older pages), industry mapped from the category line |
 | Australian Good Design Awards | working, winners of its Web Design and Development discipline read from its WordPress API newest first, one project page fetched per new site, its "view website" link passed over for the next when it names a credited designer rather than the commissioner, entries that link only their agency skipped |
+| Visuelt (Grafill) | working, Digital design winners of its latest ten years, each year's category page read in its order, newest year first, student, installation and game, design system, editorial and mobile classes skipped, one winner page fetched per new site for the link that ends its credits (most winners of 2018 and of 2021 to 2024 link none and are skipped), the client credit kept as the name, e-commerce and self-promotion classes mapped to industry |
+| Applied Arts Awards | working, website categories of its Design and Interactive groups in its latest ten years, each year's categories read from the fragment its archive filter loads, each category's winners page read in its order, newest year first, Young Blood categories skipped, one winner page fetched per new site for its "Winning Website" link (not the entrant agency's), the client credit kept as the name, e-commerce, self-promotion, charity and educational classes mapped to industry |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -236,7 +238,7 @@ first pages.
 | Responsive Web Design JP | working, paged with /page/<n> newest first, cards link straight to the site |
 | Ikesai | working, paged with ?p=<n> newest first, cards link straight to the site |
 | Gallereee | working, read from its sitemap newest first, one portfolio page fetched per new site, every site tagged Agency & Portfolio |
-| The FWA | not adapted: client-rendered |
+| The FWA | not adapted: client-rendered; its winner data loads from /api, which robots.txt disallows, and the winners feed carries no site links |
 | Land-book, Lapa Ninja, Web Design Inspiration, Saaspo, Maxibestof | not adapted: 403 behind a bot challenge |
 | SiteInspire | not adapted: 403/429 to plain requests |
 | CSS Reel | not adapted: now a casino affiliate page |
@@ -324,6 +326,9 @@ first pages.
 | D&AD, The One Show, ADC Awards | not adapted: robots.txt disallows the /search/ its archive is read from; oneclub.org's robots.txt disallows every crawler |
 | Best Design Awards (NZ), Deutscher Digital Award, Swiss Typefaces and Pangram Pangram in use | not adapted: winners' pages carry no site links; mostly ad campaigns, not sites; mostly print |
 | Information is Beautiful Awards | not adapted: data visualisations, mostly articles deep inside news sites |
+| A' Design Award, Golden Pin Design Award, ADC Europe | not adapted: winner pages carry no site links; mostly products and print, links go to designers' Behance pages; projects link only the entrant agency's site |
+| i-Award Korea, Danish Digital Award, Australian Web Awards, AGDA Awards, Netty Awards, Svenska Designpriset, Hydrogen showcase | not adapted: robots.txt bars AI crawlers; mostly apps and marketing results, not sites; robots.txt asks a 10s crawl delay (all three); client-rendered; about 15 stores |
+| Core77 Design Awards | not adapted: robots.txt bars AI crawlers |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

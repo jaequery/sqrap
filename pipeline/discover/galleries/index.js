@@ -180,7 +180,15 @@
 // disallows every crawler), Best Design Awards (bestawards.co.nz, winners' pages
 // carry no site links), Deutscher Digital Award (mostly ad campaigns, not sites),
 // Swiss Typefaces' and Pangram Pangram's in-use pages (mostly print), Information is
-// Beautiful Awards (data visualisations, mostly articles deep inside news sites).
+// Beautiful Awards (data visualisations, mostly articles deep inside news sites), A'
+// Design Award (winner pages carry no site links), Golden Pin Design Award (mostly
+// products and print, links go to designers' Behance pages), ADC Europe (projects
+// link only the entrant agency's site), The FWA (winner data loads from /api, which
+// robots.txt disallows; the winners feed carries no site links), i-Award Korea
+// (robots.txt bars AI crawlers), Danish Digital Award (mostly apps and marketing
+// results), Australian Web Awards, AGDA Awards and Netty Awards (robots.txt asks a
+// 10s crawl delay), Svenska Designpriset (client-rendered), Hydrogen showcase (about
+// 15 stores), Core77 Design Awards (robots.txt bars AI crawlers).
 import * as awwwards from "./awwwards.js";
 import * as cssdesignawards from "./cssdesignawards.js";
 import * as refero from "./refero.js";
@@ -316,5 +324,7 @@ import * as europeandesign from "./europeandesign.js";
 import * as germandesignaward from "./germandesignaward.js";
 import * as commarts from "./commarts.js";
 import * as gooddesignaustralia from "./gooddesignaustralia.js";
+import * as visuelt from "./visuelt.js";
+import * as appliedarts from "./appliedarts.js";
 
-export const GALLERIES = [awwwards, cssdesignawards, refero, onepagelove, curated, httpster, cssnectar, minimalGallery, darkmodedesign, siteofsites, admiretheweb, bestwebsitegallery, typewolf, hoverstates, siiimple, landinglove, ecommdesign, brutalistwebsites, footerdesign, mindsparklemag, deadsimplesites, landingfolio, csswinner, navbargallery, designnominees, semplice, webdesignclip, csslight, details, saaspages, saaslandingpage, sitesee, landinggallery, cssline, orpetron, unmatchedstyle, a1gallery, seesaw, landingsdev, pricingpages, typio, fourohfours, killerportfolio, webinspoo, astro, gatsby, nuxt, lenis, kirby, wordpress, statamic, muuuuu, awwwardshonorable, wallofportfolios, osmo, wagtail, darkdesign, io3000, responsivejp, ikesai, gallereee, mosaic, saasui, cursorup, oneguu, desengs, wpgallery, storefolio, curategallery, browsingmode, herogallery, threedwebsites, mesh3d, klikkentheke, cryptodesignclub, choooodoii, shopsiteawards, designforb2b, uidesignstudio, finpantheon, landingpagegallery, justadesignlist, glance, tinyblocks, lowww, perfolios, ogimagegallery, designdetails, inspolanding, dragdropship, sectionswtf, topcssgallery, brik, goodwebdesign, nook, brilliantdesign, designnokoto, koreawebdesign, reeoo, arche, lowwwcarbon, framergallery, bestsaaswebdesigns, recent, storefront, palate, uxportfolios, peekpaper, somewhatcreative, animorio, brutalistgarden, typelol, typefoundrydirectory, mabtu, brianlovin, catalog, storeinspo, uidiscovery, uisections, designatlas, norrly, studioarchives, foliosgallery, ecomgallery, purelanding, madeonweb, lovieawards, w3award, communicatorawards, horizoninteractive, webaward, europeandesign, germandesignaward, commarts, gooddesignaustralia];
+export const GALLERIES = [awwwards, cssdesignawards, refero, onepagelove, curated, httpster, cssnectar, minimalGallery, darkmodedesign, siteofsites, admiretheweb, bestwebsitegallery, typewolf, hoverstates, siiimple, landinglove, ecommdesign, brutalistwebsites, footerdesign, mindsparklemag, deadsimplesites, landingfolio, csswinner, navbargallery, designnominees, semplice, webdesignclip, csslight, details, saaspages, saaslandingpage, sitesee, landinggallery, cssline, orpetron, unmatchedstyle, a1gallery, seesaw, landingsdev, pricingpages, typio, fourohfours, killerportfolio, webinspoo, astro, gatsby, nuxt, lenis, kirby, wordpress, statamic, muuuuu, awwwardshonorable, wallofportfolios, osmo, wagtail, darkdesign, io3000, responsivejp, ikesai, gallereee, mosaic, saasui, cursorup, oneguu, desengs, wpgallery, storefolio, curategallery, browsingmode, herogallery, threedwebsites, mesh3d, klikkentheke, cryptodesignclub, choooodoii, shopsiteawards, designforb2b, uidesignstudio, finpantheon, landingpagegallery, justadesignlist, glance, tinyblocks, lowww, perfolios, ogimagegallery, designdetails, inspolanding, dragdropship, sectionswtf, topcssgallery, brik, goodwebdesign, nook, brilliantdesign, designnokoto, koreawebdesign, reeoo, arche, lowwwcarbon, framergallery, bestsaaswebdesigns, recent, storefront, palate, uxportfolios, peekpaper, somewhatcreative, animorio, brutalistgarden, typelol, typefoundrydirectory, mabtu, brianlovin, catalog, storeinspo, uidiscovery, uisections, designatlas, norrly, studioarchives, foliosgallery, ecomgallery, purelanding, madeonweb, lovieawards, w3award, communicatorawards, horizoninteractive, webaward, europeandesign, germandesignaward, commarts, gooddesignaustralia, visuelt, appliedarts];

@@ -152,6 +152,8 @@ first pages.
 | Type Foundry Directory | working, one page lists every foundry, each card links straight to its site, country mapped, every site tagged Agency & Portfolio |
 | MABTU | working, every site page read from its sitemap, most recently captured first, one page fetched per new site, sites it rates below 7 and marketplace templates skipped, industry mapped |
 | Brian Lovin's Sites | working, one page lists every site, each row links straight to the site |
+| Catalog | working, one page whose served flight data lists every brand with its outbound link, newest first, industry tags mapped to industry, E-commerce when none fits |
+| Storeinspo | working, every store page read from its sitemap, one page fetched per new store, categories mapped to industry, E-commerce when none fits |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -290,6 +292,7 @@ first pages.
 | Global Web Design Awards, Web Dev Awards, CSS Awards (cssawards.org), WD Awards, Website Design Awards, Designs Creme, dailyweb.design | not adapted: mirrors Awwwards' entries and logos; 403 behind a bot challenge; read from Supabase client-side; no site links in the served HTML; a parked lander |
 | MegaMegaTypeType, Vev showcase, Eyecandy, studiodirectory.co | not adapted: links to single typeface pages, not foundry sites; 404; 403 behind a bot challenge; a GoDaddy placeholder |
 | Mega Awwards, umanmade, on.design, Scrolltide, Me, But Online, UI Coach, The Vellum, Personal Site Gallery | not adapted: mostly paid submissions from small local businesses; shots, templates and prompts, not sites; no new entries since May 2023; 402; a handful of sample projects; tens of thousands of mostly developer blogs |
+| Photo Web Designs, Aura++ | not adapted: a web design agency for photographers, not a gallery; a startup launch directory |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

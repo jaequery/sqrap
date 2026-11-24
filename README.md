@@ -158,6 +158,8 @@ first pages.
 | UI Sections | working, every company page read from its sitemap, one page fetched per new site, industries mapped, SaaS when none fits |
 | Design Atlas | working, every site page read from its sitemap newest first, one page fetched per new site for its JSON-LD, industry (else type) mapped to industry |
 | Norrly | working, every breakdown page read from its sitemap, one page fetched per new site for its JSON-LD, category mapped to industry |
+| Studio Archives | working, one page lists every studio in an inline data array, no detail page fetched, country mapped to an ISO code, every studio Agency & Portfolio |
+| Folios.Gallery | working, every /sites/<slug> page read from its sitemap, one page fetched per new site for its outbound link, every site Agency & Portfolio |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -299,6 +301,7 @@ first pages.
 | Photo Web Designs, Aura++ | not adapted: a web design agency for photographers, not a gallery; a startup launch directory |
 | Headers Club, before.click, abtest.design, Clonify, Repaint, Selected Screens, The UI Index | not adapted: behind a Vercel login; App Store screenshots and A/B test results, not sites; a Framer template library; website examples from small local businesses; robots.txt bars AI crawlers |
 | WPMade, curated.cool, Kombai Gallery, Musterlab, Inspoweb, Pure Sites, styleguide.fyi | not adapted: mostly small local businesses; a dormant link list; generated UI designs, not sites; deployment disabled; behind Vercel's bot checkpoint; a coding style guide |
+| Motion Folios, Leadership Folios, Webfolios, Parts., umeboshi, Startup Web Designs, D1S1 | not adapted: client-rendered; about 40 design leaders' sites, mostly writing; about 60 portfolios, nothing new since January 2025; mostly Japanese corporate and small local business sites; the domain now serves gambling spam; behind Vercel's bot checkpoint |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

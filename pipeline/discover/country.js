@@ -4,7 +4,7 @@
 // is GB, not the reserved UK), plus the slugs those names do not produce.
 
 const ALIASES = {
-  usa: "US", "united-states-of-america": "US", england: "GB", scotland: "GB", wales: "GB",
+  usa: "US", uk: "GB", "united-states-of-america": "US", england: "GB", scotland: "GB", wales: "GB",
   "northern-ireland": "GB", "the-netherlands": "NL", "czech-republic": "CZ", czechia: "CZ",
   "south-korea": "KR", korea: "KR", russia: "RU", turkey: "TR",
 };

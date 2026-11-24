@@ -146,6 +146,8 @@ first pages.
 | Killer Portfolio | working, one detail page fetched per new site, every site tagged Agency & Portfolio |
 | Peek Paper | working, every post page read from its sitemap, only editions with an unseen post read from their JSON newest first, each post links straight to the site |
 | SomeWhat Creative | working, every monthly "Best Made Websites" post read in one WordPress REST request, each heading links straight to the site |
+| Animorio | working, its English journal index lists every "how it's made" article newest first on one page, each card links straight to the site |
+| Brutalist Garden | working, one page lists every site, each card links straight to the site |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -281,6 +283,7 @@ first pages.
 | Kage, Landing Pages Explained, collected.li, ARTNOC, .SG_BOOKMARK, webportfolios.dev | not adapted: mostly Product Hunt launches and app screens; copywriting teardowns of indie products; eight random sites a visit; the domains do not respond; 402 |
 | Inspirectory, mkdir.directory, LDS Library, personalsit.es | not adapted: directories of galleries, not sites; Dribbble and Behance shots; mostly developer blogs |
 | Rick Creates, Adfolio | not adapted: mirrors FWA and Awwwards entries; behind Vercel's bot checkpoint |
+| Global Web Design Awards, Web Dev Awards, CSS Awards (cssawards.org), WD Awards, Website Design Awards, Designs Creme, dailyweb.design | not adapted: mirrors Awwwards' entries and logos; 403 behind a bot challenge; read from Supabase client-side; no site links in the served HTML; a parked lander |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

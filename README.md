@@ -199,6 +199,8 @@ first pages.
 | BestSaaSWebDesigns | working, every /site/<slug> page read from its sitemap newest first, one page fetched per new site for its JSON-LD url, category mapped to industry |
 | Recent (formerly Godly) | working, Godly's website picks read from its items API newest first, 50 a request, each item's source url links straight to the site, category mapped to industry, posts from X and Instagram skipped |
 | Storefront Design | working, one page whose served data lists every store with its outbound link, industry tag mapped to industry |
+| Palate | working, one gallery page lists every reference site, one page fetched per new site for its outbound link, vertical mapped to industry |
+| UX Portfolios | working, every /portfolios/<slug> page read from its sitemap, one page fetched per new portfolio for its Visit link, every site tagged Agency & Portfolio |
 | Osmo showcase | working, one page of about 100 sites, no detail page fetched |
 | Made with Wagtail | working, paged with /page/<n> newest first, cards link straight to the site |
 | Dark Design | working, one page lists every site, cards link straight to the site, categories mapped to industry, sponsored cards skipped |
@@ -275,6 +277,7 @@ first pages.
 | WebCurate, Inspiration UI, HyperFramer, Calltoidea, LandingPicks | not adapted: a directory of useful sites and tools, not a design gallery; no new entries in years; Framer templates; UI elements, not sites; client-rendered |
 | Stash, ListOfWebsites, Browse.Cool, wwwtf.site, Insposite, Motion Sites | not adapted: a directory of tools, foundries and studios; an SEO directory whose counts contradict themselves; no site links in the served HTML; a handful of sites in the served HTML; 403 behind a bot challenge |
 | Kage, Landing Pages Explained, collected.li, ARTNOC, .SG_BOOKMARK, webportfolios.dev | not adapted: mostly Product Hunt launches and app screens; copywriting teardowns of indie products; eight random sites a visit; the domains do not respond; 402 |
+| Inspirectory, mkdir.directory, LDS Library, personalsit.es | not adapted: directories of galleries, not sites; Dribbble and Behance shots; mostly developer blogs |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

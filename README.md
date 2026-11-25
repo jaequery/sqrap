@@ -338,6 +338,7 @@ first pages.
 | Netko, Golden Site, Workspace Digital Awards, Spider Awards, Icelandic Web Awards, Zlatý středník | not adapted: project pages answer 500 and the winners list carries no site links; client-rendered behind its API's credentials; nominees are agencies, linked through /redirect/, which robots.txt disallows; two website winners a year, no site links; no winners list; corporate communications, not websites |
 | Guldägget, Loeries, Kuldmuna, Dutch Interactive Awards, Jekyll showcase, Squarespace examples | not adapted: advertising campaigns whose archive entries carry no site links (all three); its winners page is gone; about 50 mostly developer sites; no site links in the served HTML |
 | Shopware, Swell and Shopify Plus customers | not adapted: case-study pages with no store links in the served HTML (all three) |
+| Relume showcase, Showit showcase | not adapted: mostly small local businesses and webflow.io staging links; robots.txt asks a 10s crawl delay |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

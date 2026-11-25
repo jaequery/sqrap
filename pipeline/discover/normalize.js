@@ -57,7 +57,7 @@ export const BLOCKLIST = Object.freeze([
   "europeandesign.org", "german-design-award.com", "german-brand-award.com", "german-design-council.de",
   "commarts.com", "good-design.org", "grafill.no", "appliedartsmag.com",
   "tagline.ru", "altinorumcek.com", "azevhonlapja.hu", "bigcommerce.com", "woocommerce.com", "dtc.gallery",
-  "flatinspire.com", "longlist.design",
+  "flatinspire.com", "longlist.design", "bestagencysites.com",
 ]);
 
 // Link shorteners and ad trackers whose real target is behind a redirect.

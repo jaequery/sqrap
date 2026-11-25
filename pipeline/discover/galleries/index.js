@@ -215,7 +215,14 @@
 // Prix, award.dmi.jaa.or.jp: about 240 winners since 2013, more than half campaign and
 // recruiting pages deep inside large corporate sites), Gulltaggen (a handful of websites a
 // year among advertising campaigns), the in-use pages of ABC Dinamo, Grilli Type, Displaay,
-// Commercial Type, Colophon, F37, Production Type and Optimo (404).
+// Commercial Type, Colophon, F37, Production Type and Optimo (404), The FWA's
+// new sitemap (only its ~38 latest /w/ winners, whose pages render from /api) and its
+// legacy archive (legacy.thefwa.com, which hides every outbound link on purpose),
+// the Plasmic, Keystatic, GraphCommerce, TresJS and Threlte showcases (about 30, 10
+// and 25 sites, mixed with demos and small retailers; mostly demos), the Vev showcase
+// (loads again, but no site links in the served HTML), Component Gallery (design
+// system docs, mostly subdomains of sites already stored) and ui-feed (live
+// components, not sites).
 import * as awwwards from "./awwwards.js";
 import * as cssdesignawards from "./cssdesignawards.js";
 import * as refero from "./refero.js";

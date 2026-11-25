@@ -228,7 +228,12 @@
 // Awards (403 behind a bot challenge), the Motion and Rive showcases and the Typotheque and
 // Fontwerk in-use pages (404), Sharp Type's in-use page (429), and HKDA Global Design
 // Awards, CCA Venus, Annual Multimedia, Joseph Binder Award and Creative Circle (the
-// domains do not respond).
+// domains do not respond), the Shopify Theme Store's "Stores using this theme" (up to
+// five stores a theme, mostly small ordinary shops), ADCC Awards, Golden Drum and
+// Dexigner (robots.txt asks a 60s, 30s and 60s crawl delay), Love the Work (Cannes
+// Lions' archive; robots.txt bars AI crawlers), It's Nice That (articles about creative
+// work of every kind, not a site list), Brand Impact Awards (branding projects reported
+// in articles) and lookup.design and Landingly (client-rendered).
 import * as awwwards from "./awwwards.js";
 import * as cssdesignawards from "./cssdesignawards.js";
 import * as refero from "./refero.js";

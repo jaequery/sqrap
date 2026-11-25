@@ -341,6 +341,7 @@ first pages.
 | Shopware, Swell and Shopify Plus customers | not adapted: case-study pages with no store links in the served HTML (all three) |
 | Relume showcase, Showit showcase | not adapted: mostly small local businesses and webflow.io staging links; robots.txt asks a 10s crawl delay |
 | Design Nominees' and CSS Light's full submission lists, MUSE Design Awards, Are.na website-inspiration channels, Web Design File, Rating Runeta | not adapted: mostly small agencies and local businesses (both, one network); robots.txt bars AI crawlers (both); no new entries since about 2017; an agency ranking whose paging robots.txt disallows |
+| CSS Design Awards nominees, Stock Design, AGT smartphone design gallery, matome, PixiJS, Medusa and PrestaShop showcases | not adapted: the same entries as its website gallery, which is already adapted and reaches further back; mostly law, dental and salon sites; mostly Japanese corporate and small local business sites (both); mostly games and demos; no site links in the served HTML (both) |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

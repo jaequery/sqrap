@@ -206,7 +206,12 @@
 // (no site links in the served HTML), Design Nominees' and CSS Light's full submission
 // lists (mostly small agencies and local businesses, one network), MUSE Design Awards and
 // Are.na channels (robots.txt bars AI crawlers), Web Design File (no new entries since
-// about 2017), Rating Runeta (an agency ranking whose paging robots.txt disallows).
+// about 2017), Rating Runeta (an agency ranking whose paging robots.txt disallows),
+// CSS Design Awards' nominees list (the same entries as its website gallery, which
+// is already adapted and reaches further back), Stock Design (mostly law, dental and
+// salon sites), AGT smartphone design gallery and matome (mostly Japanese corporate
+// and small local business sites), PixiJS showcase (mostly games and demos), Medusa
+// and PrestaShop showcases (no site links in the served HTML).
 import * as awwwards from "./awwwards.js";
 import * as cssdesignawards from "./cssdesignawards.js";
 import * as refero from "./refero.js";

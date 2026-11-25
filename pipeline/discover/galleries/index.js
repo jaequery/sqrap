@@ -211,7 +211,11 @@
 // is already adapted and reaches further back), Stock Design (mostly law, dental and
 // salon sites), AGT smartphone design gallery and matome (mostly Japanese corporate
 // and small local business sites), PixiJS showcase (mostly games and demos), Medusa
-// and PrestaShop showcases (no site links in the served HTML).
+// and PrestaShop showcases (no site links in the served HTML), Webグランプリ (Web Grand
+// Prix, award.dmi.jaa.or.jp: about 240 winners since 2013, more than half campaign and
+// recruiting pages deep inside large corporate sites), Gulltaggen (a handful of websites a
+// year among advertising campaigns), the in-use pages of ABC Dinamo, Grilli Type, Displaay,
+// Commercial Type, Colophon, F37, Production Type and Optimo (404).
 import * as awwwards from "./awwwards.js";
 import * as cssdesignawards from "./cssdesignawards.js";
 import * as refero from "./refero.js";

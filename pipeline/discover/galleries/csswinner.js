@@ -7,18 +7,21 @@ const BASE = "https://www.csswinner.com";
 
 export const name = "csswinner";
 
+// Shared with the Nominees adapter, whose cards use the same markup.
+export const parseCards = ($) =>
+  $("li:has(> div > figure a[href*='/details/'])").map((_, el) => {
+    const card = $(el);
+    const url = card.find("figure a[target='_blank'][href^='http']").attr("href");
+    const detail = card.find("h3 a[href*='/details/']").first();
+    if (!url || !detail.length) return null;
+    return { url, name: detail.text().trim() || null, sourceRef: new URL(detail.attr("href"), BASE).href };
+  }).get();
+
 export function listing({ limit }) {
   return paged({
     name,
     limit,
     pageUrl: (n) => `${BASE}/winners${n > 1 ? `/${n}` : ""}`,
-    parse: ($) =>
-      $("li:has(> div > figure a[href*='/details/'])").map((_, el) => {
-        const card = $(el);
-        const url = card.find("figure a[target='_blank'][href^='http']").attr("href");
-        const detail = card.find("h3 a[href*='/details/']").first();
-        if (!url || !detail.length) return null;
-        return { url, name: detail.text().trim() || null, sourceRef: new URL(detail.attr("href"), BASE).href };
-      }).get(),
+    parse: parseCards,
   });
 }

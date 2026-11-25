@@ -188,6 +188,7 @@ first pages.
 | MUUUUU.ORG | working, paged with /page/<n>, cards link straight to the site, industry mapped from the detail path |
 | Awwwards (Honorable Mentions) | working, same card markup as Sites of the Day |
 | Awwwards (Nominees) | working, every site submitted to the jury (about 320 pages, newest first), same card markup as Sites of the Day, winners and Honorable Mentions skipped as already stored |
+| CSS Winner (Nominees) | working, every site submitted to CSS Winner (about 1,070 pages of 18, newest first), same card markup as Sites of the Day, winners skipped as already stored |
 | Wall of Portfolios | working, read from its sitemap newest first, one portfolio page fetched per new site, every site tagged Agency & Portfolio |
 | Mosaic | working, every category page its sitemap lists, cards link straight to the site, category label mapped to industry |
 | SaaS UI | working, read from its sitemap newest first, one app page fetched per new site, category mapped to industry, falling back to SaaS |

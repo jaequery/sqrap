@@ -8,7 +8,7 @@
 // the site link is only on each section page),
 // Supahero (hero sections, now folded into screensdesign.com), Made in Webflow and
 // SaaSFrame (no outbound site links in the served HTML), CSSMania (links behind bit.ly),
-// Web Guru Awards (winners page and site pages render client-side), bestcss.in
+// Web Guru Awards (mostly small businesses, tools and personal pages), bestcss.in
 // (mostly agency and local-business submissions), Muzli (inspiration is articles and
 // shots, not a site list), DesignMunk (no outbound site links), Pafolios (client-rendered),
 // CSS Awards (cssawards.net, now a parked domain), UIJar (the domain now hosts an
@@ -203,7 +203,10 @@
 // (corporate communications, not websites), Guldägget, Loeries and Kuldmuna (advertising
 // campaigns; archive entries carry no site links), Dutch Interactive Awards (its winners
 // page is gone), Jekyll showcase (about 50 mostly developer sites), Squarespace examples
-// (no site links in the served HTML).
+// (no site links in the served HTML), Design Nominees' and CSS Light's full submission
+// lists (mostly small agencies and local businesses, one network), MUSE Design Awards and
+// Are.na channels (robots.txt bars AI crawlers), Web Design File (no new entries since
+// about 2017), Rating Runeta (an agency ranking whose paging robots.txt disallows).
 import * as awwwards from "./awwwards.js";
 import * as cssdesignawards from "./cssdesignawards.js";
 import * as refero from "./refero.js";

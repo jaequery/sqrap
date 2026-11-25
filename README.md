@@ -251,7 +251,7 @@ first pages.
 | Supahero | not adapted: hero sections only, now folded into screensdesign.com |
 | Made in Webflow, SaaSFrame | not adapted: no outbound site links in the served HTML |
 | CSSMania | not adapted: every site link goes through bit.ly |
-| Web Guru Awards | not adapted: the winners list pages and site pages render client-side |
+| Web Guru Awards | not adapted: now server-rendered, but its winners and nominees are mostly small businesses, tools and personal pages (a drilling contractor, a browser toolbar) |
 | bestcss.in | not adapted: mostly agency and local-business submissions |
 | Muzli | not adapted: its inspiration is articles and shots, not a list of sites |
 | DesignMunk | not adapted: no outbound site links |
@@ -340,6 +340,7 @@ first pages.
 | Guldägget, Loeries, Kuldmuna, Dutch Interactive Awards, Jekyll showcase, Squarespace examples | not adapted: advertising campaigns whose archive entries carry no site links (all three); its winners page is gone; about 50 mostly developer sites; no site links in the served HTML |
 | Shopware, Swell and Shopify Plus customers | not adapted: case-study pages with no store links in the served HTML (all three) |
 | Relume showcase, Showit showcase | not adapted: mostly small local businesses and webflow.io staging links; robots.txt asks a 10s crawl delay |
+| Design Nominees' and CSS Light's full submission lists, MUSE Design Awards, Are.na website-inspiration channels, Web Design File, Rating Runeta | not adapted: mostly small agencies and local businesses (both, one network); robots.txt bars AI crawlers (both); no new entries since about 2017; an agency ranking whose paging robots.txt disallows |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

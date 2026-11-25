@@ -55,7 +55,7 @@ function industryOf(tags) {
 
 // The page's React Server Components payload: the string chunks pushed to
 // self.__next_f, decoded and joined.
-function flightData($) {
+export function flightData($) {
   return $("script").map((_, el) => {
     const m = /^self\.__next_f\.push\(\[1,("[\s\S]*")\]\)$/.exec($(el).text().trim());
     if (!m) return "";
@@ -68,7 +68,7 @@ function flightData($) {
 }
 
 // The JSON object that starts at `start` in `text`, or null.
-function objectAt(text, start) {
+export function objectAt(text, start) {
   let depth = 0;
   let inString = false;
   for (let i = start; i < text.length; i++) {

@@ -191,6 +191,7 @@ first pages.
 | Soreiine!! (soreiine.jp) | working, a Japanese gallery in which a working web director picks sites and says why (about 590, 2021 on, mostly Japanese corporate, recruiting, brand, shop and campaign sites), every pick page read from its post sitemap, most recently changed first, one page fetched per new site for the link on its screenshot, pages already stored as a source skipped, the page's own industry category mapped to industry (its online-shop type as a fallback) |
 | Webdesigner Depot (Best New Websites) | working, its monthly "20 Best New Websites" roundups (April 2020 to November 2024), the yearly "best websites of" roundups and the earlier monthly "Best New Portfolios" (December 2015 to March 2020), about 100 posts found through two title searches of the blog's WordPress API and read newest first, each heading's link (or the first outbound link after it) taken as the site and the post kept as the source, sites already stored skipped by domain, portfolios tagged Agency & Portfolio; the series has had no new posts since November 2024 |
 | S5-Style (s5-style.com) | working, a Japanese gallery whose official curators' "Good Web Design" picks (about 7,200, 2012 on, mostly Japanese corporate, brand, product, campaign, studio and shop sites) are paged with /page/<n>/ newest first, 120 a page read from the `__NEXT_DATA__` each page serves, so no page per site is fetched; users' own bookmarks (/all/) are not read, recruiting sites are skipped, site type (else category) mapped to industry, a 404 past the last page ends the listing |
+| Pafolios (pafolios.com) | working, a hand-picked gallery of design portfolios (about 900, 2020 on: product and UX designers, design engineers, creative and brand designers, studios), every record read from the Next.js flight data the home page serves, so one request reads the whole gallery, each address once from its newest record, newest first, each record's /<slug> page kept as the source, every site tagged Agency & Portfolio |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -270,7 +271,6 @@ first pages.
 | bestcss.in | not adapted: mostly agency and local-business submissions |
 | Muzli | not adapted: its inspiration is articles and shots, not a list of sites |
 | DesignMunk | not adapted: no outbound site links |
-| Pafolios | not adapted: client-rendered |
 | CSS Awards (cssawards.net) | not adapted: the domain is parked |
 | UIJar | not adapted: the domain now hosts an unrelated business |
 | DesignRush, Web Design Museum | not adapted: 403 behind a bot challenge |
@@ -375,6 +375,7 @@ first pages.
 | Pixlpin, Detail (detail.design), Details Matter, Viewport UI, Varchive, CSS Gallery (cssrefresh.com), Modulesss, Joomla Showcase | not adapted: blocked by a Cloudflare challenge, and app and UI screenshots rather than sites; small interface decisions, not sites; micro-interactions in a single Framer page; UI shots from designers on X; AI news, not a gallery; 14 entries, most of them google.com, yahoo.com and placeholders; parts cut from sites rather than whole sites; community-submitted Joomla sites, not picked for design |
 | Web Design Inspiration (webdesign-inspiration.com), TCD Museum, Dezeen Awards | not adapted: 403 behind a bot challenge, its sitemap too; sites built on one vendor's WordPress themes, mostly small Japanese businesses; architecture, interiors and products, no website category |
 | Abduzeedo, Scottish Design Awards, The Design Inspiration, Speckyboy, BIMA Awards, Docusaurus showcase | not adapted: robots.txt bars AI crawlers (both); its websites category stops in 2018 with empty post bodies, and the blog now carries pharmacy spam; scattered listicles, not a series; agencies and campaigns announced in news posts; documentation sites |
+| Needle Engine showcase, Dark Mode List, Webby Design, Web Design Rankings, Mass-Driver in use | not adapted: now redirects to the home page; apps and tools with a dark mode, not picked for design; an agency site; an agency directory; the page is gone (404) |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

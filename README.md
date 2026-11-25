@@ -187,6 +187,7 @@ first pages.
 | Statamic Showcase | working, paged with ?page=, one page fetched per new site |
 | MUUUUU.ORG | working, paged with /page/<n>, cards link straight to the site, industry mapped from the detail path |
 | Awwwards (Honorable Mentions) | working, same card markup as Sites of the Day |
+| Awwwards (Nominees) | working, every site submitted to the jury (about 320 pages, newest first), same card markup as Sites of the Day, winners and Honorable Mentions skipped as already stored |
 | Wall of Portfolios | working, read from its sitemap newest first, one portfolio page fetched per new site, every site tagged Agency & Portfolio |
 | Mosaic | working, every category page its sitemap lists, cards link straight to the site, category label mapped to industry |
 | SaaS UI | working, read from its sitemap newest first, one app page fetched per new site, category mapped to industry, falling back to SaaS |
@@ -337,6 +338,7 @@ first pages.
 | Netko, Golden Site, Workspace Digital Awards, Spider Awards, Icelandic Web Awards, Zlatý středník | not adapted: project pages answer 500 and the winners list carries no site links; client-rendered behind its API's credentials; nominees are agencies, linked through /redirect/, which robots.txt disallows; two website winners a year, no site links; no winners list; corporate communications, not websites |
 | Guldägget, Loeries, Kuldmuna, Dutch Interactive Awards, Jekyll showcase, Squarespace examples | not adapted: advertising campaigns whose archive entries carry no site links (all three); its winners page is gone; about 50 mostly developer sites; no site links in the served HTML |
 | Shopware, Swell and Shopify Plus customers | not adapted: case-study pages with no store links in the served HTML (all three) |
+| Relume showcase, Showit showcase | not adapted: mostly small local businesses and webflow.io staging links; robots.txt asks a 10s crawl delay |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

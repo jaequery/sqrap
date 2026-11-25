@@ -189,6 +189,7 @@ first pages.
 | Awwwards (Honorable Mentions) | working, same card markup as Sites of the Day |
 | Awwwards (Nominees) | working, every site submitted to the jury (about 320 pages, newest first), same card markup as Sites of the Day, winners and Honorable Mentions skipped as already stored |
 | CSS Winner (Nominees) | working, every site submitted to CSS Winner (about 1,070 pages of 18, newest first), same card markup as Sites of the Day, winners skipped as already stored |
+| Swup showcase | working, about 30 sites its maintainers accept on quality (architecture practices, museums, biennials, studios), read from the swup/docs repository on GitHub (one front-matter file per site) because swup.js.org answers 503 at times, newest first, files already stored skipped |
 | Wall of Portfolios | working, read from its sitemap newest first, one portfolio page fetched per new site, every site tagged Agency & Portfolio |
 | Mosaic | working, every category page its sitemap lists, cards link straight to the site, category label mapped to industry |
 | SaaS UI | working, read from its sitemap newest first, one app page fetched per new site, category mapped to industry, falling back to SaaS |
@@ -344,6 +345,7 @@ first pages.
 | CSS Design Awards nominees, Stock Design, AGT smartphone design gallery, matome, PixiJS, Medusa and PrestaShop showcases | not adapted: the same entries as its website gallery, which is already adapted and reaches further back; mostly law, dental and salon sites; mostly Japanese corporate and small local business sites (both); mostly games and demos; no site links in the served HTML (both) |
 | Webグランプリ (Web Grand Prix, award.dmi.jaa.or.jp), Gulltaggen, the in-use pages of ABC Dinamo, Grilli Type, Displaay, Commercial Type, Colophon, F37, Production Type and Optimo | not adapted: about 240 winners since 2013, more than half of them campaign and recruiting pages deep inside large corporate sites; a handful of websites a year among advertising campaigns; 404 |
 | The FWA (sitemap, legacy archive), Plasmic, Keystatic, GraphCommerce, TresJS and Threlte showcases, Vev showcase, Component Gallery, ui-feed | not adapted: the sitemap lists only the ~38 latest winners, whose pages render from /api, and the legacy archive hides every outbound link on purpose; about 30, 10 and 25 sites mixed with demos and small retailers, mostly demos (both); no site links in the served HTML; design-system docs, mostly subdomains of sites already stored; live components, not sites |
+| Prémios Lusos, Web Excellence Awards, Digital Design Awards (digitaldesignawards.com) | not adapted: the domain now serves a Chinese video site; a parked domain; now redirects to the World Business Awards |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

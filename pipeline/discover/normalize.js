@@ -54,7 +54,7 @@ export const BLOCKLIST = Object.freeze([
   "w3award.com", "aiva.org",
   "communicatorawards.com", "horizoninteractiveawards.com",
   "webaward.org", "webmarketingassociation.org",
-  "europeandesign.org", "german-design-award.com", "german-design-council.de",
+  "europeandesign.org", "german-design-award.com", "german-brand-award.com", "german-design-council.de",
   "commarts.com", "good-design.org", "grafill.no", "appliedartsmag.com",
   "tagline.ru", "bigcommerce.com", "woocommerce.com",
 ]);

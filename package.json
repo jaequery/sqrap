@@ -9,6 +9,7 @@
     "start": "next start",
     "db:migrate": "node scripts/db-migrate.js",
     "discover": "node scripts/discover.js",
+    "accelerators": "node scripts/accelerators.js",
     "seed": "node scripts/seed.js",
     "capture": "node scripts/capture.js",
     "judge": "node scripts/judge.js",
@@ -20,7 +21,8 @@
     "import:sqlite": "node scripts/import-sqlite.js",
     "agent:backfill": "node scripts/backfill-agent.js",
     "embed:backfill": "node scripts/backfill-embeddings.js",
-    "yc:sync": "node scripts/yc-sync.js"
+    "accelerators:sync": "node scripts/accelerators-sync.js",
+    "yc:sync": "node scripts/accelerators-sync.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.131.0",

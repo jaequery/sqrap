@@ -5,7 +5,9 @@ import { retryPendingPurges } from "../../../../lib/shots";
 import { embedNew } from "../../../../pipeline/embed";
 import { judgeEnabled, styleNew } from "../../../../pipeline/judge/index";
 import { runPipeline } from "../../../../pipeline/run";
-import { syncYc } from "../../../../pipeline/yc";
+import { ACCELERATORS } from "../../../../lib/taxonomy";
+import { SYNC_PROGRAMS } from "../../../../pipeline/accelerators/index";
+import { syncProgram } from "../../../../pipeline/accelerators/sync";
 
 export const dynamic = "force-dynamic";
 // Pro plan ceiling. The run stops claiming at STOP_CLAIMING_MS so an in-flight
@@ -17,8 +19,12 @@ const EMBED_LIMIT = 64;
 const EMBED_MS = 60 * 1000;
 const STYLE_LIMIT = 8;
 const STYLE_MS = 60 * 1000;
-const YC_MS = 30 * 1000;
-const YC_EVERY_MS = 24 * 60 * 60 * 1000;
+// Accelerator badges: each program at most once a day, ACCEL_PROGRAM_MS each
+// and ACCEL_MS for all of them per run.
+const ACCEL_MS = 75 * 1000;
+const ACCEL_PROGRAM_MS = 45 * 1000;
+const ACCEL_MIN_MS = 10 * 1000;
+const ACCEL_EVERY_MS = 24 * 60 * 60 * 1000;
 // Discover only while fewer sites than this wait for their home capture.
 const DISCOVER_BELOW = 100;
 
@@ -54,27 +60,43 @@ export async function GET(request) {
   const styles = judgeEnabled()
     ? await styleNew({ limit: STYLE_LIMIT, signal: AbortSignal.timeout(STYLE_MS), log: console.error }).catch((err) => ({ error: err.message }))
     : { skipped: "no AI credentials" };
-  const yc = await ycDaily();
+  const accelerators = await acceleratorsDaily();
   // A run captures far fewer sites than discovery can add, so discovery waits
   // while the capture queue is long and the run's time goes to capturing.
   const queued = Number((await queueCounts()).capture);
   const discover = queued < DISCOVER_BELOW;
   const totals = await runPipeline({ ...RUN, discover }, { signal: AbortSignal.timeout(STOP_CLAIMING_MS) });
-  return Response.json({ data: { queued, discoverSkipped: !discover, ...totals, purges, agentUsage, embeddings, styles, yc } }, { headers: { "Cache-Control": "no-store" } });
+  return Response.json({ data: { queued, discoverSkipped: !discover, ...totals, purges, agentUsage, embeddings, styles, accelerators } }, { headers: { "Cache-Control": "no-store" } });
 }
 
-// YC batches for the badge and the yc=1 filter (pipeline/yc.js): at most once a
-// day, time-boxed. A successful sync leaves a `yc_sync` event, so a failed one
-// is retried on the next run; a failure never clears stored batches.
-async function ycDaily() {
-  const last = await lastEvent("yc_sync").catch(() => null);
-  if (last && Date.now() - Date.parse(last.at) < YC_EVERY_MS) return { skipped: `synced at ${last.at}` };
-  try {
-    const result = await syncYc({ signal: AbortSignal.timeout(YC_MS), log: console.error });
-    await recordEvent(null, "yc_sync", result);
-    return result;
-  } catch (err) {
-    console.error(`yc sync failed: ${err.message}`);
-    return { error: err.message };
+// Accelerator badges and the accel= filter (pipeline/accelerators/sync.js).
+// Each program syncs at most once a day: a complete sync leaves an
+// `accelerator_sync:<id>` event. Programs that are due go longest-waiting
+// first, each time-boxed, until the run's share is spent; the rest wait for a
+// later run, and so does a program whose company pages are not all read yet
+// (it resumes from its cache). A failure never clears stored badges.
+async function acceleratorsDaily() {
+  const started = Date.now();
+  const out = {};
+  const due = [];
+  for (const { id } of ACCELERATORS) {
+    const last = await lastEvent(`accelerator_sync:${id}`).catch(() => null);
+    if (last && started - Date.parse(last.at) < ACCEL_EVERY_MS) out[id] = { skipped: `synced at ${last.at}` };
+    else due.push({ id, at: last ? Date.parse(last.at) : 0 });
   }
+  due.sort((a, b) => a.at - b.at);
+  for (const { id } of due) {
+    const program = SYNC_PROGRAMS.find((p) => p.name === id);
+    const left = ACCEL_MS - (Date.now() - started);
+    if (!program || left < ACCEL_MIN_MS) { out[id] = { skipped: program ? "no time left in this run" : "no fetcher" }; continue; }
+    try {
+      const result = await syncProgram(program, { signal: AbortSignal.timeout(Math.min(ACCEL_PROGRAM_MS, left)), log: console.error });
+      if (!result.pending) await recordEvent(null, `accelerator_sync:${id}`, result);
+      out[id] = result;
+    } catch (err) {
+      console.error(`[${id}] accelerator sync failed: ${err.message}`);
+      out[id] = { error: err.message };
+    }
+  }
+  return out;
 }

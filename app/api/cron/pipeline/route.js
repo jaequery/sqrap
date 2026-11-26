@@ -1,10 +1,11 @@
 import { snapshotAgentUsage } from "../../../../lib/agent-quota";
-import { queueCounts } from "../../../../lib/db";
+import { lastEvent, queueCounts, recordEvent } from "../../../../lib/db";
 import { embeddingsEnabled } from "../../../../lib/embeddings";
 import { retryPendingPurges } from "../../../../lib/shots";
 import { embedNew } from "../../../../pipeline/embed";
 import { judgeEnabled, styleNew } from "../../../../pipeline/judge/index";
 import { runPipeline } from "../../../../pipeline/run";
+import { syncYc } from "../../../../pipeline/yc";
 
 export const dynamic = "force-dynamic";
 // Pro plan ceiling. The run stops claiming at STOP_CLAIMING_MS so an in-flight
@@ -16,6 +17,8 @@ const EMBED_LIMIT = 64;
 const EMBED_MS = 60 * 1000;
 const STYLE_LIMIT = 8;
 const STYLE_MS = 60 * 1000;
+const YC_MS = 30 * 1000;
+const YC_EVERY_MS = 24 * 60 * 60 * 1000;
 // Discover only while fewer sites than this wait for their home capture.
 const DISCOVER_BELOW = 100;
 
@@ -51,10 +54,27 @@ export async function GET(request) {
   const styles = judgeEnabled()
     ? await styleNew({ limit: STYLE_LIMIT, signal: AbortSignal.timeout(STYLE_MS), log: console.error }).catch((err) => ({ error: err.message }))
     : { skipped: "no AI credentials" };
+  const yc = await ycDaily();
   // A run captures far fewer sites than discovery can add, so discovery waits
   // while the capture queue is long and the run's time goes to capturing.
   const queued = Number((await queueCounts()).capture);
   const discover = queued < DISCOVER_BELOW;
   const totals = await runPipeline({ ...RUN, discover }, { signal: AbortSignal.timeout(STOP_CLAIMING_MS) });
-  return Response.json({ data: { queued, discoverSkipped: !discover, ...totals, purges, agentUsage, embeddings, styles } }, { headers: { "Cache-Control": "no-store" } });
+  return Response.json({ data: { queued, discoverSkipped: !discover, ...totals, purges, agentUsage, embeddings, styles, yc } }, { headers: { "Cache-Control": "no-store" } });
+}
+
+// YC batches for the badge and the yc=1 filter (pipeline/yc.js): at most once a
+// day, time-boxed. A successful sync leaves a `yc_sync` event, so a failed one
+// is retried on the next run; a failure never clears stored batches.
+async function ycDaily() {
+  const last = await lastEvent("yc_sync").catch(() => null);
+  if (last && Date.now() - Date.parse(last.at) < YC_EVERY_MS) return { skipped: `synced at ${last.at}` };
+  try {
+    const result = await syncYc({ signal: AbortSignal.timeout(YC_MS), log: console.error });
+    await recordEvent(null, "yc_sync", result);
+    return result;
+  } catch (err) {
+    console.error(`yc sync failed: ${err.message}`);
+    return { error: err.message };
+  }
 }

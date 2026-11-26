@@ -619,6 +619,29 @@ npm run agent:backfill    # -- --batch 25 --limit 500
 npm run search:reindex
 ```
 
+### YC badge
+
+Sites of Y Combinator companies show a text badge after their name, such as
+`YC W26`, on browse cards and the site page, linking to the company's page on
+ycombinator.com. It is Sqrap's own outlined `.badge`, never YC's logo or color.
+Browse filters to them with the "+ YC" chip (`yc=1` in the hash and in
+`/api/sites`, `/api/screens` and `/api/sections`). The agent catalog adds a
+`- YC: W26 (<url>)` line, and agent API site objects carry `ycBatch` and `ycUrl`.
+
+The data is `sites.yc_batch` and `sites.yc_url` (migration 013), filled by
+`pipeline/yc.js` from the public yc-oss mirror of YC's directory
+(`https://yc-oss.github.io/api/companies/all.json`, every batch). A site
+matches when its domain equals the company website's hostname without `www.`;
+there is no fuzzy or parent-domain matching. When two companies share a domain
+the latest batch wins. Labels are the season letter and two-digit year:
+Winter `W`, Spring `X`, Summer `S`, Fall `F` ("Spring 2025" is `X25`); an
+unknown batch format stores the YC page without a batch, so no badge shows.
+Sites that stop matching are cleared. A failed fetch changes nothing.
+
+The cron runs the sync at most once a day (it records a `yc_sync` event, time
+boxed to 30 seconds); `npm run yc:sync` runs it by hand and prints
+`{ fetched, domains, matched, updated, cleared }`.
+
 ## Curate (admin)
 
 `SQRAP_ADMIN=1 npm run dev`, then open http://localhost:3000/admin. The admin

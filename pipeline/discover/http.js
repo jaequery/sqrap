@@ -1,6 +1,7 @@
 // Polite HTTP for discovery: identifies as SqrapBot, waits 1s between requests
 // to the same host, times out after 15s, retries twice with backoff, and checks
 // the host's robots.txt before every crawl request.
+import https from "node:https";
 
 export const USER_AGENT = "SqrapBot/1.0 (+https://github.com/jaequery/sqrap)";
 // Our own robots.txt group first, then the legacy one from before the rename.
@@ -8,6 +9,11 @@ const BOTS = ["sqrapbot", "jethrobot"];
 const SPACING_MS = 1000;
 const TIMEOUT_MS = 15000;
 const RETRIES = 2;
+
+// fetch refuses responses whose headers pass Node's 16 KB default, and some hosts
+// send more (webflow.com: two 8 KB Content-Security-Policy headers).
+const HEADERS_OVERFLOW = "UND_ERR_HEADERS_OVERFLOW";
+const MAX_HEADER_BYTES = 64 * 1024;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -38,10 +44,34 @@ async function rawFetch(url, init = {}) {
       }
       return res;
     } catch (err) {
+      if (err.cause?.code === HEADERS_OVERFLOW) throw err; // fails the same way every time
       lastErr = err;
     }
   }
   throw lastErr;
+}
+
+// A GET through node:https, which takes a larger header limit than fetch, for a
+// robots.txt whose headers overflow fetch's. Follows up to `hops` redirects like
+// fetch does. Resolves { status, type, text }.
+async function getWithLargeHeaders(url, hops = 3) {
+  await throttle(new URL(url).host);
+  const res = await new Promise((resolve, reject) => {
+    const req = https.get(url, { headers: { "user-agent": USER_AGENT }, maxHeaderSize: MAX_HEADER_BYTES, timeout: TIMEOUT_MS }, (res) => {
+      res.setEncoding("utf8");
+      let text = "";
+      res.on("data", (chunk) => (text += chunk));
+      res.on("end", () => resolve({ status: res.statusCode, type: res.headers["content-type"] || "", location: res.headers.location, text }));
+      res.on("error", reject);
+    });
+    req.on("timeout", () => req.destroy(new Error(`timeout for ${url}`)));
+    req.on("error", reject);
+  });
+  if (res.status >= 300 && res.status < 400 && res.location && hops > 0) {
+    const next = new URL(res.location, url);
+    if (next.protocol === "https:") return getWithLargeHeaders(next.href, hops - 1);
+  }
+  return res;
 }
 
 /* ---------- robots.txt ---------- */
@@ -96,11 +126,22 @@ const robotsCache = new Map();
 async function robotsFor(origin) {
   if (!robotsCache.has(origin)) {
     robotsCache.set(origin, (async () => {
+      const url = origin + "/robots.txt";
       try {
-        const res = await rawFetch(origin + "/robots.txt");
-        if (!res.ok) return []; // no robots.txt: everything allowed
-        if ((res.headers.get("content-type") || "").includes("text/html")) return []; // an HTML 404 page served as 200
-        return parseRobots(await res.text());
+        let status, type, text;
+        try {
+          const res = await rawFetch(url);
+          status = res.status;
+          type = res.headers.get("content-type") || "";
+          text = res.ok ? await res.text() : "";
+        } catch (err) {
+          if (err.cause?.code !== HEADERS_OVERFLOW || !url.startsWith("https:")) throw err;
+          ({ status, type, text } = await getWithLargeHeaders(url));
+          if (status === 429 || status >= 500) throw new Error(`HTTP ${status} for ${url}`);
+        }
+        if (status < 200 || status >= 300) return []; // no robots.txt: everything allowed
+        if (type.includes("text/html")) return []; // an HTML 404 page served as 200
+        return parseRobots(text);
       } catch {
         return null; // unreachable: treat as disallow-all
       }

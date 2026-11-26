@@ -38,6 +38,9 @@ export default function Terms() {
 
           <h2>No warranty</h2>
           <p>Sqrap is provided as is, and these terms may change; the version on this page is the one that applies.</p>
+
+          <h2>Privacy</h2>
+          <p>What we store about accounts, API keys and their usage is described in the <a href="/privacy">privacy policy</a>.</p>
         </article>
       </main>
     </>

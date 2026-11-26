@@ -5,7 +5,7 @@ import { openShot, siteCacheTag } from "../../../lib/shots";
 
 export const dynamic = "force-dynamic";
 
-const notFound = () => new Response("Not found", { status: 404 });
+const notFound = () => new Response("Not found", { status: 404, headers: { "Cache-Control": "no-store" } });
 
 // Streams a captured WebP (lib/shots.js: private Blob, or SQRAP_DATA_DIR/shots
 // locally). The first segment is the site id, so images of sites that are not

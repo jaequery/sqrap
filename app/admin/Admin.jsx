@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { INDUSTRIES, PAGE_PATTERNS, SECTION_TYPES } from "../../lib/taxonomy";
 
-// The local admin. View state lives in the hash: #/queue, #/discovered,
+// The admin (local, or a signed-in admin account; lib/admin.js). View state lives in the hash: #/queue, #/discovered,
 // #/approved, #/rejected, #/removals, #/clicks, #/stats, #/seeds and #/site/<id>; anything else
 // falls back to the queue. Data comes from app/api/admin/**.
 const TABS = [
@@ -39,6 +39,7 @@ export default function Admin() {
   const [route, setRoute] = useState({ view: "queue", id: null });
   const [counts, setCounts] = useState({});
   const [jobs, setJobs] = useState([]);
+  const [jobsOff, setJobsOff] = useState(null); // why re-capture/re-judge cannot run here, or null
   const [notice, setNotice] = useState(null);
   const [tick, setTick] = useState(0); // bump to reload the current view
   const reload = useCallback(() => setTick((t) => t + 1), []);
@@ -63,6 +64,7 @@ export default function Admin() {
     const wasActive = new Set(jobsRef.current.filter((j) => j.status === "queued" || j.status === "running").map((j) => j.id));
     jobsRef.current = d.items;
     setJobs(d.items);
+    setJobsOff(d.available === false ? d.reason || "Background jobs are off here" : null);
     if (d.items.some((j) => wasActive.has(j.id) && (j.status === "done" || j.status === "failed"))) reload();
   }, () => {}), [reload]);
   useEffect(() => { pollJobs(); }, [pollJobs, tick]);
@@ -86,7 +88,7 @@ export default function Admin() {
     }
   }, [reload, pollJobs]);
 
-  const ctx = { tick, act, setCounts, reload };
+  const ctx = { tick, act, setCounts, reload, jobsOff };
   return (
     <div className="layout admin">
       <aside className="sidebar" aria-label="Admin">
@@ -207,7 +209,7 @@ function SiteList({ tab, tick, act, setCounts }) {
   );
 }
 
-function SiteEdit({ id, tick, act }) {
+function SiteEdit({ id, tick, act, jobsOff }) {
   const [site, setSite] = useState(null);
   const [error, setError] = useState(null);
   const [form, setForm] = useState({});
@@ -268,11 +270,12 @@ function SiteEdit({ id, tick, act }) {
         <div className="admin-actions">
           <button className="btn-small" type="button" disabled={busy || site.status === "approved"} onClick={() => save({ status: "approved" })}>Approve</button>
           <button className="btn-small" type="button" disabled={busy || site.status === "rejected"} onClick={() => save({ status: "rejected" })}>Reject</button>
-          <button className="btn-small" type="button" disabled={busy} onClick={() => job("recapture")}>Re-capture</button>
-          <button className="btn-small" type="button" disabled={busy} onClick={() => job("rejudge")}>Re-judge</button>
+          <button className="btn-small" type="button" disabled={busy || !!jobsOff} title={jobsOff || undefined} onClick={() => job("recapture")}>Re-capture</button>
+          <button className="btn-small" type="button" disabled={busy || !!jobsOff} title={jobsOff || undefined} onClick={() => job("rejudge")}>Re-judge</button>
           <button className="btn-small danger" type="button" disabled={busy} onClick={del}>Delete</button>
         </div>
       </div>
+      {jobsOff && <p className="mute">{jobsOff}.</p>}
 
       <section className="admin-card">
         <h3>Judgement</h3>

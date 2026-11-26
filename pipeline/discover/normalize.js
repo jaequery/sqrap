@@ -70,6 +70,7 @@ export const BLOCKLIST = Object.freeze([
 const REDIRECTORS = new Set([
   "bit.ly", "t.co", "ow.ly", "buff.ly", "tinyurl.com", "lnkd.in", "goo.gl", "rebrand.ly",
   "grsm.io", "fas.st", "geni.us", "shareasale.com", "go.skimresources.com", "nyti.ms",
+  "shorturl.at",
 ]);
 
 const NON_HTML = /\.(pdf|jpe?g|png|gif|webp|svg|mp4|mov|zip|docx?|xlsx?|pptx?)$/i;

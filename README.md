@@ -87,7 +87,7 @@ runs at most `--max-queries` (default 30) queries per run.
 count toward it, so each run reads past the gallery entries earlier runs took,
 up to ten times the limit in candidates. Refero, Site of Sites, Details Inspo, SiteSee
 Landing Gallery, A1 Gallery, Landings, Webinspoo, Wall of Portfolios, Gallereee, Mosaic, SaaS UI, Hero Gallery, Mesh3D, Crypto Design Club, Arche Directory, BestSaaSWebDesigns and the Gatsby showcase are read from their sitemaps, and they, Admire the Web,
-Typewolf, SaaS Pages, Orpetron, Unmatched Style, See*Saw and Killer Portfolio skip the detail pages already stored
+Typewolf, SaaS Pages, SaaSFrame, Orpetron, Unmatched Style, See*Saw and Killer Portfolio skip the detail pages already stored
 as a site's source.
 
 Paged galleries (Awwwards, CSS Design Awards, One Page Love, Minimal Gallery,
@@ -198,6 +198,7 @@ first pages.
 | Bento Grids (bentogrids.com) | working, a hand-picked gallery of bento-grid layouts cut from product and marketing sites (Linear, Vercel, Attio, Clerk, Raycast, Neon), every shot read from the __NEXT_DATA__ the home page serves, so one request reads the whole gallery, "ui" shots only, template demos on framer.website and webflow.io skipped, each host once, newest first, the home page kept as the source |
 | Delightful (delightful.click) | working, a hand-picked library of design references from about 1,600 brands, each tiered S or A, read from the one index.json its client-rendered library loads, web heroes, pages and sections only (about 520), Mobbin and X clips refused, agency case-study pages skipped, each host once, most recently captured first, each item's library page kept as the source, sector tags mapped to industry |
 | Good Design Gallery (gooddesign.gallery) | working, a small hand-curated archive of websites, interfaces, identities and motion its editors pick out of X, Threads and Instagram, Websites category only (about 25), every entry read from the one served /?discipline=Websites page, entries that link only to the post they were found in (Instagram, X, Threads, Contra) skipped, each host once, newest first, each /design/<id> page kept as the source, portfolios tagged Agency & Portfolio |
+| SaaSFrame (saasframe.io) | working, a library of real web and app screens from about 360 SaaS products, every product read from the one served /saas page (most recently added first, with its category), one product page fetched per new site for the site named in its Organization JSON-LD (its Visit website button otherwise), pages already stored as a source skipped, categories mapped to industry with SaaS as the fallback |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -271,7 +272,7 @@ first pages.
 | CSS Reel | not adapted: now a casino affiliate page |
 | Unsection | not adapted: lists sections, not sites; the site link is only on each section page |
 | Supahero | not adapted: hero sections only, now folded into screensdesign.com |
-| Made in Webflow, SaaSFrame | not adapted: no outbound site links in the served HTML |
+| Made in Webflow | not adapted: no outbound site links in the served HTML |
 | CSSMania | not adapted: every site link goes through bit.ly |
 | Web Guru Awards | not adapted: now server-rendered, but its winners and nominees are mostly small businesses, tools and personal pages (a drilling contractor, a browser toolbar) |
 | bestcss.in | not adapted: mostly agency and local-business submissions |

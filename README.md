@@ -193,6 +193,7 @@ first pages.
 | S5-Style (s5-style.com) | working, a Japanese gallery whose official curators' "Good Web Design" picks (about 7,200, 2012 on, mostly Japanese corporate, brand, product, campaign, studio and shop sites) are paged with /page/<n>/ newest first, 120 a page read from the `__NEXT_DATA__` each page serves, so no page per site is fetched; users' own bookmarks (/all/) are not read, recruiting sites are skipped, site type (else category) mapped to industry, a 404 past the last page ends the listing |
 | Pafolios (pafolios.com) | working, a hand-picked gallery of design portfolios (about 900, 2020 on: product and UX designers, design engineers, creative and brand designers, studios), every record read from the Next.js flight data the home page serves, so one request reads the whole gallery, each address once from its newest record, newest first, each record's /<slug> page kept as the source, every site tagged Agency & Portfolio |
 | Bestfolios (bestfolios.com) | working, a hand-picked gallery of designer portfolios (product and UX designers at tech companies, graphic, brand and motion designers), read from the /api/portfolios JSON its client-rendered pages load, which returns only the newest 100, so each run takes the latest additions, each address once, newest first, each /portfolio/<authorlink> page kept as the source, every site tagged Agency & Portfolio |
+| Cofolios (cofolios.com) | working, a hand-picked gallery of about 190 portfolios of product designers from Airbnb, Apple, Google, Meta, Microsoft, Amazon and other tech companies (2020 to 2024), read from the public Firestore collections its client-rendered pages load, one per company group, each address once, newest first, each /portfolio/<Full-Name> page kept as the source, every site tagged Agency & Portfolio |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -295,7 +296,6 @@ first pages.
 | Hugo, Payload, Storyblok, DatoCMS, Directus, Svelte showcases | not adapted: 404 |
 | Prismic showcase, Ghost Explore, Site Builder Report, Codrops roundups | not adapted: only a handful of sites in the served HTML; mostly small businesses and affiliate links; 403 behind a bot challenge |
 | Webby Awards winners, Made with Vue.js, Made with React, Made with Laravel, Klim In Use | not adapted: client-rendered; mostly apps and side projects; mostly print work |
-| Cofolios | not adapted: client-rendered |
 | Barba.js showcase | not adapted: read from Firestore behind an encrypted client key |
 | Wix Studio inspiration | not adapted: no site links in the served HTML |
 | Design Made in Germany | not adapted: a design blog and agency directory, not a site gallery |

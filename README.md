@@ -419,7 +419,7 @@ page on the accelerator's site is its `sourceRef`, so later runs skip it.
 ```sh
 npm run discover -- --only speedrun --limit 50   # queue one program's companies
 npm run accelerators -- --window                 # dry run, no database: 2025–2026 counts and samples
-npm run accelerators -- --only techstars         # every cohort, as the badge code will use it
+npm run accelerators -- --only techstars         # every cohort, as the badge sync uses it
 ```
 
 The fetchers live in `pipeline/accelerators/<id>.js` (`companies()` returns every
@@ -644,28 +644,56 @@ npm run agent:backfill    # -- --batch 25 --limit 500
 npm run search:reindex
 ```
 
-### YC badge
+### Accelerator badges
 
-Sites of Y Combinator companies show a text badge after their name, such as
-`YC W26`, on browse cards and the site page, linking to the company's page on
-ycombinator.com. It is Sqrap's own outlined `.badge`, never YC's logo or color.
-Browse filters to them with the "+ YC" chip (`yc=1` in the hash and in
-`/api/sites`, `/api/screens` and `/api/sections`). The agent catalog adds a
-`- YC: W26 (<url>)` line, and agent API site objects carry `ycBatch` and `ycUrl`.
+Sites of accelerator companies show one text badge per program after their
+name, on browse cards and the site page, in `lib/taxonomy.js` `ACCELERATORS`
+order. Each badge links to the company's page on that program's site. They use
+Sqrap's own outlined `.badge`, never a program's logo, wordmark or color.
 
-The data is `sites.yc_batch` and `sites.yc_url` (migration 013), filled by
-`pipeline/yc.js` from the public yc-oss mirror of YC's directory
-(`https://yc-oss.github.io/api/companies/all.json`, every batch). A site
-matches when its domain equals the company website's hostname without `www.`;
-there is no fuzzy or parent-domain matching. When two companies share a domain
-the latest batch wins. Labels are the season letter and two-digit year:
-Winter `W`, Spring `X`, Summer `S`, Fall `F` ("Spring 2025" is `X25`); an
-unknown batch format stores the YC page without a batch, so no badge shows.
-Sites that stop matching are cleared. A failed fetch changes nothing.
+| Program | Source (all cohorts) | Badge |
+|---|---|---|
+| `yc` Y Combinator | the yc-oss mirror of YC's directory (`https://yc-oss.github.io/api/companies/all.json`) | `YC W26`: season letter and two-digit year, Winter `W`, Spring `X`, Summer `S`, Fall `F` ("Spring 2025" is `X25`); a company with an unknown batch format gets no badge |
+| `techstars` Techstars | the portfolio's Typesense search | `Techstars 2025`, the cohort year (`first_session_year`): the program names ("Techstars Seattle Accelerator") are too long for a badge; `Techstars` without a year |
+| `finc` Founders Inc | f.inc's `/portfolio/<slug>/` pages | `F.inc` (f.inc publishes no cohorts) |
+| `speedrun` a16z speedrun | speedrun.a16z.com's `/companies?cohort=` lists and company pages | `Speedrun SR007` |
 
-The cron runs the sync at most once a day (it records a `yc_sync` event, time
-boxed to 30 seconds); `npm run yc:sync` runs it by hand and prints
-`{ fetched, domains, matched, updated, cleared }`.
+Browse filters to one program with the "+ accelerator" chip (`accel=<id>` in
+the hash and in `/api/sites`, `/api/screens` and `/api/sections`; `yc=1` still
+works and means `accel=yc`; an unknown id is ignored). The agent catalog adds an
+`- Accelerators: YC W26 (<url>); Speedrun SR007 (<url>)` line, and agent API and
+MCP site objects carry `accelerators: [{ program, name, batch, label, url }]`
+(empty when none), plus the deprecated `ycBatch` and `ycUrl`.
+
+The data is `site_accelerators` (migration 014: one row per site and program,
+`batch` and `url`), filled by `pipeline/accelerators/sync.js` with each
+program's fetcher in `pipeline/accelerators/<id>.js`. A site matches when its
+domain equals a company website's hostname without `www.`: there is no fuzzy or
+parent-domain matching, and shared hosts (facebook.com, linkedin.com,
+github.com and the like) never match. When two companies share a domain the
+latest cohort wins. Each program is stored in one transaction: matches are
+upserted and the program's rows on sites that stopped matching are deleted. A
+program whose fetch fails or lists no companies is skipped and keeps its rows.
+
+Founders Inc and speedrun list websites only on per-company pages (one request a
+second, minutes per program), so the sync caches each page's website in
+`accelerator_companies` and re-reads entries after 30 days. A sync that runs
+out of time stops and the next one resumes from the cache. Until every page has
+been read once, a program's matches are added but none are cleared, and it
+reports `pending`.
+
+The cron syncs each program at most once a day (a complete sync records an
+`accelerator_sync:<id>` event). The programs that are due go longest-waiting
+first, 45 seconds each and 75 seconds per run in all, and whatever does not fit
+waits for the next run (every 30 minutes). Its response has `accelerators` with
+`{ fetched, matched, updated, cleared }` (and `pending`) per program.
+`npm run accelerators:sync -- [--only <id>] [--minutes 10]` runs it by hand
+(`npm run yc:sync` is the same command).
+
+`sites.yc_batch` and `yc_url` (migration 013) are legacy: migration 014 copied
+them into `site_accelerators` and nothing reads them now. The YC sync still
+writes them so that rolling back to the code before 014 keeps fresh batches. A
+later migration drops them once that rollback window is over.
 
 ## Curate (admin)
 

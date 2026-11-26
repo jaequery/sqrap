@@ -9,6 +9,7 @@ const BASE = "https://speedrun.a16z.com";
 
 export const name = "speedrun";
 export const hasCohortYears = true;
+export const websiteOnDetails = true;
 
 // Cohort years from a16z's own pages, checked 2026-11-26:
 //   SR004: "join ... starting January 2025" (speedrun's SR004 call for

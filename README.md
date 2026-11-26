@@ -270,7 +270,7 @@ first pages.
 | Gallereee | working, read from its sitemap newest first, one portfolio page fetched per new site, every site tagged Agency & Portfolio |
 | The FWA | not adapted: client-rendered; its winner data loads from /api, which robots.txt disallows, and the winners feed carries no site links |
 | Land-book, Lapa Ninja, Web Design Inspiration, Saaspo, Maxibestof | not adapted: 403 behind a bot challenge |
-| SiteInspire | not adapted: 403/429 to plain requests |
+| SiteInspire | not adapted: 403/429 to plain requests; its RSS feed (`/websites/feed`, 48 latest) answers, but its items link only to SiteInspire's own detail pages, which sit behind Vercel's bot checkpoint, and robots.txt bars AI crawlers |
 | CSS Reel | not adapted: now a casino affiliate page |
 | Unsection | not adapted: lists sections, not sites; the site link is only on each section page |
 | Supahero | not adapted: hero sections only, now folded into screensdesign.com |
@@ -389,6 +389,7 @@ first pages.
 | Made With Astro (madewithastro.co), Flowing Page, Sombra, swiped., What Ships, GreatStuff.fyi | not adapted: mostly small local businesses and test pages; the domain does not resolve; a gradient tool, a design content feed, launch videos from X and a bookmark list, not site galleries |
 | LP advance, Real Estate Design Gallery, Selected Site | not adapted: campaign landing pages deep inside corporate sites; condominium sales sites, nothing new since 2021; now a link-in-bio builder's promo page, not a gallery |
 | Bootstrap Expo, Made with Angular, Aceternity UI and Chakra UI showcases, Brands in Motion, Identik, UI Garage, Nicelydone | not adapted: about 10 sites, nothing new since 2019; mostly corporate apps; indie AI tools and product apps built on the library; motion branding projects, robots.txt bars AI crawlers; branding case studies; closed; app screens behind an account |
+| Hermes Creative Awards, Webflow Awards, Made in Webflow API, Made with Svelte, Best CSS Gallery, Designflavr, CSS Pick, The Gallery (thegallery.design), unseen.design | not adapted: winners load client-side and are mostly marketing collateral; about 30 winners and finalists a year, mixed with agencies, partners and people; community cloneables and templates; mostly apps and side projects; now casino spam; a link page to other galleries; an empty placeholder; an empty WordPress install; a parked lander |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

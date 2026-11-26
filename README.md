@@ -197,6 +197,7 @@ first pages.
 | Fountn (fountn.design) | working, a design-resources library whose Websites section is a small hand-picked gallery (about 30, 2024 on: landing, SaaS, AI and studio sites), read from its public WordPress REST API newest first, so no page per site is fetched, each /website/<slug>/ page kept as the source, site type (AI, Crypto, Ecommerce, Portfolio, SaaS) mapped to industry |
 | Bento Grids (bentogrids.com) | working, a hand-picked gallery of bento-grid layouts cut from product and marketing sites (Linear, Vercel, Attio, Clerk, Raycast, Neon), every shot read from the __NEXT_DATA__ the home page serves, so one request reads the whole gallery, "ui" shots only, template demos on framer.website and webflow.io skipped, each host once, newest first, the home page kept as the source |
 | Delightful (delightful.click) | working, a hand-picked library of design references from about 1,600 brands, each tiered S or A, read from the one index.json its client-rendered library loads, web heroes, pages and sections only (about 520), Mobbin and X clips refused, agency case-study pages skipped, each host once, most recently captured first, each item's library page kept as the source, sector tags mapped to industry |
+| Good Design Gallery (gooddesign.gallery) | working, a small hand-curated archive of websites, interfaces, identities and motion its editors pick out of X, Threads and Instagram, Websites category only (about 25), every entry read from the one served /?discipline=Websites page, entries that link only to the post they were found in (Instagram, X, Threads, Contra) skipped, each host once, newest first, each /design/<id> page kept as the source, portfolios tagged Agency & Portfolio |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -382,6 +383,7 @@ first pages.
 | Needle Engine showcase, Dark Mode List, Webby Design, Web Design Rankings, Mass-Driver in use | not adapted: now redirects to the home page; apps and tools with a dark mode, not picked for design; an agency site; an agency directory; the page is gone (404) |
 | getdesign.ai, 4db | not adapted: about 45 sites, mostly reposted from Recent and X; no new entries since 2014 |
 | Tessory | not adapted: its about 1,000 websites mirror Awwwards, Hover States, Recent and Codrops, all read already |
+| Bootstrap Expo, Made with Angular, Aceternity UI and Chakra UI showcases, Brands in Motion, Identik, UI Garage, Nicelydone | not adapted: about 10 sites, nothing new since 2019; mostly corporate apps; indie AI tools and product apps built on the library; motion branding projects, robots.txt bars AI crawlers; branding case studies; closed; app screens behind an account |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ## Capture a site

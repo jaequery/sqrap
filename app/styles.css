@@ -519,6 +519,22 @@ dialog p code { padding: 1px 6px; border-radius: var(--r-sm); background: var(--
 .admin-savebar { position: sticky; bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px; margin-bottom: 16px; background: var(--bg); border: 1px solid var(--line-2); border-radius: var(--r-lg); box-shadow: var(--shadow-pop); }
 .admin-savebar .btn-primary { width: auto; margin: 0; }
 .admin-events { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 14px; }
+.admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 0 0 18px; }
+.admin-stats div { border: 1px solid var(--line); border-radius: var(--r-lg); padding: 14px 18px; }
+.admin-stats dt { color: var(--mute); font-size: 13px; }
+.admin-stats dd { margin: 4px 0 0; font-size: 30px; font-weight: 500; letter-spacing: var(--track-tight); font-variant-numeric: tabular-nums; }
+.admin-chart-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.admin-legend { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.admin-legend i { display: inline-block; width: 10px; height: 10px; border-radius: var(--r-sm); margin-left: 6px; }
+.admin-legend i.captured, .admin-chart .bar.captured { background: var(--ink); }
+.admin-legend i.failed, .admin-chart .bar.failed { background: var(--line-2); }
+.admin-chart { display: flex; align-items: stretch; gap: 4px; height: 220px; margin-top: 8px; }
+.admin-chart .col { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.admin-chart .bars { flex: 1; display: flex; align-items: flex-end; justify-content: center; gap: 2px; border-bottom: 1px solid var(--line); }
+.admin-chart .bar { flex: 1 1 0; max-width: 18px; border-radius: var(--r-sm) var(--r-sm) 0 0; }
+.admin-chart .label { height: 16px; font-size: 12px; color: var(--mute); white-space: nowrap; text-align: center; overflow: visible; }
+.admin-chart-note { margin: 10px 0 0; font-size: 13px; }
+.admin-subtitle { margin: 26px 0 12px; font-size: 20px; font-weight: 500; letter-spacing: var(--track-tight); }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1279px) {

@@ -4,11 +4,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { INDUSTRIES, PAGE_PATTERNS, SECTION_TYPES } from "../../lib/taxonomy";
 
 // The local admin. View state lives in the hash: #/queue, #/discovered,
-// #/approved, #/rejected, #/removals, #/clicks, #/seeds and #/site/<id>; anything else
+// #/approved, #/rejected, #/removals, #/clicks, #/stats, #/seeds and #/site/<id>; anything else
 // falls back to the queue. Data comes from app/api/admin/**.
 const TABS = [
   ["queue", "Queue"], ["discovered", "Discovered"], ["approved", "Approved"], ["rejected", "Rejected"],
-  ["removals", "Removal requests"], ["clicks", "Most clicked"], ["seeds", "Add seeds"],
+  ["removals", "Removal requests"], ["clicks", "Most clicked"], ["stats", "Stats"], ["seeds", "Add seeds"],
 ];
 
 function readHash() {
@@ -112,6 +112,7 @@ export default function Admin() {
         {route.view === "site" ? <SiteEdit id={route.id} {...ctx} />
           : route.view === "removals" ? <Removals {...ctx} />
           : route.view === "clicks" ? <Clicks {...ctx} />
+          : route.view === "stats" ? <Stats {...ctx} />
           : route.view === "seeds" ? <Seeds {...ctx} />
           : <SiteList tab={route.view} {...ctx} />}
       </main>
@@ -423,6 +424,94 @@ function Clicks({ tick }) {
             ))}
           </tbody>
         </table>
+      )}
+    </>
+  );
+}
+
+const STAT_RANGES = [["day", "Day"], ["month", "Month"]];
+
+// Bucket labels are UTC, like the buckets themselves.
+const bucketLabel = (bucket, unit, long = false) => new Date(`${bucket}T00:00:00Z`).toLocaleDateString(undefined, unit === "day"
+  ? { timeZone: "UTC", month: long ? "long" : "short", day: "numeric", ...(long ? { year: "numeric" } : {}) }
+  : { timeZone: "UTC", month: long ? "long" : "short", ...(long ? { year: "numeric" } : {}) });
+
+// Sites scraped per UTC day or month, from the pipeline's events.
+function Stats({ tick }) {
+  const [range, setRange] = useState("day");
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    let live = true;
+    setError(null);
+    api(`stats?range=${range}`).then((d) => live && setData(d), (err) => live && setError(err.message));
+    return () => { live = false; };
+  }, [range, tick]);
+
+  const shown = data?.range === range ? data : null;
+  const max = shown ? Math.max(1, ...shown.buckets.map((b) => Math.max(b.captured, b.failed))) : 1;
+  const sum = (k) => shown.buckets.reduce((n, b) => n + b[k], 0);
+  const stats = data && [
+    ["Sites scraped", data.totals.captured],
+    ["Today", data.totals.today],
+    ["This month", data.totals.month],
+    ["Approved", data.totals.byStatus.approved || 0],
+  ];
+  return (
+    <>
+      {error && <p className="admin-notice error">{error}</p>}
+      {!data && !error && <p className="mute">Loading…</p>}
+      {stats && (
+        <dl className="admin-stats">
+          {stats.map(([label, n]) => <div key={label}><dt>{label}</dt><dd>{n}</dd></div>)}
+        </dl>
+      )}
+      <div className="seg admin-range" role="group" aria-label="Range">
+        {STAT_RANGES.map(([k, label]) => (
+          <button key={k} type="button" aria-pressed={range === k} onClick={() => setRange(k)}>{label}</button>
+        ))}
+      </div>
+      {data && !shown && !error && <p className="mute">Loading…</p>}
+      {shown && (
+        <section className="admin-card">
+          <div className="admin-chart-head">
+            <h3>Sites scraped per {shown.unit}, last {shown.buckets.length} {shown.unit}s</h3>
+            <span className="admin-legend"><i className="captured" /> captured {sum("captured")} <i className="failed" /> failed {sum("failed")}</span>
+          </div>
+          <div className={`admin-chart ${shown.unit}`} role="img" aria-label={`Sites captured per ${shown.unit}: ${shown.buckets.map((b) => `${bucketLabel(b.bucket, shown.unit)} ${b.captured}`).join(", ")}`}>
+            {shown.buckets.map((b, i) => (
+              <div className="col" key={b.bucket} title={`${bucketLabel(b.bucket, shown.unit, true)}: ${b.captured} captured, ${b.failed} failed`}>
+                <div className="bars">
+                  <span className="bar captured" style={{ height: `${(b.captured / max) * 100}%` }} title={`${bucketLabel(b.bucket, shown.unit, true)}: ${b.captured} captured`} />
+                  <span className="bar failed" style={{ height: `${(b.failed / max) * 100}%` }} title={`${bucketLabel(b.bucket, shown.unit, true)}: ${b.failed} failed`} />
+                </div>
+                <span className="label">{shown.unit === "month" || i % 5 === 0 || i === shown.buckets.length - 1 ? bucketLabel(b.bucket, shown.unit) : ""}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mute admin-chart-note">UTC {shown.unit}s. Each count is distinct sites; {sum("discovered")} discovered and {sum("approved")} approved in this range.</p>
+        </section>
+      )}
+      {data && (
+        <>
+          <h2 className="admin-subtitle">Recently scraped</h2>
+          {!data.recent.length ? <div className="empty"><h2>No scrapes yet</h2><div>Sites the pipeline captures show up here.</div></div> : (
+            <table className="admin-table">
+              <thead><tr><th>Site</th><th>Name</th><th>Status</th><th>Scraped</th><th><span className="sr-only">Actions</span></th></tr></thead>
+              <tbody>
+                {data.recent.map((s) => (
+                  <tr key={s.id}>
+                    <td><Out href={s.url}>{s.domain} ↗</Out></td>
+                    <td>{s.name || <span className="mute">—</span>}</td>
+                    <td><span className={`chip st-${s.status}`}>{s.status}</span></td>
+                    <td className="mute">{date(s.capturedAt)}</td>
+                    <td><div className="admin-actions"><a className="btn-small" href={`#/site/${s.id}`}>Open</a></div></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </>
       )}
     </>
   );

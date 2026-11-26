@@ -195,6 +195,7 @@ first pages.
 | Bestfolios (bestfolios.com) | working, a hand-picked gallery of designer portfolios (product and UX designers at tech companies, graphic, brand and motion designers), read from the /api/portfolios JSON its client-rendered pages load, which returns only the newest 100, so each run takes the latest additions, each address once, newest first, each /portfolio/<authorlink> page kept as the source, every site tagged Agency & Portfolio |
 | Cofolios (cofolios.com) | working, a hand-picked gallery of about 190 portfolios of product designers from Airbnb, Apple, Google, Meta, Microsoft, Amazon and other tech companies (2020 to 2024), read from the public Firestore collections its client-rendered pages load, one per company group, each address once, newest first, each /portfolio/<Full-Name> page kept as the source, every site tagged Agency & Portfolio |
 | Fountn (fountn.design) | working, a design-resources library whose Websites section is a small hand-picked gallery (about 30, 2024 on: landing, SaaS, AI and studio sites), read from its public WordPress REST API newest first, so no page per site is fetched, each /website/<slug>/ page kept as the source, site type (AI, Crypto, Ecommerce, Portfolio, SaaS) mapped to industry |
+| Bento Grids (bentogrids.com) | working, a hand-picked gallery of bento-grid layouts cut from product and marketing sites (Linear, Vercel, Attio, Clerk, Raycast, Neon), every shot read from the __NEXT_DATA__ the home page serves, so one request reads the whole gallery, "ui" shots only, template demos on framer.website and webflow.io skipped, each host once, newest first, the home page kept as the source |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -281,7 +282,7 @@ first pages.
 | Minimalissimo | not adapted: features product and interior design, not websites |
 | Page Collective | not adapted: app flows and screens, not sites |
 | SaaS Websites | not adapted: no outbound site links |
-| GSAP showcase, Bento Grids | not adapted: client-rendered |
+| GSAP showcase | not adapted: a handful of sites in the served HTML |
 | Call to Inspiration, Communication Arts Webpicks | not adapted: client-rendered (Communication Arts' Interactive Annual is adapted) |
 | Web Design Awards (webdesignawards.io) | not adapted: paid submissions, mostly agencies and local businesses |
 | Fonts In Use | not adapted: robots.txt asks a 10-second crawl delay |

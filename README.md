@@ -201,6 +201,7 @@ first pages.
 | SaaSFrame (saasframe.io) | working, a library of real web and app screens from about 360 SaaS products, every product read from the one served /saas page (most recently added first, with its category), one product page fetched per new site for the site named in its Organization JSON-LD (its Visit website button otherwise), pages already stored as a source skipped, categories mapped to industry with SaaS as the fallback |
 | Portfolio Project (portfolioproject.io) | working, a reviewed gallery of about 270 portfolio sites of product designers, design engineers, motion designers and small studios (2024 on), every approved entry read from the flight data of the one served home page, most recently reviewed first, each host once, each /website/<slug> page kept as the source, every site tagged Agency & Portfolio |
 | Wow! Works (wowoworks.com) | working, a hand-picked Japanese web design gallery of about 520 sites (2018 to February 2022, mostly Japanese corporate, brand, shop, recruiting and portfolio sites), its home page read with `/page/<n>/`, newest first, 12 sites a page, each card links straight to the site, recruiting sites (採用, リクルート) skipped |
+| cms design (cmsdesign.jp) | working, a Japanese gallery of about 2,100 sites built on a CMS (mostly WordPress, some Shopify, STUDIO, microCMS, a-blog cms; May 2019 to April 2026), its home page read with `/page/<n>/`, newest first, 24 sites a page, each card links straight to the site, each /cms/<cms>/<id>/ detail page kept as the source, recruiting pages (採用, リクルート, /recruit/) skipped |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -388,6 +389,7 @@ first pages.
 | Tessory | not adapted: its about 1,000 websites mirror Awwwards, Hover States, Recent and Codrops, all read already |
 | Made With Astro (madewithastro.co), Flowing Page, Sombra, swiped., What Ships, GreatStuff.fyi | not adapted: mostly small local businesses and test pages; the domain does not resolve; a gradient tool, a design content feed, launch videos from X and a bookmark list, not site galleries |
 | LP advance, Real Estate Design Gallery, Selected Site | not adapted: campaign landing pages deep inside corporate sites; condominium sales sites, nothing new since 2021; now a link-in-bio builder's promo page, not a gallery |
+| Best Restaurant Websites, lovely ui | not adapted: serves nothing; UI snippets, not a site gallery |
 | Bootstrap Expo, Made with Angular, Aceternity UI and Chakra UI showcases, Brands in Motion, Identik, UI Garage, Nicelydone | not adapted: about 10 sites, nothing new since 2019; mostly corporate apps; indie AI tools and product apps built on the library; motion branding projects, robots.txt bars AI crawlers; branding case studies; closed; app screens behind an account |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 

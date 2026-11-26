@@ -294,6 +294,13 @@
 // showcases (indie AI tools and product apps built on the library), Brands in Motion
 // (motion branding projects; its robots.txt bars AI crawlers), Identik (branding
 // case studies), UI Garage (closed) and Nicelydone (app screens behind an account).
+// Hermes Creative Awards (winners load client-side, mostly marketing collateral), the
+// Webflow Awards (about 30 winners and finalists a year, mixed with agencies, partners
+// and people), Made in Webflow's API (community cloneables and templates), Made with
+// Svelte (mostly apps and side projects), Best CSS Gallery (now casino spam), Designflavr
+// (a link page to other galleries), CSS Pick and The Gallery (empty placeholders) and
+// unseen.design (a parked lander). SiteInspire's RSS feed answers, but its items link
+// only to detail pages behind Vercel's bot checkpoint, and robots.txt bars AI crawlers.
 import * as awwwards from "./awwwards.js";
 import * as cssdesignawards from "./cssdesignawards.js";
 import * as refero from "./refero.js";

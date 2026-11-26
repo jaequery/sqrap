@@ -9,6 +9,7 @@
     "start": "next start",
     "db:migrate": "node scripts/db-migrate.js",
     "discover": "node scripts/discover.js",
+    "accelerators": "node scripts/accelerators.js",
     "seed": "node scripts/seed.js",
     "capture": "node scripts/capture.js",
     "judge": "node scripts/judge.js",

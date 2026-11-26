@@ -403,6 +403,30 @@ first pages.
 | Best Design Awards (New Zealand), Owwly, CloneAny gallery, AIGA Design Archives, RGD Awards, LeadAwards, Made With GSAP, Tokyo Interactive Ad Awards, ADC*E | not adapted: robots.txt bars AI crawlers; robots.txt disallows /feed; clones of CloneAny's own demo pages; 403 behind a bot challenge; branding and in-house categories, no websites; no edition since 2019; JavaScript effects, not sites; the domains do not respond (both) |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
+### Accelerator portfolios
+
+Three discovery adapters read accelerator portfolios instead of design galleries
+and queue the websites of their **2025 and 2026 cohort** companies, through the
+same opt-out, robots.txt and dedupe checks as every gallery. Each company's
+page on the accelerator's site is its `sourceRef`, so later runs skip it.
+
+| Adapter | Program | Source |
+|---|---|---|
+| `techstars` | Techstars | the portfolio page's Typesense search (search-only key from `/api/search/config/companies`); cohort year is `first_session_year`, batch the program name |
+| `finc` | Founders Inc | `/portfolio/<slug>/` pages from f.inc's sitemap; f.inc publishes no cohorts, so the whole portfolio (about 205 companies) is read, and skipped if it ever passes 400 |
+| `speedrun` | a16z speedrun | `/companies?cohort=SRxxx` and each `/companies/<slug>` page for the website; years from a16z's own posts (SR004–SR005 2025, SR006–SR007 2026) and, for new cohorts, speedrun's FAQ |
+
+```sh
+npm run discover -- --only speedrun --limit 50   # queue one program's companies
+npm run accelerators -- --window                 # dry run, no database: 2025–2026 counts and samples
+npm run accelerators -- --only techstars         # every cohort, as the badge code will use it
+```
+
+The fetchers live in `pipeline/accelerators/<id>.js` (`companies()` returns every
+cohort as `{ name, website, batch, year, companyUrl, oneLiner, industryHint }`)
+and the program ids and names in `lib/taxonomy.js` `ACCELERATORS`. Only company
+websites enter the pipeline; logos and other images are never read.
+
 ## Capture a site
 
 The capture engine drives a local headless Chromium through Playwright. Install

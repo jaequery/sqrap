@@ -658,6 +658,7 @@ jobs, so on Vercel they are not reliable; approve, reject, edit and delete are.
 | `GET/PATCH/DELETE /api/admin/sites/<id>` | one site with pages, screens, sections and events / edit (`name`, `tagline`, `industry`, `country`, `status`, `pages: [{id, pattern}]`, `sections: [{id, type}]`, enums checked against `lib/taxonomy.js`) / delete |
 | `POST /api/admin/sites/<id>/recapture`, `…/rejudge` | queue a job (409 when busy) |
 | `GET /api/admin/jobs` | recent jobs and their state |
+| `GET /api/admin/stats?range=day\|month` | sites scraped per UTC day (last 30) or month (last 12) from `events` (distinct sites with `captured`, `capture_failed`, `discovered`, `approved`), totals (all time, today, this month, sites by status) and the 50 most recently scraped sites; the admin's Stats tab (`#/stats`) |
 | `POST /api/admin/seeds` | `{ urls }`, one per line, added as `discovered` |
 | `GET/PATCH /api/admin/optouts` | removal requests / `{ domain, status: "approved" \| "dismissed" }` |
 

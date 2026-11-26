@@ -11,6 +11,7 @@ const BASE = "https://f.inc";
 
 export const name = "finc";
 export const hasCohortYears = false;
+export const websiteOnDetails = true;
 
 // `years` is ignored: there are no cohort years to filter on.
 export async function roster() {

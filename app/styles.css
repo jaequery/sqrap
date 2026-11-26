@@ -305,12 +305,12 @@ div.card { position: relative; cursor: default; }
 .cap-out .i.ext { margin-left: 3px; vertical-align: -2px; }
 /* Inside the caption's overflow box an outer ring would be clipped. */
 .cap-out:focus-visible { outline-offset: -2px; border-radius: 4px; }
-/* "YC W26" after a YC company's name: the outlined .badge, layered above
-   .card-main like .cap-out so it opens its own link. */
-.yc-badge { position: relative; z-index: 1; height: 18px; margin-left: 2px; vertical-align: 1px; color: var(--ink); font-weight: 400; text-decoration: none; }
-a.yc-badge:hover { background: var(--surface); }
+/* "YC W26", "Speedrun SR007"… after an accelerator company's name: the
+   outlined .badge, layered above .card-main like .cap-out so it opens its own link. */
+.accel-badge { position: relative; z-index: 1; height: 18px; margin-left: 2px; vertical-align: 1px; color: var(--ink); font-weight: 400; text-decoration: none; }
+a.accel-badge:hover { background: var(--surface); }
 .site-title { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px; }
-.site-title .yc-badge { margin-left: 0; vertical-align: 0; }
+.site-title .accel-badge { margin-left: 0; vertical-align: 0; }
 /* Save (heart) over a card's frame, top right: shown on hover or focus, always
    once saved and on touch screens. Saved, the heart fills with --accent. */
 .like {

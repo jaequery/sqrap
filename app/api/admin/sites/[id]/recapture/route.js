@@ -1,7 +1,11 @@
-import { adminRoute } from "../../../../../../lib/admin";
+import { adminRoute, httpError, jobsAvailable, JOBS_OFF } from "../../../../../../lib/admin";
 import { recapture } from "../../../../../../lib/admin-data";
 
 export const dynamic = "force-dynamic";
 
-// Queues a background job; poll GET /api/admin/jobs for its state.
-export const POST = adminRoute(async (request, { params }) => recapture((await params).id));
+// Queues a background job; poll GET /api/admin/jobs for its state. 501 where
+// background jobs cannot run (jobsAvailable in lib/admin.js).
+export const POST = adminRoute(async (request, { params }) => {
+  if (!jobsAvailable()) throw httpError(501, JOBS_OFF);
+  return recapture((await params).id);
+});

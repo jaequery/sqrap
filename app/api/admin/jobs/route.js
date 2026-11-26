@@ -1,6 +1,7 @@
-import { adminRoute } from "../../../../lib/admin";
+import { adminRoute, jobsAvailable, JOBS_OFF } from "../../../../lib/admin";
 import { listJobs } from "../../../../lib/jobs";
 
 export const dynamic = "force-dynamic";
 
-export const GET = adminRoute(() => ({ items: listJobs() }));
+// `available` is false where re-capture and re-judge cannot run (lib/admin.js).
+export const GET = adminRoute(() => jobsAvailable() ? { items: listJobs(), available: true } : { items: [], available: false, reason: JOBS_OFF });

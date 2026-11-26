@@ -622,7 +622,9 @@ npm run search:reindex
 
 ## Curate (admin)
 
-`SQRAP_ADMIN=1 npm run dev`, then open http://localhost:3000/admin. The admin
+Locally: `SQRAP_ADMIN=1 npm run dev`, then open http://localhost:3000/admin. On
+the live site: sign in with Google as an admin (below) and pick "Admin" in the
+account menu, or open `/admin`. The admin
 lists sites by status (Queue: captured, failed and in-flight; Discovered;
 Approved; Rejected) with home thumbnails, score and the judge's reasons. Per
 site you can approve or reject, edit name, tagline, industry and country, retag
@@ -643,21 +645,34 @@ client-sent `X-Forwarded-For` cannot fake it), the `Host` header and any
 a hosted deployment; that guard is the only protection of the local path.
 
 On any deployment, production included, a signed-in admin account can open
-`/admin` too: its email must be in the `admin_emails` table (migration `012`
-adds `jaequery@gmail.com`) **and** the account must have signed in with Google
-at least once, since a password signup never proves it owns the address.
-Grant another admin with
-`INSERT INTO admin_emails (email, created_at) VALUES ('someone@example.com', '<ISO time>')`.
-Admin mutations from a session must send an `Origin` matching the host, which
-the admin page's own `fetch` calls do. Re-capture and re-judge run as in-process
-jobs, so on Vercel they are not reliable; approve, reject, edit and delete are.
+`/admin` too. An account is an admin only when **all** of these hold:
+
+- its email is allowlisted: listed in `SQRAP_ADMIN_EMAILS` (comma-separated;
+  unset or empty means `jaequery@gmail.com`) or in the `admin_emails` table
+  (migration `012` adds `jaequery@gmail.com`; grant more with
+  `INSERT INTO admin_emails (email, created_at) VALUES ('someone@example.com', '<ISO time>')`);
+- it has signed in with Google at least once, so Google vouched for the email
+  (a password signup never proves it owns the address);
+- it has no password. Linking Google drops a password set before, and its
+  sessions, so a squatter's signup with the owner's email never becomes admin.
+
+Everyone else, signed out or not, gets the same plain 404 from `/admin`,
+`/api/admin/*` and non-public `/shots/*`. `GET /api/auth/me` reports
+`user.isAdmin` for the caller's own account only, and the account menu shows
+"Admin" when it is true. Admin mutations from a session must send an `Origin`
+matching the host, which the admin page's own `fetch` calls do.
+
+On Vercel, re-capture and re-judge are off: they need the in-process job queue
+and a long-lived browser. Their routes answer 501 and the buttons are disabled
+with that reason; the cron pipeline keeps capturing and judging new sites.
+Approve, reject, edits, deletion, removals, seeds and Stats work everywhere.
 
 | Route | Does |
 | --- | --- |
 | `GET /api/admin/sites?tab=queue\|discovered\|approved\|rejected&q` | sites in a tab, plus per-tab counts |
 | `GET/PATCH/DELETE /api/admin/sites/<id>` | one site with pages, screens, sections and events / edit (`name`, `tagline`, `industry`, `country`, `status`, `pages: [{id, pattern}]`, `sections: [{id, type}]`, enums checked against `lib/taxonomy.js`) / delete |
-| `POST /api/admin/sites/<id>/recapture`, `…/rejudge` | queue a job (409 when busy) |
-| `GET /api/admin/jobs` | recent jobs and their state |
+| `POST /api/admin/sites/<id>/recapture`, `…/rejudge` | queue a job (409 when busy, 501 on Vercel) |
+| `GET /api/admin/jobs` | recent jobs and their state; `available: false` with a `reason` on Vercel |
 | `GET /api/admin/stats?range=day\|month` | sites scraped per UTC day (last 30) or month (last 12) from `events` (distinct sites with `captured`, `capture_failed`, `discovered`, `approved`), totals (all time, today, this month, sites by status) and the 50 most recently scraped sites; the admin's Stats tab (`#/stats`) |
 | `POST /api/admin/seeds` | `{ urls }`, one per line, added as `discovered` |
 | `GET/PATCH /api/admin/optouts` | removal requests / `{ domain, status: "approved" \| "dismissed" }` |

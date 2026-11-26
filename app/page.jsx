@@ -55,7 +55,7 @@ export default function Page() {
       <dialog id="about">
         <h2>About Sqrap</h2>
         <p>Sqrap is an open library of real, well-designed websites from around the world. Browse by site, by page or by section, search, and filter by platform, page pattern, section type, industry, color, light or dark theme, style and country.</p>
-        <p>Every screenshot links to the site it was captured from, and each site's name and logo belong to its owner.</p>
+        <p>Every screenshot links to the site it was captured from, and each site's name and logo belong to its owner. Read how we handle account data in the <a className="link" href="/privacy">privacy policy</a>.</p>
         <p>Own a site listed here? <button className="link" id="removal-open" type="button">Request removal</button></p>
         <p>{AGENT_CLAIM} Every design is labeled so an agent can read it, compare it with your project and pick the best fit: point it at <a className="link" href="/designs.md">the catalog for agents</a> (no key needed) or <a className="link" href="/agents">connect it to Sqrap</a>, and read the <a className="link" href="/terms">terms for agents and API use</a>.</p>
         <form method="dialog"><button className="btn-primary">Got it</button></form>
@@ -103,6 +103,7 @@ export default function Page() {
           </div>
         </form>
         <p className="auth-switch"><span id="auth-switch-text"></span> <a className="link" id="auth-switch" href="#/signup">Sign up</a></p>
+        <p className="auth-switch"><a className="link" href="/privacy">Privacy</a> · <a className="link" href="/terms">Terms</a></p>
       </dialog>
 
       <dialog id="keys" aria-labelledby="keys-title">

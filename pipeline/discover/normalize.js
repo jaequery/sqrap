@@ -63,6 +63,7 @@ export const BLOCKLIST = Object.freeze([
   "bentogrids.com", "layers.to", "delightful.click", "underconsideration.com",
   "gooddesign.gallery", "contra.com", "saasframe.io", "portfolioproject.io",
   "wowoworks.com", "cmsdesign.jp", "webflow.com",
+  "techstars.com", "f.inc", "a16z.com", "a16zspeedrun.com", "ycombinator.com",
 ]);
 
 // Link shorteners and ad trackers whose real target is behind a redirect.

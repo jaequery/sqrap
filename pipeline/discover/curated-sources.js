@@ -38,7 +38,7 @@ export const CURATED_SOURCES = new Set([
   "gallereee", "killerportfolio", "designdobrasil", "awesomeportfolios", "designerportfolios",
   // Japanese galleries whose editors pick each site
   "muuuuu", "io3000", "responsivejp", "webdesignclip", "sankou", "s5style", "kasou",
-  "soreiine", "choooodoii", "brilliantdesign", "wowoworks",
+  "soreiine", "choooodoii", "brilliantdesign", "wowoworks", "81web",
 ]);
 
 export const isCuratedSource = (source) => CURATED_SOURCES.has(source);

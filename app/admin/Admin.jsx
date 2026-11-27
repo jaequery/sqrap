@@ -109,6 +109,7 @@ export default function Admin() {
       </aside>
       <main className="main">
         <h1 className="admin-title">{route.view === "site" ? "Edit site" : TABS.find(([k]) => k === route.view)[1]}</h1>
+        <JudgeStalled tick={tick} />
         <Jobs jobs={jobs} />
         {notice && <p className={`admin-notice ${notice.kind}`} role="status">{notice.text}</p>}
         {route.view === "site" ? <SiteEdit id={route.id} {...ctx} />
@@ -119,6 +120,20 @@ export default function Admin() {
           : <SiteList tab={route.view} {...ctx} />}
       </main>
     </div>
+  );
+}
+
+// A warning while sites wait in 'captured' and nothing was judged for 6 hours
+// (lib/db.js judgeHealth), with the last judge_error event's message.
+function JudgeStalled({ tick }) {
+  const [health, setHealth] = useState(null);
+  useEffect(() => { api("judge").then(setHealth, () => setHealth(null)); }, [tick]);
+  if (!health?.stalled) return null;
+  return (
+    <p className="admin-notice error admin-stalled" role="alert">
+      <strong>The judge is stalled.</strong> {health.waiting} {health.waiting === 1 ? "site waits" : "sites wait"} in captured; last judged {health.lastJudgedAt ? date(health.lastJudgedAt) : "never"}.
+      {health.lastError ? ` Last error (${date(health.lastErrorAt)}): ${health.lastError}` : " No judge error recorded."}
+    </p>
   );
 }
 

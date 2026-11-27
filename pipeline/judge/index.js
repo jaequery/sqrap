@@ -10,6 +10,7 @@ import { all, get, getSite, getSiteByDomain, recordEvent, run, tx, upsertSite } 
 import { publicSites } from "../../lib/queries.js";
 import { reindexSite } from "../../lib/search.js";
 import { purgeSiteShots } from "../../lib/shots.js";
+import { isCuratedSource } from "../discover/curated-sources.js";
 import { imageBlock } from "./images.js";
 import { JUDGE_SYSTEM, STYLE_SYSTEM, TAG_SYSTEM, judgeUserText } from "./prompt.js";
 import { JUDGE_SCHEMA, SchemaError, STYLE_SCHEMA, TAG_SCHEMA, validateJudgement, validateStyle, validateTags } from "./schema.js";
@@ -33,6 +34,13 @@ export const minQuality = () => {
   const n = Number(process.env.SQRAP_MIN_QUALITY ?? process.env.JETHRO_MIN_QUALITY);
   return Number.isFinite(n) && n > 0 ? n : 7;
 };
+// The bar for sites from a hand-curated design gallery (CURATED_SOURCES): a
+// human already picked each one for its design. Never stricter than minQuality().
+export const minQualityCurated = () => {
+  const n = Number(process.env.SQRAP_MIN_QUALITY_CURATED);
+  return Math.min(Number.isFinite(n) && n > 0 ? n : 6, minQuality());
+};
+export const minQualityFor = (site) => (isCuratedSource(site?.source) ? minQualityCurated() : minQuality());
 
 const MAX_IMAGES = 12; // per tagging call, the page image included
 // Models that take the server-side refusal fallback (`fallbacks: "default"`).
@@ -178,18 +186,22 @@ export async function judgeSite(siteOrId, { dryRun = false } = {}) {
       await recordEvent(site.id, "judge_failed", { code: "schema", message: err.message, model: judgeModel(), usage, cost });
       return { site: await getSite(site.id), status: "failed", error: err.message, usage, cost };
     }
-    // API or local error: leave the site as it was so a later run retries it.
-    await upsertSite({ domain: site.domain, status: previousStatus });
+    // API or local error: leave the site as it was so a later run retries it,
+    // with the reason on the site (a later successful judge clears it).
+    // The SDK's message already starts with the HTTP status ("402 {...}").
+    const message = String(err.message).replace(new RegExp(`^${err.status ?? "-"}\\s+`), "");
+    await upsertSite({ domain: site.domain, status: previousStatus, lastError: `judge_error: ${err.status ?? "-"} ${message.slice(0, 200)}` });
     await recordEvent(site.id, "judge_error", { message: String(err.message).slice(0, 500), status: err.status ?? null, model: judgeModel(), usage, cost });
     throw err;
   }
 
   const cost = costOf(usage);
-  const status = !judgement.capture_ok ? "failed" : judgement.quality >= minQuality() ? "approved" : "rejected";
-  if (dryRun) return { site, status, judgement, usage, cost };
+  const bar = minQualityFor(site);
+  const status = !judgement.capture_ok ? "failed" : judgement.quality >= bar ? "approved" : "rejected";
+  if (dryRun) return { site, status, minQuality: bar, judgement, usage, cost };
 
   const now = new Date().toISOString();
-  const notes = { scores: judgement.scores, reasons: judgement.verdict_reasons, model: judgeModel(), min_quality: minQuality() };
+  const notes = { scores: judgement.scores, reasons: judgement.verdict_reasons, model: judgeModel(), min_quality: bar };
   if (!judgement.capture_ok) {
     // A bad capture counts as a capture attempt, so `--retry-failed` gives up
     // on a site whose captures keep coming out wrong instead of retrying forever.

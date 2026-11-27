@@ -485,12 +485,37 @@ domain and page title, and gets back a 1–10 quality score with per-dimension
 scores and reasons, plus a name, an original tagline and description, an
 industry, a country and a language. A site scoring at least
 `SQRAP_MIN_QUALITY` (default 7) becomes `approved`, anything lower `rejected`.
+Sites discovered from a hand-curated design gallery, where a jury, editor or
+curator picked each site for its design, are approved at the lower
+`SQRAP_MIN_QUALITY_CURATED` (default 6, never above `SQRAP_MIN_QUALITY`),
+since the score there mostly second-guesses that pick. The list is
+`CURATED_SOURCES` in `pipeline/discover/curated-sources.js`, by adapter name
+(`sites.source`): design awards and Sites of the Day, and galleries of sites,
+stores and portfolios hand-picked for design. Nominee lists, platform
+showcases, section and screen libraries, studio and foundry directories,
+the accelerators, search and `manual` sites keep the normal bar, as does a
+site with no or an unknown source. A site found by several sources is judged
+by its first one. The bar used is stored as `min_quality` in `quality_notes`.
+The judge still runs for every source: it also catches bad captures and
+writes the name, description, industry and country.
 A capture that does not show the real site (blank, error page, bot challenge,
 a cookie wall over most of the fold) becomes `failed` with
 `last_error='bad_capture'` so it can be captured again. Approved sites are then
 styled and tagged: the site gets 1 or 2 visual styles (minimal, editorial,
 brutalist, …: `STYLES`), each page a page pattern and every section crop a
 section type, all from `lib/taxonomy.js`.
+
+A judge call that fails (the API refused it, a timeout, no credits) leaves the
+site `captured`, so a later run retries it, and sets
+`last_error='judge_error: <status|-> <message>'`. The operator API and the admin
+show it, and the next successful judge clears it. A 401/402/403 also switches
+the judge off for the rest of the run; the run totals count `judged`,
+`judgeErrors` and `judgeRefused` (the status, or null). The cron response adds
+`judge: { enabled, lastJudgedAt, waiting, lastError, lastErrorAt, stalled }`.
+The judge counts as stalled when sites wait in `captured` and none was judged for
+6 hours (`judgeHealth` in `lib/db.js`). A stalled judge logs
+`JUDGE STALLED: …` from the cron route (search the function logs for it) and
+shows a warning at the top of `/admin`.
 
 Styles come from a call of their own (`styleSite`, `STYLE_SCHEMA`) that sees the
 same two home folds and writes only `sites.style`, `styled_at` and

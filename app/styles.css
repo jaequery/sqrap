@@ -473,6 +473,7 @@ dialog p code { padding: 1px 6px; border-radius: var(--r-sm); background: var(--
 .admin-range { margin-bottom: 14px; }
 .admin-notice { padding: 10px 14px; border: 1px solid var(--line-2); border-radius: var(--r-md); background: var(--surface); font-size: 14.5px; }
 .admin-notice.error { border-color: var(--ink); }
+.admin-stalled { margin: 0 0 18px; }
 .admin-jobs { list-style: none; margin: 0 0 18px; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 14px; }
 .admin-jobs li { display: flex; align-items: center; gap: 8px; }
 .admin .chip { gap: 0; height: 22px; padding: 0 8px; margin-right: 4px; border: 1px solid var(--line-2); font-size: 12.5px; color: var(--ink-2); background: var(--bg); }

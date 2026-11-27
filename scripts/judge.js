@@ -7,7 +7,7 @@
 // name or description); without a site it styles public sites that have none.
 import "./env.js";
 import { listSites } from "../lib/db.js";
-import { judgeEnabled, judgeModel, judgeSite, minQuality, styleNew, styleSite, tagSite } from "../pipeline/judge/index.js";
+import { judgeEnabled, judgeModel, judgeSite, minQuality, minQualityCurated, styleNew, styleSite, tagSite } from "../pipeline/judge/index.js";
 
 const USAGE = "usage: npm run judge -- <siteId|domain> [--dry-run] | --all-captured [--limit N] | --retag <siteId|domain> | --style-only [<siteId|domain> ...] [--limit N] [--dry-run]";
 
@@ -74,7 +74,7 @@ const tally = (r) => {
   return `${tokens} tokens, ${money(spent)} so far`;
 };
 
-if (!dryRun) console.error(`model ${judgeModel()}, approve at quality >= ${minQuality()}`);
+if (!dryRun) console.error(`model ${judgeModel()}, approve at quality >= ${minQuality()} (${minQualityCurated()} from curated galleries)`);
 let code = 0;
 for (const target of targets) {
   try {
@@ -93,7 +93,7 @@ for (const target of targets) {
     }
     const r = await judgeSite(target, { dryRun });
     if (dryRun) {
-      console.log(JSON.stringify({ domain: r.site.domain, status: r.status, ...r.judgement }, null, 2));
+      console.log(JSON.stringify({ domain: r.site.domain, source: r.site.source ?? null, status: r.status, min_quality: r.minQuality ?? null, ...r.judgement }, null, 2));
       console.error(`(dry run, nothing written; ${tally(r)})`);
       continue;
     }

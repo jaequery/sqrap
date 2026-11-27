@@ -483,6 +483,19 @@ domain and page title, and gets back a 1–10 quality score with per-dimension
 scores and reasons, plus a name, an original tagline and description, an
 industry, a country and a language. A site scoring at least
 `SQRAP_MIN_QUALITY` (default 7) becomes `approved`, anything lower `rejected`.
+Sites discovered from a hand-curated design gallery, where a jury, editor or
+curator picked each site for its design, are approved at the lower
+`SQRAP_MIN_QUALITY_CURATED` (default 6, never above `SQRAP_MIN_QUALITY`),
+since the score there mostly second-guesses that pick. The list is
+`CURATED_SOURCES` in `pipeline/discover/curated-sources.js`, by adapter name
+(`sites.source`): design awards and Sites of the Day, and galleries of sites,
+stores and portfolios hand-picked for design. Nominee lists, platform
+showcases, section and screen libraries, studio and foundry directories,
+the accelerators, search and `manual` sites keep the normal bar, as does a
+site with no or an unknown source. A site found by several sources is judged
+by its first one. The bar used is stored as `min_quality` in `quality_notes`.
+The judge still runs for every source: it also catches bad captures and
+writes the name, description, industry and country.
 A capture that does not show the real site (blank, error page, bot challenge,
 a cookie wall over most of the fold) becomes `failed` with
 `last_error='bad_capture'` so it can be captured again. Approved sites are then

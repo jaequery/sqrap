@@ -421,6 +421,7 @@ first pages.
 | URAGAWA, WebAnatomy best landing pages, Scaling DevTools landing pages, ThemesMotion Best Sites, awesome-web-prompts, awwweasome-websites | not adapted: still 401, its new domain redirects to the old address; an SEO agency's conversion scores, no outbound site links; robots.txt bars AI crawlers; a template shop, client-rendered; AI prompts, not sites; about 100 links mostly reposted from other galleries, last added to in March 2025 |
 | Flowradar Webflow inspiration, Flowout best Webflow websites, Hoverstate (hoverstate.design) | not adapted: about 85 sites behind its own redirect links; no site links in the served HTML; the domain still does not resolve |
 | UIZZE, Gummble, Flownato, gallery.design, webdesignawards.net | not adapted: app screens and flows, not websites (all three); a kitchen showroom; a landing page for the A' Design Award |
+| Nikolai Bain examples, Colorlib "best websites" posts, Best Websites Around the World, Cssfox, Vetted Design (Flat Trendz), Website Awards, djangosites.org | not adapted: a freelancer's B2B SaaS page examples, about 80 distinct sites; a theme vendor's listicles of mostly small local businesses; nominees mostly small businesses; no new entries since 2024; dormant; 403 behind a bot challenge (both) |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ### Accelerator portfolios

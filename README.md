@@ -211,6 +211,7 @@ first pages.
 | hallointer.net | working, a Berlin studio's platform for contemporary web design (about 620 portfolios, exhibitions, festivals, theaters, shops and experiments, each tagged with designer, type and subject); one page lists every site, newest first, read in one request; entries marked as archived and those pointing at web.archive.org snapshots are skipped, leaving about 335 live sites, the type and subject tags mapped to an industry |
 | THE INDEX (theindex.website) | working, a hand-picked directory of about 80 design studios and type foundries (Bakken & Bæck, Base Design, Porto Rocha, Instrument, Dinamo, Commercial Type...), every studio's website, name and first location read from the home page's Next.js page data in one request, the country hinted, every site tagged Agency & Portfolio |
 | The Responsive (the-responsive.com) | working, a hand-picked gallery of about 1,280 responsive websites shown desktop and mobile (studios and portfolios, fashion and furniture stores, architects, galleries, editorial and culture sites), dormant since August 2024; the home page read newest first with `/page/<n>/`, 12 a page, 107 pages, resuming where the last run stopped; every card links straight out to the site, its category classes mapped to an industry |
+| Tailwind CSS showcase (tailwindcss.com/showcase) | working, about 45 sites built with Tailwind that its team picks (Cursor, Vercel, Supabase, PostHog, Column, The Verge, Der Spiegel, Google I/O, NASA JPL...), every card now served in the HTML and read in one request; cards labeled Template (Tailwind's own tailwindui.com templates) skipped, go.<company> marketing links turned into the company's home page, each card's label ("Developer tool website", "News website"...) mapped to an industry |
 | Webinspoo | working, read from its sitemap newest first, landing pages only, one page fetched per new site, every site tagged SaaS |
 | Astro showcase | working, cards link straight to the site |
 | Gatsby showcase | working, read from its sitemap newest first, one page fetched per new site, categories mapped to industry |
@@ -306,7 +307,7 @@ first pages.
 | Looks Like Good Design, Framer Websites | not adapted: creative work of every kind, not websites; an agency site, not a gallery |
 | One Page Mania, startups.gallery, Next.js showcase | not adapted: now redirects to an agency site; a startup and jobs directory; only a handful of sites |
 | Design Inspiration (design-inspiration.net), Readymag showcase | not adapted: industrial and product design, not websites; the showcase page is gone (404) |
-| Shopify examples, Tailwind CSS showcase | not adapted: a handful of stores; client-rendered |
+| Shopify examples | not adapted: a handful of stores |
 | Three.js showcase, Sanity showcase, Strapi showcases | not adapted: mostly WebGL demos, games and experiments; robots.txt disallows /showcase; mostly small local businesses |
 | Craft CMS showcase | not adapted: now redirects to the home page, whose few links are mostly agency case studies |
 | ProcessWire sites, Readymag examples, Remix showcase | not adapted: no site links in the served HTML |

@@ -1,5 +1,5 @@
 import { snapshotAgentUsage } from "../../../../lib/agent-quota";
-import { lastEvent, queueCounts, recordEvent } from "../../../../lib/db";
+import { judgeHealth, lastEvent, queueCounts, recordEvent } from "../../../../lib/db";
 import { embeddingsEnabled } from "../../../../lib/embeddings";
 import { retryPendingPurges } from "../../../../lib/shots";
 import { embedNew } from "../../../../pipeline/embed";
@@ -66,7 +66,25 @@ export async function GET(request) {
   const queued = Number((await queueCounts()).capture);
   const discover = queued < DISCOVER_BELOW;
   const totals = await runPipeline({ ...RUN, discover }, { signal: AbortSignal.timeout(STOP_CLAIMING_MS) });
-  return Response.json({ data: { queued, discoverSkipped: !discover, ...totals, purges, agentUsage, embeddings, styles, accelerators } }, { headers: { "Cache-Control": "no-store" } });
+  const judge = await judgeStatus();
+  return Response.json({ data: { queued, discoverSkipped: !discover, ...totals, judge, purges, agentUsage, embeddings, styles, accelerators } }, { headers: { "Cache-Control": "no-store" } });
+}
+
+// The judge's health after the run. Without AI credentials the judge is off,
+// not stalled. A stall logs one loud line, so a judge outage shows up in the
+// function logs within hours (search "JUDGE STALLED").
+async function judgeStatus() {
+  const enabled = judgeEnabled();
+  try {
+    const health = await judgeHealth();
+    const stalled = enabled && health.stalled;
+    if (stalled) {
+      console.error(`JUDGE STALLED: ${health.waiting} captured, last judged ${health.lastJudgedAt ?? "never"}, last error: ${health.lastError ?? "none"}`);
+    }
+    return { enabled, ...health, stalled };
+  } catch (err) {
+    return { enabled, error: err.message };
+  }
 }
 
 // Accelerator badges and the accel= filter (pipeline/accelerators/sync.js).

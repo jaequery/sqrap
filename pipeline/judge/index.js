@@ -186,8 +186,11 @@ export async function judgeSite(siteOrId, { dryRun = false } = {}) {
       await recordEvent(site.id, "judge_failed", { code: "schema", message: err.message, model: judgeModel(), usage, cost });
       return { site: await getSite(site.id), status: "failed", error: err.message, usage, cost };
     }
-    // API or local error: leave the site as it was so a later run retries it.
-    await upsertSite({ domain: site.domain, status: previousStatus });
+    // API or local error: leave the site as it was so a later run retries it,
+    // with the reason on the site (a later successful judge clears it).
+    // The SDK's message already starts with the HTTP status ("402 {...}").
+    const message = String(err.message).replace(new RegExp(`^${err.status ?? "-"}\\s+`), "");
+    await upsertSite({ domain: site.domain, status: previousStatus, lastError: `judge_error: ${err.status ?? "-"} ${message.slice(0, 200)}` });
     await recordEvent(site.id, "judge_error", { message: String(err.message).slice(0, 500), status: err.status ?? null, model: judgeModel(), usage, cost });
     throw err;
   }

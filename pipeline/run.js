@@ -102,7 +102,7 @@ export async function runPipeline(options = {}, { signal } = {}) {
   let judgeOn = judgeEnabled();
   const totals = {
     discovered: 0, claimed: 0, captured: 0, approved: 0, rejected: 0, failed: 0, skipped: 0,
-    deferred: 0, styled: 0, tagged: 0, aiCalls: 0, cost: 0, diskAdded: 0, stopped: null,
+    deferred: 0, styled: 0, tagged: 0, judged: 0, judgeErrors: 0, judgeRefused: null, aiCalls: 0, cost: 0, diskAdded: 0, stopped: null,
   };
 
   if (opts.dryRun) {
@@ -222,6 +222,7 @@ export async function runPipeline(options = {}, { signal } = {}) {
     } catch (err) {
       // judgeSite put the site back to captured; the next run retries it.
       totals.aiCalls++;
+      totals.judgeErrors++;
       give(2);
       say(i, site.domain, `judge error, left captured: ${err.message}`, Date.now() - t, { event: "judge_error" });
       // Bad credentials, no credits or a model the account may not use: every
@@ -229,6 +230,7 @@ export async function runPipeline(options = {}, { signal } = {}) {
       // run instead of spending its limit on judge attempts.
       if (judgeOn && [401, 402, 403].includes(err.status)) {
         judgeOn = false;
+        totals.judgeRefused = err.status;
         log(`warning: the judge was refused (${err.status}); capturing only for the rest of this run`, { event: "judge_refused", status: err.status });
       }
       return;
@@ -242,6 +244,7 @@ export async function runPipeline(options = {}, { signal } = {}) {
     totals.aiCalls++;
     totals.cost += r.cost;
     totals[r.status]++;
+    totals.judged++;
     const quality = r.judgement?.capture_ok ? ` (quality ${r.judgement.quality})` : r.error ? ` (${r.error})` : " (bad capture)";
     say(i, site.domain, `${r.status}${quality}`, Date.now() - t, { event: r.status, quality: r.judgement?.quality ?? null, cost: r.cost });
 
@@ -394,6 +397,7 @@ export function summaryTable(t) {
   const rows = [
     ["discovered", t.discovered], ["claimed", t.claimed], ["captured", t.captured],
     ["approved", t.approved], ["rejected", t.rejected], ["failed", t.failed], ["skipped", t.skipped],
+    ["judged", t.judged], ["judge errors", t.judgeErrors ?? 0], ["judge refused", t.judgeRefused ?? "no"],
     ["left captured (budget)", t.deferred], ["styled", t.styled], ["tagged", t.tagged], ["AI calls", t.aiCalls],
     ["est. cost", `$${t.cost.toFixed(4)}`], ["disk added", formatBytes(t.diskAdded)],
     ["time", secs(t.elapsed ?? 0)], ["stopped", STOP_LABELS[t.stopped] ?? t.stopped],

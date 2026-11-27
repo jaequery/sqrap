@@ -6,7 +6,7 @@
 const ALIASES = {
   usa: "US", uk: "GB", "united-states-of-america": "US", england: "GB", scotland: "GB", wales: "GB",
   "northern-ireland": "GB", "the-netherlands": "NL", "czech-republic": "CZ", czechia: "CZ",
-  "south-korea": "KR", korea: "KR", russia: "RU", turkey: "TR",
+  "south-korea": "KR", korea: "KR", russia: "RU", turkey: "TR", netherland: "NL",
 };
 
 const slugify = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z]+/g, "-").replace(/^-|-$/g, "");

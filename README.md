@@ -490,6 +490,18 @@ styled and tagged: the site gets 1 or 2 visual styles (minimal, editorial,
 brutalist, …: `STYLES`), each page a page pattern and every section crop a
 section type, all from `lib/taxonomy.js`.
 
+A judge call that fails (the API refused it, a timeout, no credits) leaves the
+site `captured`, so a later run retries it, and sets
+`last_error='judge_error: <status|-> <message>'`. The operator API and the admin
+show it, and the next successful judge clears it. A 401/402/403 also switches
+the judge off for the rest of the run; the run totals count `judged`,
+`judgeErrors` and `judgeRefused` (the status, or null). The cron response adds
+`judge: { enabled, lastJudgedAt, waiting, lastError, lastErrorAt, stalled }`.
+The judge counts as stalled when sites wait in `captured` and none was judged for
+6 hours (`judgeHealth` in `lib/db.js`). A stalled judge logs
+`JUDGE STALLED: …` from the cron route (search the function logs for it) and
+shows a warning at the top of `/admin`.
+
 Styles come from a call of their own (`styleSite`, `STYLE_SCHEMA`) that sees the
 same two home folds and writes only `sites.style`, `styled_at` and
 `style_attempts` (migration `010`), never status, quality, name or description,

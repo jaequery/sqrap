@@ -3,6 +3,8 @@
 // yielding the entries `parse` extracts until `limit` entries, an empty page or
 // `maxPages`. Entries whose site or detail page is already stored are skipped,
 // so they use up none of a run's reads and each run reaches further back.
+// `load` turns a page URL into what `parse` reads: a cheerio document by
+// default; a JSON gallery API passes its own (see ./81web.js).
 import * as cheerio from "cheerio";
 import { galleryCursor, knownDomains, knownSourceRefs, setGalleryCursor } from "../../../lib/db.js";
 import { fetchHtml } from "../http.js";
@@ -21,7 +23,9 @@ async function unseen(entries, pageUrl) {
   return entries.filter((_, i) => !knownDoms.has(domains[i]) && !knownRefs.has(refs[i]));
 }
 
-export async function* paged({ name, pageUrl, parse, limit, maxPages = 1000 }) {
+const loadHtml = async (url) => cheerio.load(await fetchHtml(url));
+
+export async function* paged({ name, pageUrl, parse, limit, maxPages = 1000, load = loadHtml }) {
   // Without the gallery_cursors table (003 not migrated yet) every run starts at page 2.
   const cursor = await galleryCursor(name).catch((err) => {
     console.warn(`[${name}] no paging cursor, reading from the start: ${err.message}`);
@@ -31,7 +35,7 @@ export async function* paged({ name, pageUrl, parse, limit, maxPages = 1000 }) {
   let previous = null;
   for (let page = 1; page <= maxPages && yielded < limit; page = page === 1 ? Math.max(2, cursor ?? 2) : page + 1) {
     const url = pageUrl(page);
-    const entries = parse(cheerio.load(await fetchHtml(url)), url);
+    const entries = parse(await load(url), url);
     if (!entries.length) {
       if (page === 1) console.warn(`[${name}] no entries on ${url}; the gallery markup may have changed`);
       return;

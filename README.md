@@ -126,7 +126,7 @@ first pages.
 | CSS Winner (Sites of the Day) | working |
 | Navbar Gallery | working |
 | Design Nominees (Sites of the Day) | working |
-| Semplice Showcase | working, one page lists every site |
+| Semplice Showcase (semplice.com) | working, portfolio sites of designers and small studios built with Semplice and picked by its team: the Showcase (about 18 current picks, names kept) read first, then the yearly Best Of pages its Showcase Archives link to, newest first (2024 back to 2017, about 120 more portfolios: Tavo, Studio Paack, Figure, Shy Studio, Smith & Diction), one request a page; a site picked twice yielded once; no industry hinted; keeps the normal quality bar |
 | Web Design Clip | working, category mapped to industry |
 | CSS Light (featured sites) | working |
 | Details Inspo (formerly inspo.page) | working, read from its sitemap, one page fetched per new site, industry tag mapped |
@@ -447,6 +447,7 @@ first pages.
 | AGT smartphone design, Muse Creative Awards, Creativepool, Nicheloom, commerce.cool, CSS Reel, Minimal Exhibit, Hoverstate (again) | not adapted: Japanese phone layouts, untouched since April 2021; robots.txt bars ClaudeBot; 403 behind a bot challenge (both); a parked domain; now casino affiliate pages; a WordPress error page; its TLS handshake still fails |
 | Photo Web Designs (photowebdesigns.com) | not adapted: a web design agency for photographers, not a gallery |
 | Font League, ping.design, Upslide Inspire, Design Everywhere, ui.live, Motion Web Awards, Noticed Sites, Web Awards UK (webawards.uk), Teasertrack | not adapted: admits sites mechanically from Show HN and the YC directory to measure their fonts, not picked for design; 36 well-known sites (Linear, Vercel, Raycast), all with prompts; mostly Dribbble shots, X posts and fonts rather than sites; 403 behind a bot challenge; a client-rendered sharing network marked noindex; about a dozen winners so far; a handful of sites; 403 behind a bot challenge; a mirror of Awwwards' Sites of the Day |
+| Real Good Sites, Stack Sorted, Super showcase (super.so/showcase), UI Land | not adapted: client-rendered, no site links in the served HTML; design elements, client-rendered; mostly Notion pages on `super.site` subdomains and product docs; app UI screens, not sites |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ### Accelerator portfolios

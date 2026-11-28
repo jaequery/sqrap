@@ -17,6 +17,7 @@ import { purgeSiteShots, putShot, removeShots } from "../lib/shots.js";
 import { PLATFORMS } from "../lib/taxonomy.js";
 import { agentRaw, writeAgentTiles } from "./agent-images.js";
 import { closeBrowser, newContext, VIEWPORTS } from "./browser.js";
+import { CAPTURE_LIMIT, dedupeSections, sectionHash, trimWrap } from "./dedupe.js";
 import { MAX_HEIGHT, preparePage } from "./prepare.js";
 import { findSections, guessSectionType } from "./sections.js";
 import { collectLinks, pickSubpages, registrableDomain } from "./links.js";
@@ -116,8 +117,28 @@ function tonesOf(dominant, palette) {
 
 /* ---------- Loading and screenshotting one page ---------- */
 
+// Device px per screenshot call, under the CAPTURE_LIMIT at which Chromium wraps a capture back to the top of the page.
+const TILE_DEVICE_PX = 8000;
+
+// The top `height` css px of the page as one PNG at device px. Taller than
+// one tile, it is shot in clipped tiles and stitched.
+async function screenshotPage(page, width, height, dpr) {
+  const opts = { type: "png", fullPage: true, animations: "disabled", caret: "hide", timeout: 60000 };
+  const tile = Math.floor(TILE_DEVICE_PX / dpr);
+  if (height <= tile) return page.screenshot({ ...opts, clip: { x: 0, y: 0, width, height } });
+  const parts = [];
+  for (let y = 0; y < height; y += tile) {
+    const h = Math.min(tile, height - y);
+    parts.push({ input: await page.screenshot({ ...opts, clip: { x: 0, y, width, height: h } }), top: y * dpr, left: 0 });
+  }
+  return sharp({ create: { width: width * dpr, height: height * dpr, channels: 3, background: "#ffffff" }, limitInputPixels: false })
+    .composite(parts)
+    .png({ compressionLevel: 1 })
+    .toBuffer();
+}
+
 // Loads `url` at one viewport and returns the screenshot plus layout facts.
-async function shoot(site, url, platform, { wantLinks = false } = {}) {
+export async function shoot(site, url, platform, { wantLinks = false } = {}) {
   const context = await newContext(platform);
   let timedOut = false;
   const timer = setTimeout(() => { timedOut = true; context.close().catch(() => {}); }, SHOOT_TIMEOUT_MS);
@@ -135,17 +156,15 @@ async function shoot(site, url, platform, { wantLinks = false } = {}) {
     // Pages that scroll inside a 100vh container report no extra height: Playwright
     // then shoots the viewport, which is the fallback we want.
     const height = Math.max(viewHeight, Math.min(docHeight, MAX_HEIGHT));
-    const png = await page.screenshot({
-      type: "png",
-      fullPage: true,
-      clip: { x: 0, y: 0, width, height },
-      animations: "disabled",
-      caret: "hide",
-      timeout: 60000,
+    const dpr = VIEWPORTS[platform].deviceScaleFactor;
+    const shot = await screenshotPage(page, width, height, dpr);
+    // Defence in depth: a capture that still repeats from the top at the
+    // Chromium limit is cut there, and sections that start below it go.
+    const { png, height: keptHeight, sections, trimmed } = await trimWrap(shot, {
+      sections: await findSections(page, height), height, dpr, periods: [CAPTURE_LIMIT],
     });
-    const sections = await findSections(page, height);
     const links = wantLinks ? await collectLinks(page) : [];
-    return { png, height, title, finalUrl, sections, links };
+    return { png, height: keptHeight, title, finalUrl, sections, links, trimmed };
   } catch (err) {
     if (timedOut) throw new CaptureError("timeout", `${platform} capture took over ${SHOOT_TIMEOUT_MS / 1000}s`);
     throw err;
@@ -165,9 +184,21 @@ async function writeWebp(pipeline, rel, quality) {
   return buf.info;
 }
 
+// sectionHash of rows [top, top + height) of agent raw pixels (from agentRaw).
+async function agentSectionHash({ data, info }, top, height) {
+  const y = Math.min(Math.max(0, Math.round(top)), info.height - 1);
+  const h = Math.max(1, Math.min(Math.round(height), info.height - y));
+  const crop = await sharp(data, { raw: { width: info.width, height: info.height, channels: info.channels } })
+    .extract({ left: 0, top: y, width: info.width, height: h })
+    .raw()
+    .toBuffer();
+  return sectionHash(crop, { raw: { width: info.width, height: h, channels: info.channels } });
+}
+
 // Writes full, lg, sm, section and agent images for one screenshot. Returns
-// screen fields and section rows, with shot paths, plus the agent tiles of each.
-async function writeScreen(site, slug, platform, shot) {
+// screen fields and section rows, with shot paths, plus the agent tiles of each,
+// and the sections it skipped as duplicates.
+export async function writeScreen(site, slug, platform, shot) {
   const size = SIZES[platform];
   const dpr = VIEWPORTS[platform].deviceScaleFactor;
   const dir = site.id;
@@ -198,12 +229,20 @@ async function writeScreen(site, slug, platform, shot) {
   const agentScale = agent.info.width / meta.width;
   const agentTiles = await writeAgentTiles(agent, base);
 
-  const sections = [];
+  // Section boxes in device px, each with a hash of its pixels (from the
+  // agent-sized copy) so near-identical sections on this screen are written once.
+  const candidates = [];
   for (const [i, s] of shot.sections.entries()) {
     const y = Math.round(s.y * dpr);
     const h = Math.min(Math.round(s.height * dpr), meta.height - y);
     if (h < 40 * dpr) continue;
     if (Math.round((h * size.section) / meta.width) > WEBP_MAX) continue;
+    candidates.push({ s, i, y, h, height: h, hash: await agentSectionHash(agent, y * agentScale, h * agentScale) });
+  }
+  const { keep, dropped } = dedupeSections(candidates);
+
+  const sections = [];
+  for (const { s, i, y, h } of keep) {
     const id = randomUUID();
     const crop = () => sharp(shot.png, { limitInputPixels: false }).extract({ left: 0, top: y, width: meta.width, height: h });
     const imgPath = `${dir}/sections/${id}.webp`;
@@ -225,6 +264,8 @@ async function writeScreen(site, slug, platform, shot) {
     },
     agentTiles,
     sections,
+    // Sections skipped as near-identical to an earlier one: { y, height, of } in css px.
+    deduped: dropped.map(({ item, of }) => ({ y: item.s.y, height: item.s.height, of: of.s.y })),
     colors,
   };
 }
@@ -258,6 +299,19 @@ async function capturePage(site, { url, path: pagePath, pattern }, { wantLinks =
     return { stale, page };
   });
   await reindexSite(site.id);
+
+  // The duplicate guards, for the admin's event log. Best effort: the page is
+  // already stored, so a failed log line must not fail the capture.
+  for (const { id: platform } of PLATFORMS) {
+    const { trimmed } = shots[platform];
+    const { deduped } = written[platform];
+    try {
+      if (trimmed) await recordEvent(site.id, "capture_trimmed", { path: pagePath, platform, ...trimmed });
+      if (deduped.length) await recordEvent(site.id, "section_deduped", { path: pagePath, platform, sections: deduped });
+    } catch (err) {
+      console.warn(`capture: could not log the duplicate guard for ${site.domain}${pagePath}: ${err.message}`);
+    }
+  }
 
   // Old files this capture did not overwrite.
   const fresh = new Set(PLATFORMS.flatMap(({ id }) => [

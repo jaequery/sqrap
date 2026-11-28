@@ -79,6 +79,24 @@ function wrapped(height, period) {
   check("ordinary page left alone", r.trimmed === null && r.height === height / 3);
 }
 
+// 3b. A sparse page with a tinted body around a white column: its empty rows
+// all match each other, which must not read as a repeat.
+{
+  const height = 12000;
+  const d = Buffer.alloc(W * height * 3, 0xee);
+  let s = 42;
+  const rand = () => ((s = (s * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff);
+  for (let y = 0; y < height; y++) {
+    const text = rand() < 0.02, off = Math.floor(rand() * 100);
+    for (let x = 100; x < 380; x++) {
+      const v = text && x > 120 && x < 360 && (x + off) % 9 < 4 ? 40 : 255;
+      d.fill(v, (y * W + x) * 3, (y * W + x) * 3 + 3);
+    }
+  }
+  const period = await findWrapPeriod(await png(d, height));
+  check("sparse two-tone page left alone", period === null, String(period));
+}
+
 // 4. Duplicate section crops: the same band twice (once re-encoded lossily),
 // plus two distinct bands.
 {

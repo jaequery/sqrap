@@ -15,6 +15,12 @@ import { closeBrowser, VIEWPORTS } from "../pipeline/browser.js";
 import { shoot, writeScreen } from "../pipeline/capture.js";
 import { shotsDir } from "../lib/shots.js";
 
+// Never upload repro images to the real Blob store.
+if (process.env.BLOB_READ_WRITE_TOKEN) {
+  console.error("repro-wrap: unset BLOB_READ_WRITE_TOKEN; images must go to SQRAP_DATA_DIR");
+  process.exit(2);
+}
+
 const LIMIT = 8192; // device px per Chromium capture
 const args = process.argv.slice(2);
 const pi = args.indexOf("--platform");

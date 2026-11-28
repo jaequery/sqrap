@@ -17,8 +17,7 @@ const MIN_PERIOD = 1024;
 const MIN_OVERLAP = 128; // shorter repeats are left alone: too little to judge
 const MATCH_SHARE = 0.9;
 
-async function greyRows(input) {
-  const { height } = await sharp(input, { limitInputPixels: false }).metadata();
+async function greyRows(input, height) {
   const { data, info } = await sharp(input, { limitInputPixels: false })
     .resize({ width: SAMPLE_WIDTH, height, fit: "fill" })
     .greyscale()
@@ -28,50 +27,55 @@ async function greyRows(input) {
 }
 
 // The device-px period at which `input` (any image sharp reads, at device px)
-// repeats itself from the top, or null. Checks CAPTURE_LIMIT, plus any offset
-// where the first ANCHOR rows of the page show up again. A period counts when
-// at least MATCH_SHARE of the rows past it that carry content (not flat colour)
-// equal the rows the same distance from the top.
-export async function findWrapPeriod(input) {
-  const { data, width: W, height: H, channels: C } = await greyRows(input);
+// repeats itself from the top, or null. Checks `periods` when given (capture
+// time passes [CAPTURE_LIMIT]: tiles keep Chromium below it, so no other
+// period can come from a wrap), else CAPTURE_LIMIT plus any offset where the
+// first ANCHOR rows of the page show up again (for stored shots, whose size no
+// longer says where a wrap was). Only rows that differ from the row above count
+// (edges of text, images, bands): empty rows match each other on any page,
+// whatever their colours. A period counts when at least MATCH_SHARE of those
+// rows past it equal the row the same distance from the top.
+export async function findWrapPeriod(input, { periods } = {}) {
+  const { height } = await sharp(input, { limitInputPixels: false }).metadata();
+  const lowest = periods ? Math.min(...periods) : MIN_PERIOD;
+  if (height < lowest + MIN_OVERLAP) return null;
+  const { data, width: W, height: H, channels: C } = await greyRows(input, height);
   const px = (y, x) => data[(y * W + x) * C];
   const rowEqual = (a, b) => {
     let sum = 0;
     for (let x = 0; x < W; x++) sum += Math.abs(px(a, x) - px(b, x));
     return sum / W < ROW_EQUAL;
   };
-  const flat = new Uint8Array(H);
-  for (let y = 0; y < H; y++) {
-    let min = 255, max = 0;
-    for (let x = 0; x < W; x++) { const v = px(y, x); if (v < min) min = v; if (v > max) max = v; }
-    flat[y] = max - min < 8 ? 1 : 0;
-  }
+  const edge = new Uint8Array(H);
+  for (let y = 1; y < H; y++) edge[y] = rowEqual(y, y - 1) ? 0 : 1;
 
   const repeats = (p) => {
     let informative = 0, match = 0;
     for (let y = 0; y + p < H; y++) {
-      if (flat[y] && flat[y + p]) continue;
+      if (!edge[y] && !edge[y + p]) continue;
       informative++;
       if (rowEqual(y, y + p)) match++;
     }
     return informative >= MIN_OVERLAP / 2 && match / informative >= MATCH_SHARE;
   };
 
-  const candidates = new Set([CAPTURE_LIMIT]);
-  // Rows near the top with content to look for further down.
-  const anchor = [];
-  for (let y = 0; y < Math.min(ANCHOR, H) && anchor.length < 32; y++) if (!flat[y]) anchor.push(y);
-  if (anchor.length >= 16) {
-    // Most anchor rows must recur: lossy WebP input (stored shots) blurs a few
-    // at block edges. The full check below decides.
-    const allowed = Math.floor(anchor.length / 4);
-    for (let p = MIN_PERIOD; p + MIN_OVERLAP <= H; p++) {
-      let misses = 0;
-      for (const y of anchor) {
-        if (y + p < H && rowEqual(y, y + p)) continue;
-        if (++misses > allowed) break;
+  const candidates = new Set(periods ?? [CAPTURE_LIMIT]);
+  if (!periods) {
+    // Edge rows near the top to look for further down.
+    const anchor = [];
+    for (let y = 1; y < Math.min(ANCHOR, H) && anchor.length < 32; y++) if (edge[y]) anchor.push(y);
+    if (anchor.length >= 16) {
+      // Most anchor rows must recur: lossy WebP input (stored shots) blurs a few
+      // at block edges. The full check below decides.
+      const allowed = Math.floor(anchor.length / 4);
+      for (let p = MIN_PERIOD; p + MIN_OVERLAP <= H; p++) {
+        let misses = 0;
+        for (const y of anchor) {
+          if (y + p < H && rowEqual(y, y + p)) continue;
+          if (++misses > allowed) break;
+        }
+        if (misses <= allowed) candidates.add(p);
       }
-      if (misses <= allowed) candidates.add(p);
     }
   }
   for (const p of [...candidates].sort((a, b) => a - b)) {
@@ -82,19 +86,20 @@ export async function findWrapPeriod(input) {
 
 // Cuts a capture that repeats itself at its period. `png` is at device px,
 // `sections` and `height` in css px ([{ y, height, ... }], as findSections
-// returns). Returns { png, height, sections, trimmed }: unchanged with
-// trimmed null when there is no wrap, else the image cut at the period,
-// sections that start below it dropped and the rest clamped, and
-// trimmed = { period, from, droppedSections } (period and from in device px).
-export async function trimWrap(png, { sections, height, dpr }) {
-  const period = await findWrapPeriod(png);
+// returns); `periods` as for findWrapPeriod. Returns { png, height, sections,
+// trimmed }: unchanged with trimmed null when there is no wrap, else the image
+// cut at the period (rounded down to whole css px), sections that start below
+// it dropped and the rest clamped, and trimmed = { period, from, droppedSections }
+// (period and from in device px).
+export async function trimWrap(png, { sections, height, dpr, periods }) {
+  const period = await findWrapPeriod(png, { periods });
   if (!period) return { png, height, sections, trimmed: null };
   const meta = await sharp(png, { limitInputPixels: false }).metadata();
+  const cssHeight = Math.floor(period / dpr);
   const cut = await sharp(png, { limitInputPixels: false })
-    .extract({ left: 0, top: 0, width: meta.width, height: period })
+    .extract({ left: 0, top: 0, width: meta.width, height: cssHeight * dpr })
     .png({ compressionLevel: 1 })
     .toBuffer();
-  const cssHeight = Math.floor(period / dpr);
   const kept = sections
     .filter((s) => s.y < cssHeight)
     .map((s) => ({ ...s, height: Math.min(s.height, cssHeight - s.y) }));

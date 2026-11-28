@@ -17,7 +17,7 @@ import { purgeSiteShots, putShot, removeShots } from "../lib/shots.js";
 import { PLATFORMS } from "../lib/taxonomy.js";
 import { agentRaw, writeAgentTiles } from "./agent-images.js";
 import { closeBrowser, newContext, VIEWPORTS } from "./browser.js";
-import { dedupeSections, sectionHash, trimWrap } from "./dedupe.js";
+import { CAPTURE_LIMIT, dedupeSections, sectionHash, trimWrap } from "./dedupe.js";
 import { MAX_HEIGHT, preparePage } from "./prepare.js";
 import { findSections, guessSectionType } from "./sections.js";
 import { collectLinks, pickSubpages, registrableDomain } from "./links.js";
@@ -117,8 +117,7 @@ function tonesOf(dominant, palette) {
 
 /* ---------- Loading and screenshotting one page ---------- */
 
-// Device px per screenshot call, under the CAPTURE_LIMIT (pipeline/dedupe.js)
-// at which Chromium wraps a capture back to the top of the page.
+// Device px per screenshot call, under the CAPTURE_LIMIT at which Chromium wraps a capture back to the top of the page.
 const TILE_DEVICE_PX = 8000;
 
 // The top `height` css px of the page as one PNG at device px. Taller than
@@ -132,7 +131,7 @@ async function screenshotPage(page, width, height, dpr) {
     const h = Math.min(tile, height - y);
     parts.push({ input: await page.screenshot({ ...opts, clip: { x: 0, y, width, height: h } }), top: y * dpr, left: 0 });
   }
-  return sharp({ create: { width: width * dpr, height: height * dpr, channels: 4, background: "#ffffff" }, limitInputPixels: false })
+  return sharp({ create: { width: width * dpr, height: height * dpr, channels: 3, background: "#ffffff" }, limitInputPixels: false })
     .composite(parts)
     .png({ compressionLevel: 1 })
     .toBuffer();
@@ -159,9 +158,11 @@ export async function shoot(site, url, platform, { wantLinks = false } = {}) {
     const height = Math.max(viewHeight, Math.min(docHeight, MAX_HEIGHT));
     const dpr = VIEWPORTS[platform].deviceScaleFactor;
     const shot = await screenshotPage(page, width, height, dpr);
-    // Defence in depth: a capture that still repeats from the top is cut at the
-    // repeat, and sections that start below it go.
-    const { png, height: keptHeight, sections, trimmed } = await trimWrap(shot, { sections: await findSections(page, height), height, dpr });
+    // Defence in depth: a capture that still repeats from the top at the
+    // Chromium limit is cut there, and sections that start below it go.
+    const { png, height: keptHeight, sections, trimmed } = await trimWrap(shot, {
+      sections: await findSections(page, height), height, dpr, periods: [CAPTURE_LIMIT],
+    });
     const links = wantLinks ? await collectLinks(page) : [];
     return { png, height: keptHeight, title, finalUrl, sections, links, trimmed };
   } catch (err) {
@@ -299,12 +300,17 @@ async function capturePage(site, { url, path: pagePath, pattern }, { wantLinks =
   });
   await reindexSite(site.id);
 
-  // The duplicate guards, for the admin's event log.
+  // The duplicate guards, for the admin's event log. Best effort: the page is
+  // already stored, so a failed log line must not fail the capture.
   for (const { id: platform } of PLATFORMS) {
     const { trimmed } = shots[platform];
-    if (trimmed) await recordEvent(site.id, "capture_trimmed", { path: pagePath, platform, ...trimmed });
     const { deduped } = written[platform];
-    if (deduped.length) await recordEvent(site.id, "section_deduped", { path: pagePath, platform, sections: deduped });
+    try {
+      if (trimmed) await recordEvent(site.id, "capture_trimmed", { path: pagePath, platform, ...trimmed });
+      if (deduped.length) await recordEvent(site.id, "section_deduped", { path: pagePath, platform, sections: deduped });
+    } catch (err) {
+      console.warn(`capture: could not log the duplicate guard for ${site.domain}${pagePath}: ${err.message}`);
+    }
   }
 
   // Old files this capture did not overwrite.

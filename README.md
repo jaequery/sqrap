@@ -85,7 +85,15 @@ runs at most `--max-queries` (default 30) queries per run.
 
 `--limit` caps the new sites a run adds. Sites already in the library do not
 count toward it, so each run reads past the gallery entries earlier runs took,
-up to ten times the limit in candidates. Refero, Site of Sites, Details Inspo, SiteSee
+up to ten times the limit in candidates. Discovery asks the adapters in turn,
+one candidate each; an adapter that yields a domain already stored is read on
+within its turn (up to 25 such entries, which count toward neither the limit
+nor the reads, reported as `known`). Each run starts with the adapter after the
+last one the previous run asked, kept in `gallery_cursors` under
+`discover:rotation:<sources>`, so a short run (the cron's 15 sites in 90
+seconds) still reaches the adapters at the end of the list over successive
+runs instead of always reading the first few dozen. `--only` neither uses nor
+moves it. Refero, Site of Sites, Details Inspo, SiteSee
 Landing Gallery, A1 Gallery, Landings, Webinspoo, Wall of Portfolios, Gallereee, Mosaic, SaaS UI, Hero Gallery, Mesh3D, Crypto Design Club, Arche Directory, BestSaaSWebDesigns, Dokle and the Gatsby showcase are read from their sitemaps, and they, Admire the Web,
 Typewolf, SaaS Pages, SaaSFrame, Orpetron, Unmatched Style, See*Saw and Killer Portfolio skip the detail pages already stored
 as a site's source.

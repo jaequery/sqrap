@@ -128,7 +128,7 @@ first pages.
 | Design Nominees (Sites of the Day) | working |
 | Semplice Showcase (semplice.com) | working, portfolio sites of designers and small studios built with Semplice and picked by its team: the Showcase (about 18 current picks, names kept) read first, then the yearly Best Of pages its Showcase Archives link to, newest first (2024 back to 2017, about 120 more portfolios: Tavo, Studio Paack, Figure, Shy Studio, Smith & Diction), one request a page; a site picked twice yielded once; no industry hinted; keeps the normal quality bar |
 | Web Design Clip | working, category mapped to industry |
-| CSS Light (featured sites) | working |
+| CSS Light (featured sites) | working, its featured sites newest first, 12 a page by offset, about 5,100 in some 425 pages back to November 2012 (page 100 is only August 2023), each card's link out kept and its `/website/<id>/<slug>` page the source (the "by" link is the designer's own site, not read) |
 | Details Inspo (formerly inspo.page) | working, read from its sitemap, one page fetched per new site, industry tag mapped |
 | SaaS Pages | working, one detail page fetched per new site, every site tagged SaaS |
 | SaaS Landing Page | working, tags mapped to industry, falling back to SaaS |

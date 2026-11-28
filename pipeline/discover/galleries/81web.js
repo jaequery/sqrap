@@ -5,8 +5,9 @@
 // client-rendered Nuxt app (so it was once passed over), but its gallery comes
 // from a same-origin JSON endpoint, /api/toppage_v2?paged=<n>, 24 posts a page
 // newest first, each with the site's address, its industry category, its site
-// type and the production credit. It is read through the shared paged loop;
-// pages past about 100 reach back before 2019, so the loop stops there.
+// type and the production credit. It is read through the shared paged loop
+// back to the first picks of November 2010, page 231 today; the page past the
+// last answers an empty list, which ends the listing.
 // Recruiting sites are skipped, and so are campaign pages that live inside a
 // brand's site (adidas.jp/JFA/) rather than on a domain of their own. The page
 // /sites/<postID>/ is the sourceRef. robots.txt allows everything.
@@ -78,7 +79,7 @@ export function listing({ limit }) {
   return paged({
     name,
     limit,
-    maxPages: 100,
+    maxPages: 260,
     pageUrl: (n) => `${BASE}/api/toppage_v2?paged=${n}`,
     // fetchHtml for its robots.txt check; the endpoint answers JSON either way.
     load: async (url) => JSON.parse(await fetchHtml(url)),

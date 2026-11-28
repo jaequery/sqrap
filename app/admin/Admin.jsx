@@ -607,7 +607,8 @@ function Users({ tick, act, setCounts }) {
     patch(u, "revoke_admin", `${u.email} is no longer allowlisted`);
   };
   const del = (u) => {
-    if (!confirm(`Delete the account ${u.email}? Its sessions, API keys, saved designs and any admin grant go with it. This cannot be undone.`)) return;
+    const grant = u.adminFrom === "db" ? ` It also removes ${u.email} from the admin allowlist (admin_emails), even if that grant was meant for the address's real owner.` : "";
+    if (!confirm(`Delete the account ${u.email}? Its sessions, API keys and saved designs go with it.${grant} This cannot be undone.`)) return;
     act(() => api(`users/${u.id}`, { method: "DELETE" }), `${u.email} deleted`).catch(() => {});
   };
 
@@ -630,7 +631,7 @@ function Users({ tick, act, setCounts }) {
                 <td><b>{u.email}</b>{u.self && <span className="mute"> (you)</span>}<div className="mute">{u.name || "—"}</div></td>
                 <td>{signInMethod(u)}</td>
                 <td className="mute">{date(u.createdAt)}</td>
-                <td>{u.lastActiveAt ? date(u.lastActiveAt) : <span className="mute">never</span>}<div className="mute">{plural(u.sessions, "active session")}</div></td>
+                <td>{u.lastActiveAt ? date(u.lastActiveAt) : <span className="mute">no live session</span>}<div className="mute">{plural(u.sessions, "active session")}</div></td>
                 <td>{u.likes}</td>
                 <td>{u.apiKeys}</td>
                 <td><AdminCell u={u} /></td>
@@ -639,7 +640,7 @@ function Users({ tick, act, setCounts }) {
                   <button className="btn-small" type="button" disabled={!u.apiKeys} onClick={() => revokeKeys(u)}>Revoke keys</button>
                   {!u.listed
                     ? <button className="btn-small" type="button" onClick={() => grant(u)}>Grant admin</button>
-                    : <button className="btn-small" type="button" disabled={u.self || u.adminFrom === "env"} title={u.adminFrom === "env" ? "From SQRAP_ADMIN_EMAILS; change it there" : u.self ? "You can't revoke your own admin" : undefined} onClick={() => revoke(u)}>Revoke admin</button>}
+                    : <button className="btn-small" type="button" disabled={u.self || u.adminFrom === "env"} title={u.adminFrom === "env" ? "From SQRAP_ADMIN_EMAILS (or the built-in default); change it in the environment" : u.self ? "You can't revoke your own admin" : undefined} onClick={() => revoke(u)}>Revoke admin</button>}
                   <button className="btn-small danger" type="button" disabled={u.self} title={u.self ? "You can't delete your own account" : undefined} onClick={() => del(u)}>Delete</button>
                 </div>
                 </td>

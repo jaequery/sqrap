@@ -645,13 +645,27 @@ that suit your machine and AI budget.
 ### On Vercel Cron
 
 Production also runs the pipeline itself: `vercel.json` calls
-`/api/cron/pipeline` every 30 minutes. Each run styles up to 8 public sites
-that have no style yet (for at most a minute), then, only while fewer than 100
-sites wait for their home capture, pulls up to 15 new sites from the galleries
-(for at most 90 seconds), then takes up to 6 sites, one at a
-time and with at most 4 subpages each, through the pipeline with serverless
-Chromium (`@sparticuz/chromium`) and the judge on AI Gateway. It stops claiming
-after 5 minutes so an in-flight site finishes within the 800-second limit. The
+`/api/cron/pipeline` every 5 minutes, and each call first counts the sites
+waiting for their home capture:
+
+- **Normal** (fewer than 100 waiting): the call returns at once, claiming
+  nothing, unless the last run started at least 28 minutes ago (the
+  `cron_pipeline` event), so a run still starts about every 30 minutes. A run
+  styles up to 8 public sites that have no style yet (for at most a minute),
+  pulls up to 15 new sites from the galleries (for at most 90 seconds), then
+  takes up to 6 sites, one at a time and with at most 4 subpages each, through
+  the pipeline. It stops claiming after 5 minutes.
+- **Backlog** (100 or more waiting, e.g. after a big import): every call runs,
+  without gallery discovery, and takes up to 16 sites, two at a time in one
+  browser, with at most 48 AI calls. It keeps claiming until 560 seconds after
+  the call started. Runs on different instances overlap (claims are atomic); a
+  call that lands on an instance whose run is still going returns at once.
+
+Either way it uses serverless Chromium (`@sparticuz/chromium`) and the judge on
+AI Gateway, and no new site is claimed later than 560 seconds into the call, so
+an in-flight site finishes within the 800-second limit. The response, the
+`cron_pipeline` event and the `pipeline_started` event's options carry the
+`mode`. The
 route answers 404 unless called with `Authorization: Bearer $CRON_SECRET`. On
 Vercel the data dir is under `/tmp` (logs only); run logs are in the
 function logs and `events`. A bad capture counts as a capture attempt, so a
@@ -835,9 +849,10 @@ curl -X POST https://www.sqrap.com/api/operator/sites -H "Authorization: Bearer 
 curl "https://www.sqrap.com/api/operator/sites?domains=example.com" -H "Authorization: Bearer $SQRAP_INGEST_TOKEN"
 ```
 
-Cron takes at most 6 sites per 30-minute run (`RUN.limit` in
-`app/api/cron/pipeline/route.js`), so a large batch drains over hours or days;
-it does not need to be split, the queue only grows. Sites added here (and by
+Cron takes at most 6 sites per 30-minute run, and with 100 or more sites
+waiting switches to backlog mode, a run every 5 minutes taking two sites at a
+time (`MODES` in `app/api/cron/pipeline/route.js`), so a large batch drains in
+a day or two; it does not need to be split, the queue only grows. Sites added here (and by
 `npm run seed` or admin seeds, source `manual`) are captured and judged before
 gallery and search finds, and the cron skips gallery discovery while 100 or
 more sites wait for capture.

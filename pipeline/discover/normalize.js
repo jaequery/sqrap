@@ -66,7 +66,7 @@ export const BLOCKLIST = Object.freeze([
   "the-responsive.com", "tailwindcss.com", "tailwindui.com",
   "creativetable.de", "refto.one", "cta.gallery", "pagedone.io",
   "partsdesign.net", "81-web.com", "webdesign-journal.de", "cartcraze.com", "designmunk.com",
-  "websitedesignawards.com", "nocodesupply.co", "webdesigngarden.com",
+  "websitedesignawards.com", "nocodesupply.co", "webdesigngarden.com", "webcity.design",
   "techstars.com", "f.inc", "a16z.com", "a16zspeedrun.com", "ycombinator.com",
 ]);
 

@@ -495,19 +495,20 @@ the top past that, so long pages captured before capture switched to tiles
 more than once. `npm run dedupe-sections` finds and fixes them:
 
 - It walks every page captured before the run started, oldest first. It downloads
-  the full image only for screens tall enough to wrap (4096 stored px on both
+  the full image only for screens tall enough to wrap (about 4096 stored px on both
   platforms) and checks it at exactly the Chromium period (`pipeline/dedupe.js`).
 - A wrapped page of a public site is **captured again** (both platforms, the
   fixed capture), and the site keeps its status. If that fails, or the site is
-  not public, opted out or disallowed by robots.txt, the page is cleaned up
-  instead: the full image is cut at the period (stored under a new name), its
+  not public or disallowed by robots.txt, the page is cleaned up instead
+  (nothing is written for opted-out domains): the full image is cut at the period (stored under a new name), its
   agent tiles rebuilt, sections at or past the period deleted and the one across
   it cut short.
 - On every screen, a section that is near-identical to an earlier one
   (`sectionHash`) is deleted, together with its images, agent tiles and embedding.
 - Each fixed page gets a `dedupe_backfill` event, and the run ends with totals.
   It is safe to stop (Ctrl-C finishes the current page) and run again: a rerun
-  changes nothing.
+  changes nothing, but it reads every section image again (each run downloads
+  the whole library from Blob, in the dry run too).
 
 ```sh
 npm run dedupe-sections                     # dry run: what it would change, and totals
@@ -519,7 +520,7 @@ Against production: run `vercel env pull` so `.env.local` has `DATABASE_URL`
 and `BLOB_READ_WRITE_TOKEN`, install Chromium (`npx playwright install chromium`),
 then start with the dry run and read its totals before `--apply`. Without
 `BLOB_READ_WRITE_TOKEN`, shots are read from and written to `data/shots`.
-`--apply` refuses to run when the database's shots are not there (the shared
+`--apply` refuses to run unless a random sample of the database's full images are all there (the shared
 database keeps them in Blob), because recaptured rows would point at files only
 your disk has. Recaptures use the normal polite capture (one page load per
 domain per second), so a large backlog takes a while. `--site` lets you try a

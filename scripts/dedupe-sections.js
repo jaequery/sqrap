@@ -7,10 +7,10 @@
 // - wrap: only a screen taller than its stored wrap period (8192 device px at
 //   the stored width: 4096 px for both platforms) can be affected, so only
 //   those full images are downloaded and checked (findWrapPeriod at exactly
-//   that period). A wrapped page of a public site is captured again with the
+//   that period, rounded both ways when the image was narrowed). A wrapped page of a public site is captured again with the
 //   fixed capture (recapturePage, site status untouched). When that fails, or
-//   the site is not public, opted out or disallowed by robots.txt, the page is
-//   cleaned up instead: the full image is cut at the period (new path, since
+//   the site is not public or disallowed by robots.txt, the page is cleaned up
+//   instead (opted-out domains are left alone: nothing is written for them): the full image is cut at the period (new path, since
 //   shots are cached as immutable), its agent tiles rebuilt, sections at or
 //   past the period deleted and the one straddling it cut short.
 // - duplicates: the stored section images are hashed (sectionHash) and a
@@ -20,7 +20,8 @@
 //
 // Dry run by default: prints what it would change and the totals. Pages
 // captured after the run started are left alone (the fixed capture made
-// them), so it is safe to stop and run again; a rerun finds nothing to fix.
+// them), so it is safe to stop and run again; a rerun finds nothing to fix,
+// but reads every image again (there is no saved cursor).
 // Screens without a page row are not checked.
 //
 // With --apply and no BLOB_READ_WRITE_TOKEN, shots are read from and written
@@ -32,7 +33,7 @@
 import "./env.js";
 import { parseArgs } from "node:util";
 import sharp from "sharp";
-import { all, get, recordEvent, run, setAgentImages, tx } from "../lib/db.js";
+import { all, get, isOptedOut, recordEvent, run, setAgentImages, tx } from "../lib/db.js";
 import { publicSites } from "../lib/queries.js";
 import { reindexSite } from "../lib/search.js";
 import { putShot, readShot, removeShots } from "../lib/shots.js";
@@ -80,8 +81,11 @@ const cssWidth = (platform) => VIEWPORTS[platform].viewport.width;
 const dpr = (platform) => VIEWPORTS[platform].deviceScaleFactor;
 // Stored px per css px of a screen's full image.
 const scaleOf = (sc) => sc.width / cssWidth(sc.platform);
-// The Chromium wrap period in the screen's stored full image, in its px.
-const storedPeriod = (sc) => Math.round((CAPTURE_LIMIT / dpr(sc.platform)) * scaleOf(sc));
+// The Chromium wrap period in the screen's stored full image, in its px (not
+// whole when capture narrowed the image to fit WebP's size limit).
+const exactPeriod = (sc) => (CAPTURE_LIMIT / dpr(sc.platform)) * scaleOf(sc);
+const storedPeriods = (sc) => [...new Set([Math.floor(exactPeriod(sc)), Math.ceil(exactPeriod(sc))])];
+const tallEnough = (sc) => !!(sc.full_path && sc.width && sc.height >= Math.floor(exactPeriod(sc)) + MIN_OVERLAP);
 const id8 = (id) => id.slice(0, 8);
 
 /* ---------- Reading the database ---------- */
@@ -130,16 +134,16 @@ const sectionsOf = (screenId) => all(`
 // MIN_SECTION by it); straddle: the one the cut shortens, with its new css
 // height; duplicates: [{ section, of }] among the sections the cut keeps.
 async function inspectScreen(sc) {
-  const out = { sc, full: null, period: null, past: [], straddle: null, duplicates: [], missing: [] };
+  const out = { sc, full: null, period: null, past: [], straddle: null, duplicates: [], missing: [], checkedFull: false };
   const sections = await sectionsOf(sc.id);
   let kept = sections;
 
-  const P = storedPeriod(sc);
-  if (sc.full_path && sc.width && sc.height >= P + MIN_OVERLAP) {
+  if (tallEnough(sc)) {
     const full = await readShot(sc.full_path);
     if (!full) out.missing.push(sc.full_path);
     else {
-      const period = await findWrapPeriod(full, { periods: [P], minRows: MIN_WRAP_ROWS });
+      out.checkedFull = true;
+      const period = await findWrapPeriod(full, { periods: storedPeriods(sc), minRows: MIN_WRAP_ROWS });
       if (period) {
         const cutCss = Math.floor(period / scaleOf(sc));
         Object.assign(out, { full, period, cutCss, cut: Math.round(cutCss * scaleOf(sc)) });
@@ -161,6 +165,8 @@ async function inspectScreen(sc) {
     const img = s.img_path && (await readShot(s.img_path));
     if (!img) {
       if (s.img_path) out.missing.push(s.img_path);
+      // Without its image, the straddling section cannot be cut: leave it.
+      if (out.straddle?.section === s) out.straddle = null;
       continue;
     }
     const height = out.straddle?.section === s ? out.straddle.height : s.height;
@@ -170,6 +176,8 @@ async function inspectScreen(sc) {
     items.push({ s, height, hash: await sectionHash(pixels) });
   }
   out.duplicates = dedupeSections(items).dropped.map(({ item, of }) => ({ section: item.s, of: of.s }));
+  // A straddling section that is a duplicate goes, rather than being cut.
+  if (out.duplicates.some((d) => d.section === out.straddle?.section)) out.straddle = null;
   return out;
 }
 
@@ -208,6 +216,19 @@ async function sectionShots(ids) {
 async function cleanScreen(r) {
   const { sc } = r;
   const written = [];
+  try {
+    const stale = await cleanScreenFiles(r, written);
+    // Nothing references the new files when the screen was gone.
+    if (stale === null) await removeShots(written);
+    return stale;
+  } catch (err) {
+    await removeShots(written).catch(() => {});
+    throw err;
+  }
+}
+
+async function cleanScreenFiles(r, written) {
+  const { sc } = r;
   let screenUpdate = null;
   let straddleUpdate = null;
 
@@ -243,36 +264,40 @@ async function cleanScreen(r) {
   }
 
   const drop = [...r.past, ...r.duplicates.map((d) => d.section)].map((s) => s.id);
-  let stale;
-  try {
-    stale = await tx(async () => {
-      if (!(await lockScreen(sc.id))) return null;
-      const stale = await sectionShots(drop);
-      if (drop.length) await run("DELETE FROM sections WHERE id = ANY(@ids::text[])", { ids: drop });
-      if (screenUpdate) {
-        stale.push(sc.full_path);
-        await run("UPDATE screens SET full_path = @fullPath, height = @height WHERE id = @id", { id: sc.id, ...screenUpdate });
-        stale.push(...await setAgentImages({ siteId: sc.site_id, screenId: sc.id, status: "full", tiles: screenUpdate.tiles }));
-      }
-      if (straddleUpdate) {
-        const { id, height, imgPath, smPath, tiles } = straddleUpdate;
-        const old = await get("SELECT img_path, sm_path FROM sections WHERE id = @id", { id });
-        await run("UPDATE sections SET height = @height, img_path = @imgPath, sm_path = @smPath WHERE id = @id", { id, height, imgPath, smPath });
-        stale.push(old.img_path, ...(old.sm_path !== smPath ? [old.sm_path] : []));
-        stale.push(...await setAgentImages({ siteId: sc.site_id, sectionId: id, status: "full", tiles }));
-        // Its picture changed: find_similar makes a new embedding.
-        await run("DELETE FROM embeddings WHERE id = @id", { id });
-      }
-      const fresh = new Set(written);
-      return stale.filter((p) => p && !fresh.has(p));
-    });
-  } catch (err) {
-    await removeShots(written);
-    throw err;
-  }
-  // Nothing references the new files when the screen was gone.
-  if (stale === null) await removeShots(written);
-  return stale;
+  return tx(async () => {
+    if (!(await lockScreen(sc.id))) return null;
+    const stale = await sectionShots(drop);
+    if (drop.length) await run("DELETE FROM sections WHERE id = ANY(@ids::text[])", { ids: drop });
+    if (screenUpdate) {
+      stale.push(sc.full_path);
+      await run("UPDATE screens SET full_path = @fullPath, height = @height WHERE id = @id", { id: sc.id, ...screenUpdate });
+      stale.push(...await setAgentImages({ siteId: sc.site_id, screenId: sc.id, status: "full", tiles: screenUpdate.tiles }));
+    }
+    if (straddleUpdate) {
+      const { id, height, imgPath, smPath, tiles } = straddleUpdate;
+      const old = await get("SELECT img_path, sm_path FROM sections WHERE id = @id", { id });
+      await run("UPDATE sections SET height = @height, img_path = @imgPath, sm_path = @smPath WHERE id = @id", { id, height, imgPath, smPath });
+      stale.push(old.img_path, ...(old.sm_path !== smPath ? [old.sm_path] : []));
+      stale.push(...await setAgentImages({ siteId: sc.site_id, sectionId: id, status: "full", tiles }));
+      // Its picture changed: find_similar makes a new embedding.
+      await run("DELETE FROM embeddings WHERE id = @id", { id });
+    }
+    const fresh = new Set(written);
+    return stale.filter((p) => p && !fresh.has(p));
+  });
+}
+
+// The paths no row points at any more: a capture of the same page running
+// meanwhile writes the same fixed names (<page>-<platform>-full.webp, …) and
+// must keep them.
+async function unreferenced(paths) {
+  if (!paths.length) return [];
+  const rows = await all(`
+    SELECT p FROM unnest(@paths::text[]) AS p
+    WHERE NOT EXISTS (SELECT 1 FROM screens WHERE p IN (full_path, lg_path, sm_path))
+      AND NOT EXISTS (SELECT 1 FROM sections WHERE p IN (img_path, sm_path))
+      AND NOT EXISTS (SELECT 1 FROM agent_images a WHERE a.path = p)`, { paths });
+  return rows.map((r) => r.p);
 }
 
 /* ---------- One page ---------- */
@@ -303,14 +328,16 @@ const summary = (r) => ({
 async function processPage(page) {
   const site = await siteOf(page.site_id);
   const screens = await screensOf(page.id);
-  if (!site || !screens.length) return;
   totals.pages++;
+  if (!site || !screens.length) return;
   totals.screens += screens.length;
+  // Never write anything for an opted-out domain.
+  if (await isOptedOut(site.domain)) return;
 
   const results = [];
   for (const sc of screens) {
     const r = await inspectScreen(sc);
-    if (sc.full_path && sc.width && sc.height >= storedPeriod(sc) + MIN_OVERLAP) totals.checkedFull++;
+    if (r.checkedFull) totals.checkedFull++;
     totals.missing += r.missing.length;
     for (const m of r.missing) console.warn(`  missing ${m}`);
     results.push(r);
@@ -343,16 +370,19 @@ async function processPage(page) {
   }
 
   if (recapture) {
+    let result = null;
     try {
+      result = await recapturePage(site, page);
+    } catch (err) {
+      console.warn(`  recapture failed (${err.code || err.message}), cleaning up instead`);
+    }
+    if (result) {
       const before = broken.map(summary);
-      const result = await recapturePage(site, page);
       await recordEvent(site.id, "dedupe_backfill", { path: page.path, action: "recaptured", screens: before, sections: result.sections });
       totals.fixedPages++;
       totals.recaptured++;
       console.log(`  recaptured: ${result.sections} sections`);
       return;
-    } catch (err) {
-      console.warn(`  recapture failed (${err.code || err.message}), cleaning up instead`);
     }
   }
 
@@ -360,11 +390,16 @@ async function processPage(page) {
   for (const r of broken) {
     const stale = await cleanScreen(r);
     if (stale === null) {
+      totals.wrappedScreens -= isWrapped(r) ? 1 : 0;
       console.log(`  ${r.sc.platform}: screen replaced meanwhile, skipped`);
       continue;
     }
-    await removeShots(stale);
     fixed.push(r);
+    try {
+      await removeShots(await unreferenced(stale));
+    } catch (err) {
+      console.warn(`  ${r.sc.platform}: could not remove old images: ${err.message}`);
+    }
   }
   if (!fixed.length) return;
   count(fixed);
@@ -377,13 +412,13 @@ async function processPage(page) {
 
 /* ---------- Run ---------- */
 
-// Without a Blob token, shots come from SQRAP_DATA_DIR/shots. True when some
-// of the newest screens' full images are there, or there are none to check.
+// Without a Blob token, shots come from SQRAP_DATA_DIR/shots. True when every
+// one of a random sample of full images is there (or there are none): a few
+// local leftovers next to the shared database do not pass.
 async function shotsAreLocal() {
-  const rows = await all("SELECT full_path FROM screens WHERE full_path IS NOT NULL ORDER BY captured_at DESC NULLS LAST LIMIT 5");
-  if (!rows.length) return true;
-  for (const { full_path } of rows) if (await readShot(full_path)) return true;
-  return false;
+  const rows = await all("SELECT full_path FROM screens WHERE full_path IS NOT NULL ORDER BY random() LIMIT 20");
+  for (const { full_path } of rows) if (!(await readShot(full_path))) return false;
+  return true;
 }
 
 if (!process.env.BLOB_READ_WRITE_TOKEN && !(await shotsAreLocal())) {

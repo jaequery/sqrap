@@ -73,6 +73,7 @@ for (const url of urls) {
     console.log(JSON.stringify({
       url, platform, ok, ms: Date.now() - t, cssHeight: shot.height, png: `${meta.width}x${meta.height}`,
       wrapped, rowMatchAtShift: Object.fromEntries(shifts.map((s, i) => [s, match[i] === null ? null : +match[i].toFixed(3)])),
+      trimmed: shot.trimmed ?? null, deduped: written.deduped ?? [],
       sections: written.sections.map((s) => `${s.type ?? "?"}@${s.y}`), duplicateSections: dupes,
       full: `${shotsDir}/${written.screen.fullPath}`,
     }));

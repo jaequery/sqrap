@@ -243,7 +243,7 @@ first pages.
 | WordPress Showcase | working, read from its WordPress API newest first, two requests for the whole gallery, categories and tags mapped to industry |
 | Statamic Showcase | working, paged with ?page=, one page fetched per new site |
 | MUUUUU.ORG | working, paged with /page/<n>, cards link straight to the site, industry mapped from the detail path |
-| Awwwards (Honorable Mentions) | working, same card markup as Sites of the Day |
+| Awwwards (Honorable Mentions) | working, every site the jury scored well short of Site of the Day (about 321 pages back to August 2022, newest first), same card markup as Sites of the Day |
 | Awwwards (Nominees) | working, every site submitted to the jury (about 320 pages, newest first), same card markup as Sites of the Day, winners and Honorable Mentions skipped as already stored |
 | CSS Winner (Nominees) | working, every site submitted to CSS Winner (about 1,070 pages of 18, newest first), same card markup as Sites of the Day, winners skipped as already stored |
 | Swup showcase | working, about 30 sites its maintainers accept on quality (architecture practices, museums, biennials, studios), read from the swup/docs repository on GitHub (one front-matter file per site) because swup.js.org answers 503 at times, newest first, files already stored skipped |
@@ -448,6 +448,7 @@ first pages.
 | Photo Web Designs (photowebdesigns.com) | not adapted: a web design agency for photographers, not a gallery |
 | Font League, ping.design, Upslide Inspire, Design Everywhere, ui.live, Motion Web Awards, Noticed Sites, Web Awards UK (webawards.uk), Teasertrack | not adapted: admits sites mechanically from Show HN and the YC directory to measure their fonts, not picked for design; 36 well-known sites (Linear, Vercel, Raycast), all with prompts; mostly Dribbble shots, X posts and fonts rather than sites; 403 behind a bot challenge; a client-rendered sharing network marked noindex; about a dozen winners so far; a handful of sites; 403 behind a bot challenge; a mirror of Awwwards' Sites of the Day |
 | Real Good Sites, Stack Sorted, Super showcase (super.so/showcase), UI Land | not adapted: client-rendered, no site links in the served HTML; design elements, client-rendered; mostly Notion pages on `super.site` subdomains and product docs; app UI screens, not sites |
+| Ycode showcase, Carbonmade, Umso, Brizy, Blocksy and PageFly showcases, Relume's Inspiration List, Collect UI, Type Fan, The Brand Identity | not adapted: 429 behind Vercel's bot challenge; its portfolios sit on the shared `portfolio.site` host and its examples page names four; mostly small local businesses; 28 well-known products (Stripe, Notion, Figma), last edited in January 2024; Dribbble shots, the same Panda network as Best Designs On X; now a casino affiliate page; 403 behind a bot challenge |
 | Brave Search | working; skipped with a notice when `BRAVE_API_KEY` is unset |
 
 ### Accelerator portfolios

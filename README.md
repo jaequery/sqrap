@@ -111,9 +111,9 @@ first pages.
 | Minimal Gallery | working |
 | Dark Mode Design | working |
 | Site of Sites | working, read from its sitemap newest first, one page fetched per new site |
-| Admire the Web | working, one detail page fetched per new site |
+| Admire the Web | working, one detail page fetched per new site; the archive back to 2011 (about 77 pages, 40 a page), a run reads page 1 and then resumes at the page an earlier run reached |
 | Best Website Gallery | working |
-| Typewolf (Site of the Day) | working, one detail page fetched per new site |
+| Typewolf (Site of the Day) | working, one detail page fetched per new site; the archive back to June 2013 (about 396 pages, 9 a page), a run reads page 1 and then resumes at the page an earlier run reached |
 | Hover States | working, read from its archive data newest first |
 | Siiimple | working |
 | Landing Love | working, category mapped to industry |

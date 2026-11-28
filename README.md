@@ -146,7 +146,7 @@ first pages.
 | Orpetron (awarded and nominated sites) | working, one detail page fetched per new site |
 | Unmatched Style (gallery) | working, read from its WordPress API newest first, one post fetched per new site, categories mapped to industry |
 | A1 Gallery | working, read from its sitemap newest first, one page fetched per new site, templates skipped, type and category mapped to industry |
-| See*Saw | working, read from its home page newest first, one page fetched per new site, categories mapped to industry |
+| See*Saw | working, every site read from its `/sites.json` newest first (about 920; the home page now serves only the newest 24 and is the fallback), one page fetched per new site, categories mapped to industry |
 | Landings (landings.dev) | working, read from its sitemap newest first, one page fetched per new site, every site tagged SaaS |
 | Pricing Pages | working, pricing page links reduced to the site, every site tagged SaaS |
 | Typ.io | working, typography sample links reduced to the site, tags mapped to industry |

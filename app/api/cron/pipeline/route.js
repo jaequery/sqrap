@@ -16,7 +16,9 @@ export const dynamic = "force-dynamic";
 // several minutes on a function's CPU) can finish before the hard limit. A site
 // cut off anyway is reset by a later run.
 export const maxDuration = 800;
-const CLAIM_DEADLINE_MS = 560 * 1000;
+// 350 s left after the last claim: two sites at once on a small CPU, and a site
+// killed by the limit counts as a crash attempt (3 of them fail it for good).
+const CLAIM_DEADLINE_MS = 450 * 1000;
 const EMBED_LIMIT = 64;
 const EMBED_MS = 60 * 1000;
 const STYLE_LIMIT = 8;
@@ -27,13 +29,12 @@ const ACCEL_MS = 75 * 1000;
 const ACCEL_PROGRAM_MS = 45 * 1000;
 const ACCEL_MIN_MS = 10 * 1000;
 const ACCEL_EVERY_MS = 24 * 60 * 60 * 1000;
-// Discover only while fewer sites than this wait for their home capture.
-const DISCOVER_BELOW = 100;
 // Backlog mode while at least this many sites wait for their home capture
-// (a big import): every cron tick runs, longer and two sites at a time.
+// (a big import): every cron tick runs, longer and two sites at a time, and
+// gallery discovery waits.
 // Below it, a tick runs only if the last run started NORMAL_EVERY_MS ago, so
 // vercel.json's 5-minute schedule keeps the usual 30-minute pace.
-const BACKLOG_AT = DISCOVER_BELOW;
+const BACKLOG_AT = 100;
 const NORMAL_EVERY_MS = 28 * 60 * 1000;
 
 // Each run: pull a few new sites from the galleries (time-boxed, so a slow
@@ -47,21 +48,24 @@ const NORMAL_EVERY_MS = 28 * 60 * 1000;
 // one shared browser, claiming until the deadline. Not three: each capture
 // holds full-page screenshots (2880 px wide at 2x) and their decoded pixels
 // next to Chromium in the function's 3 GB, and an out-of-memory kill counts as
-// a crash attempt on every site in flight.
+// a crash attempt on every site in flight. Failed sites are re-queued only in
+// normal mode: at a run every 5 minutes a briefly unreachable site would spend
+// its 3 attempts within a quarter of an hour.
 const RUN = {
   discover: true, discoverLimit: 15, discoverMs: 90 * 1000,
-  subpages: 4, retryFailed: true,
+  subpages: 4,
 };
 const MODES = {
-  normal: { limit: 6, concurrency: 1, maxJudge: 18, claimMs: 300 * 1000 },
-  backlog: { limit: 16, concurrency: 2, maxJudge: 48, claimMs: Infinity },
+  normal: { limit: 6, concurrency: 1, maxJudge: 18, retryFailed: true, claimMs: 300 * 1000 },
+  backlog: { limit: 16, concurrency: 2, maxJudge: 48, retryFailed: false, claimMs: Infinity },
 };
 
 // A run in progress in this instance. Fluid compute can hand an overlapping
 // invocation to the same instance; two runs there would share one browser
 // (each closes it when done) and one memory limit, so the later one waits for
-// the next tick.
-let running = false;
+// the next tick. A start time rather than a flag, so a run the platform cut
+// off at maxDuration without ending its promise stops blocking the instance.
+let runningSince = 0;
 
 // Vercel Cron calls this with `Authorization: Bearer $CRON_SECRET`.
 export async function GET(request) {
@@ -71,8 +75,8 @@ export async function GET(request) {
   }
   const started = Date.now();
   const noStore = { headers: { "Cache-Control": "no-store" } };
-  if (running) return Response.json({ data: { skipped: "a run is still going in this instance" } }, noStore);
-  running = true;
+  if (started - runningSince < maxDuration * 1000) return Response.json({ data: { skipped: "a run is still going in this instance" } }, noStore);
+  runningSince = started;
   try {
     // A run captures far fewer sites than discovery can add, so discovery waits
     // while the capture queue is long and the run's time goes to capturing.
@@ -87,7 +91,7 @@ export async function GET(request) {
     await recordEvent(null, "cron_pipeline", { mode, queued });
     return Response.json({ data: await cronRun(started, mode, queued) }, noStore);
   } finally {
-    running = false;
+    runningSince = 0;
   }
 }
 
@@ -110,7 +114,7 @@ async function cronRun(started, mode, queued) {
   const accelerators = await acceleratorsDaily();
   const { claimMs, ...batch } = MODES[mode];
   const claimFor = Math.max(0, Math.min(claimMs, started + CLAIM_DEADLINE_MS - Date.now()));
-  const discover = queued < DISCOVER_BELOW;
+  const discover = mode === "normal";
   const totals = await runPipeline({ ...RUN, ...batch, discover, mode }, { signal: AbortSignal.timeout(claimFor) });
   const judge = await judgeStatus();
   console.log(`cron pipeline (${mode}, ${queued} queued): claimed ${totals.claimed}, captured ${totals.captured}, approved ${totals.approved} in ${Math.round((Date.now() - started) / 1000)}s`);

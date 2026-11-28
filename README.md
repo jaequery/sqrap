@@ -657,13 +657,15 @@ waiting for their home capture:
   the pipeline. It stops claiming after 5 minutes.
 - **Backlog** (100 or more waiting, e.g. after a big import): every call runs,
   without gallery discovery, and takes up to 16 sites, two at a time in one
-  browser, with at most 48 AI calls. It keeps claiming until 560 seconds after
-  the call started. Runs on different instances overlap (claims are atomic); a
+  browser, with at most 48 AI calls. It keeps claiming until 450 seconds after
+  the call started, and leaves re-queueing failed sites to normal runs. Runs on different instances overlap (claims are atomic); a
   call that lands on an instance whose run is still going returns at once.
 
 Either way it uses serverless Chromium (`@sparticuz/chromium`) and the judge on
-AI Gateway, and no new site is claimed later than 560 seconds into the call, so
-an in-flight site finishes within the 800-second limit. The response, the
+AI Gateway, and no new site is claimed later than 450 seconds into the call, so
+in-flight sites have the remaining 350 seconds to finish inside the
+800-second limit (one cut off anyway is reset by a later run, as a crash
+attempt). The response, the
 `cron_pipeline` event and the `pipeline_started` event's options carry the
 `mode`. The
 route answers 404 unless called with `Authorization: Bearer $CRON_SECRET`. On
@@ -851,8 +853,8 @@ curl "https://www.sqrap.com/api/operator/sites?domains=example.com" -H "Authoriz
 
 Cron takes at most 6 sites per 30-minute run, and with 100 or more sites
 waiting switches to backlog mode, a run every 5 minutes taking two sites at a
-time (`MODES` in `app/api/cron/pipeline/route.js`), so a large batch drains in
-a day or two; it does not need to be split, the queue only grows. Sites added here (and by
+time (`MODES` in `app/api/cron/pipeline/route.js`), so a batch of 1,400 sites should drain in
+about a day or two (an estimate; `pipeline_finished` events show the real rate); it does not need to be split, the queue only grows. Sites added here (and by
 `npm run seed` or admin seeds, source `manual`) are captured and judged before
 gallery and search finds, and the cron skips gallery discovery while 100 or
 more sites wait for capture.

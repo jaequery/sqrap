@@ -601,7 +601,7 @@ function Users({ tick, act, setCounts }) {
   };
   const grant = (u) => patch(u, "grant_admin", (r) => r.user.admin
     ? `${u.email} is now an admin`
-    : `${u.email} is allowlisted, but not an admin until it ${[r.user.password && "drops its password (sign in with Google)", !r.user.google && "signs in with Google"].filter(Boolean).join(" and ")}`);
+    : `${u.email} is allowlisted, but not an admin: ${notActiveReason(r.user)}`);
   const revoke = (u) => {
     if (!confirm(`Revoke admin from ${u.email}?`)) return;
     patch(u, "revoke_admin", `${u.email} is no longer allowlisted`);

@@ -117,7 +117,7 @@ function tonesOf(dominant, palette) {
 /* ---------- Loading and screenshotting one page ---------- */
 
 // Loads `url` at one viewport and returns the screenshot plus layout facts.
-async function shoot(site, url, platform, { wantLinks = false } = {}) {
+export async function shoot(site, url, platform, { wantLinks = false } = {}) {
   const context = await newContext(platform);
   let timedOut = false;
   const timer = setTimeout(() => { timedOut = true; context.close().catch(() => {}); }, SHOOT_TIMEOUT_MS);
@@ -167,7 +167,7 @@ async function writeWebp(pipeline, rel, quality) {
 
 // Writes full, lg, sm, section and agent images for one screenshot. Returns
 // screen fields and section rows, with shot paths, plus the agent tiles of each.
-async function writeScreen(site, slug, platform, shot) {
+export async function writeScreen(site, slug, platform, shot) {
   const size = SIZES[platform];
   const dpr = VIEWPORTS[platform].deviceScaleFactor;
   const dir = site.id;

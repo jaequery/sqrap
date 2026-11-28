@@ -4,11 +4,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { INDUSTRIES, PAGE_PATTERNS, SECTION_TYPES } from "../../lib/taxonomy";
 
 // The admin (local, or a signed-in admin account; lib/admin.js). View state lives in the hash: #/queue, #/discovered,
-// #/approved, #/rejected, #/removals, #/clicks, #/stats, #/seeds and #/site/<id>; anything else
+// #/approved, #/rejected, #/removals, #/clicks, #/stats, #/seeds, #/users and #/site/<id>; anything else
 // falls back to the queue. Data comes from app/api/admin/**.
 const TABS = [
   ["queue", "Queue"], ["discovered", "Discovered"], ["approved", "Approved"], ["rejected", "Rejected"],
-  ["removals", "Removal requests"], ["clicks", "Most clicked"], ["stats", "Stats"], ["seeds", "Add seeds"],
+  ["removals", "Removal requests"], ["clicks", "Most clicked"], ["stats", "Stats"], ["seeds", "Add seeds"], ["users", "Users"],
 ];
 
 function readHash() {
@@ -117,6 +117,7 @@ export default function Admin() {
           : route.view === "clicks" ? <Clicks {...ctx} />
           : route.view === "stats" ? <Stats {...ctx} />
           : route.view === "seeds" ? <Seeds {...ctx} />
+          : route.view === "users" ? <Users {...ctx} />
           : <SiteList tab={route.view} {...ctx} />}
       </main>
     </div>
@@ -555,5 +556,99 @@ function Seeds({ act }) {
         </ul>
       )}
     </form>
+  );
+}
+
+
+const signInMethod = (u) => (u.password && u.google ? "Password + Google" : u.password ? "Password" : u.google ? "Google" : "—");
+const plural = (n, one, many = `${one}s`) => `${n} ${n === 1 ? one : many}`;
+
+// Why an allowlisted account is still not an admin (isAdminUser in lib/db.js).
+const notActiveReason = (u) => [u.password && "has a password", !u.google && "no Google sign-in"].filter(Boolean).join(", ");
+
+function AdminCell({ u }) {
+  if (u.admin) return <><span className="chip st-approved">Admin</span>{u.adminFrom === "env" && <div className="mute">from env</div>}</>;
+  if (u.listed) return <><span className="chip">listed, not active</span><div className="mute">{notActiveReason(u)}{u.adminFrom === "env" ? " · from env" : ""}</div></>;
+  return <span className="mute">—</span>;
+}
+
+// Accounts: search, cut off access, delete, grant or revoke admin
+// (app/api/admin/users). Self-actions are refused by the server too.
+function Users({ tick, act, setCounts }) {
+  const [data, setData] = useState(null);
+  const [error, setError] = useState(null);
+  const [q, setQ] = useState("");
+
+  useEffect(() => {
+    let live = true;
+    setError(null);
+    api(`users?q=${encodeURIComponent(q)}`).then((d) => {
+      if (!live) return;
+      setData(d);
+      setCounts((c) => ({ ...c, users: d.total }));
+    }, (err) => live && setError(err.message));
+    return () => { live = false; };
+  }, [q, tick, setCounts]);
+
+  const patch = (u, action, ok) => act(() => api(`users/${u.id}`, { method: "PATCH", body: { action } }), ok).catch(() => {});
+  const signout = (u) => {
+    if (!confirm(`Sign ${u.email} out of every browser? They can sign in again.`)) return;
+    patch(u, "signout", (r) => `${u.email}: ${plural(r.done, "session")} ended`);
+  };
+  const revokeKeys = (u) => {
+    if (!confirm(`Revoke all ${plural(u.apiKeys, "API key")} of ${u.email}? Agents using them get 401 from now on.`)) return;
+    patch(u, "revoke_keys", (r) => `${u.email}: ${plural(r.done, "API key")} revoked`);
+  };
+  const grant = (u) => patch(u, "grant_admin", (r) => r.user.admin
+    ? `${u.email} is now an admin`
+    : `${u.email} is allowlisted, but not an admin: ${notActiveReason(r.user)}`);
+  const revoke = (u) => {
+    if (!confirm(`Revoke admin from ${u.email}?`)) return;
+    patch(u, "revoke_admin", `${u.email} is no longer allowlisted`);
+  };
+  const del = (u) => {
+    const grant = u.adminFrom === "db" ? ` It also removes ${u.email} from the admin allowlist (admin_emails), even if that grant was meant for the address's real owner.` : "";
+    if (!confirm(`Delete the account ${u.email}? Its sessions, API keys and saved designs go with it.${grant} This cannot be undone.`)) return;
+    act(() => api(`users/${u.id}`, { method: "DELETE" }), `${u.email} deleted`).catch(() => {});
+  };
+
+  return (
+    <>
+      <label className="search admin-search">
+        <span className="sr-only">Filter by email or name</span>
+        <input type="search" placeholder="Filter by email or name" value={q} onChange={(e) => setQ(e.target.value)} />
+      </label>
+      {error && <p className="admin-notice error">{error}</p>}
+      {!data && !error && <p className="mute">Loading…</p>}
+      {data && data.matched > data.items.length && <p className="mute">Showing the newest {data.items.length} of {data.matched}; search to narrow it down.</p>}
+      {data && !data.items.length && <div className="empty"><h2>{q ? "No matching accounts" : "No accounts yet"}</h2>{q && <div>Nothing matches “{q}”.</div>}</div>}
+      {data?.items.length > 0 && (
+        <table className="admin-table">
+          <thead><tr><th>Account</th><th>Sign-in</th><th>Joined</th><th>Last active</th><th>Likes</th><th>API keys</th><th>Admin</th><th><span className="sr-only">Actions</span></th></tr></thead>
+          <tbody>
+            {data.items.map((u) => (
+              <tr key={u.id}>
+                <td><b>{u.email}</b>{u.self && <span className="mute"> (you)</span>}<div className="mute">{u.name || "—"}</div></td>
+                <td>{signInMethod(u)}</td>
+                <td className="mute">{date(u.createdAt)}</td>
+                <td>{u.lastActiveAt ? date(u.lastActiveAt) : <span className="mute">no live session</span>}<div className="mute">{plural(u.sessions, "active session")}</div></td>
+                <td>{u.likes}</td>
+                <td>{u.apiKeys}</td>
+                <td><AdminCell u={u} /></td>
+                <td><div className="admin-actions">
+                  <button className="btn-small" type="button" disabled={u.self || !u.sessions} title={u.self ? "You can't sign yourself out everywhere here" : undefined} onClick={() => signout(u)}>Sign out everywhere</button>
+                  <button className="btn-small" type="button" disabled={!u.apiKeys} onClick={() => revokeKeys(u)}>Revoke keys</button>
+                  {!u.listed
+                    ? <button className="btn-small" type="button" onClick={() => grant(u)}>Grant admin</button>
+                    : <button className="btn-small" type="button" disabled={u.self || u.adminFrom === "env"} title={u.adminFrom === "env" ? "From SQRAP_ADMIN_EMAILS (or the built-in default); change it in the environment" : u.self ? "You can't revoke your own admin" : undefined} onClick={() => revoke(u)}>Revoke admin</button>}
+                  <button className="btn-small danger" type="button" disabled={u.self} title={u.self ? "You can't delete your own account" : undefined} onClick={() => del(u)}>Delete</button>
+                </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </>
   );
 }

@@ -835,6 +835,19 @@ each page's pattern and each section's type, re-capture, re-judge (needs
 `ANTHROPIC_API_KEY`) or delete the site and its shots. "Add seeds"
 takes URLs one per line, and "Removal requests" processes opt-outs.
 
+"Users" (`#/users`) lists accounts, newest first (the newest 200; search by
+email or name), with sign-in method, join date, last active (the newest
+session still on record; signed-out and expired sessions are deleted, so it
+can be empty), active sessions, saved designs, API keys and admin status. Per account you can sign
+it out everywhere, revoke its API keys, grant or revoke admin, or delete it
+(its sessions, Google link, keys and saves go with it, and so does its
+`admin_emails` grant). You can't sign yourself out everywhere, revoke your own
+admin or delete your own account there, and emails from `SQRAP_ADMIN_EMAILS`
+(or the built-in `jaequery@gmail.com` when it is unset) show "from env" and can
+only be changed in the environment. Deleting an account removes its email's
+`admin_emails` row even if it was granted for the address's real owner before
+they signed up; grant it again afterwards if so.
+
 Re-capture and re-judge run as background jobs inside the server process, one
 at a time, and are lost on restart; the page polls `GET /api/admin/jobs`. A
 re-captured site keeps its approved or rejected status (its tags fall back to
@@ -852,7 +865,8 @@ On any deployment, production included, a signed-in admin account can open
 
 - its email is allowlisted: listed in `SQRAP_ADMIN_EMAILS` (comma-separated;
   unset or empty means `jaequery@gmail.com`) or in the `admin_emails` table
-  (migration `012` adds `jaequery@gmail.com`; grant more with
+  (migration `012` adds `jaequery@gmail.com`; grant more from the admin's
+  Users tab, which adds the row, or, before the person has an account, with
   `INSERT INTO admin_emails (email, created_at) VALUES ('someone@example.com', '<ISO time>')`);
 - it has signed in with Google at least once, so Google vouched for the email
   (a password signup never proves it owns the address);
@@ -879,6 +893,9 @@ Approve, reject, edits, deletion, removals, seeds and Stats work everywhere.
 | `GET /api/admin/stats?range=day\|month` | sites scraped per UTC day (last 30) or month (last 12) from `events` (distinct sites with `captured`, `capture_failed`, `discovered`, `approved`), totals (all time, today, this month, sites by status) and the 50 most recently scraped sites; the admin's Stats tab (`#/stats`) |
 | `POST /api/admin/seeds` | `{ urls }`, one per line, added as `discovered` |
 | `GET/PATCH /api/admin/optouts` | removal requests / `{ domain, status: "approved" \| "dismissed" }` |
+| `GET /api/admin/users?q` | accounts, newest first (at most 200; `q` matches email or name), with `total` and `matched`; never password, session or key hashes |
+| `PATCH /api/admin/users/<id>` | `{ action: "signout" \| "revoke_keys" \| "grant_admin" \| "revoke_admin" }`, answers `{ user, done }` (`done`: live sessions ended, keys revoked, or rows changed); 400 for another action, 404 for an unknown id, 403 for signing yourself out or revoking your own admin (checked first), 409 for revoking an env-listed admin |
+| `DELETE /api/admin/users/<id>` | deletes the account and its `admin_emails` grant; 403 for your own, 404 for an unknown id |
 
 ## Operator API (add sites remotely)
 

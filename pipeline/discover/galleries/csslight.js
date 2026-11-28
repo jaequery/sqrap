@@ -1,7 +1,10 @@
 // CSS Light (csslight.com). Its featured-sites list pages by offset
 // (?per_page=0, 12, 24, …), newest first; every card links to its
 // /website/<id>/<slug> page and out to the site. The "by" link under each card
-// is the designer's own site, not the featured one.
+// is the designer's own site, not the featured one. The list runs back to
+// November 2012, about 5,100 sites in some 425 pages (page 100 is only August
+// 2023); a page past the end has no cards, which ends the listing, and runs
+// resume at the page an earlier one reached (paged()). robots.txt allows it.
 import { paged } from "./paged.js";
 
 const BASE = "https://www.csslight.com";
@@ -13,7 +16,7 @@ export function listing({ limit }) {
   return paged({
     name,
     limit,
-    maxPages: 100,
+    maxPages: 450,
     pageUrl: (n) => `${BASE}/featured-sites${n > 1 ? `?&per_page=${(n - 1) * PER_PAGE}` : ""}`,
     parse: ($) =>
       $("li:has(> .img a.go)").map((_, el) => {

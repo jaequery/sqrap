@@ -337,6 +337,16 @@ function siteUrl(site) {
   return site.url || `https://${site.domain}/`;
 }
 
+// Captures one stored page again (a pages row: path, url, pattern), both
+// platforms, replacing its screens, sections and agent images. The site's
+// status is left alone, so an approved site stays in public view. Throws
+// OptedOut or RobotsDisallowed (nothing written) or the capture's error.
+// Used by scripts/dedupe-sections.js.
+export function recapturePage(site, page) {
+  const url = page.url || new URL(page.path, siteUrl(site)).href;
+  return capturePage(site, { url, path: page.path, pattern: page.pattern });
+}
+
 // Records a failed capture. Permanent problems fail the site at once; others
 // after MAX_ATTEMPTS tries.
 async function recordFailure(site, err, previousStatus) {

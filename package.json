@@ -21,6 +21,7 @@
     "import:sqlite": "node scripts/import-sqlite.js",
     "agent:backfill": "node scripts/backfill-agent.js",
     "embed:backfill": "node scripts/backfill-embeddings.js",
+    "dedupe-sections": "node scripts/dedupe-sections.js",
     "accelerators:sync": "node scripts/accelerators-sync.js",
     "yc:sync": "node scripts/accelerators-sync.js"
   },

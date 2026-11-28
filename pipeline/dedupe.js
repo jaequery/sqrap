@@ -34,8 +34,11 @@ async function greyRows(input, height) {
 // longer says where a wrap was). Only rows that differ from the row above count
 // (edges of text, images, bands): empty rows match each other on any page,
 // whatever their colours. A period counts when at least MATCH_SHARE of those
-// rows past it equal the row the same distance from the top.
-export async function findWrapPeriod(input, { periods } = {}) {
+// rows past it equal the row the same distance from the top, and there are at
+// least `minRows` such rows (default MIN_OVERLAP / 2; the backfill of stored
+// shots, which checks only the exact Chromium period, lowers it to catch a
+// wrap that repeats just a header).
+export async function findWrapPeriod(input, { periods, minRows = MIN_OVERLAP / 2 } = {}) {
   const { height } = await sharp(input, { limitInputPixels: false }).metadata();
   const lowest = periods ? Math.min(...periods) : MIN_PERIOD;
   if (height < lowest + MIN_OVERLAP) return null;
@@ -56,7 +59,7 @@ export async function findWrapPeriod(input, { periods } = {}) {
       informative++;
       if (rowEqual(y, y + p)) match++;
     }
-    return informative >= MIN_OVERLAP / 2 && match / informative >= MATCH_SHARE;
+    return informative >= minRows && match / informative >= MATCH_SHARE;
   };
 
   const candidates = new Set(periods ?? [CAPTURE_LIMIT]);

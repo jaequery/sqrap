@@ -488,6 +488,45 @@ mobile, cut top-down. Rows go into `pages`, `screens`, `sections` and
 `agent_images`. Opted-out domains and URLs disallowed by robots.txt are skipped and
 logged in `events`.
 
+### Clean up wrapped captures (backfill)
+
+Chromium draws at most 8192 device px per screenshot and repeats the page from
+the top past that, so long pages captured before capture switched to tiles
+(desktop past 4096 css px, mobile past ~2731) list Hero, Logo cloud and so on
+more than once. `npm run dedupe-sections` finds and fixes them:
+
+- It walks every page captured before the run started, oldest first. It downloads
+  the full image only for screens tall enough to wrap (about 4096 stored px on both
+  platforms) and checks it at exactly the Chromium period (`pipeline/dedupe.js`).
+- A wrapped page of a public site is **captured again** (both platforms, the
+  fixed capture), and the site keeps its status. If that fails, or the site is
+  not public or disallowed by robots.txt, the page is cleaned up instead
+  (nothing is written for opted-out domains): the full image is cut at the period (stored under a new name), its
+  agent tiles rebuilt, sections at or past the period deleted and the one across
+  it cut short.
+- On every screen, a section that is near-identical to an earlier one
+  (`sectionHash`) is deleted, together with its images, agent tiles and embedding.
+- Each fixed page gets a `dedupe_backfill` event, and the run ends with totals.
+  It is safe to stop (Ctrl-C finishes the current page) and run again: a rerun
+  changes nothing, but it reads every section image again (each run downloads
+  the whole library from Blob, in the dry run too).
+
+```sh
+npm run dedupe-sections                     # dry run: what it would change, and totals
+npm run dedupe-sections -- --site <siteId>  # one site
+npm run dedupe-sections -- --apply          # make the changes
+```
+
+Against production: run `vercel env pull` so `.env.local` has `DATABASE_URL`
+and `BLOB_READ_WRITE_TOKEN`, install Chromium (`npx playwright install chromium`),
+then start with the dry run and read its totals before `--apply`. Without
+`BLOB_READ_WRITE_TOKEN`, shots are read from and written to `data/shots`.
+`--apply` refuses to run unless a random sample of the database's full images are all there (the shared
+database keeps them in Blob), because recaptured rows would point at files only
+your disk has. Recaptures use the normal polite capture (one page load per
+domain per second), so a large backlog takes a while. `--site` lets you try a
+single site first.
+
 ## Judge and tag
 
 Claude vision decides which captured sites make it into Sqrap. Judging sends
@@ -1158,6 +1197,7 @@ after verifying the sqrap.com domain.
 - `scripts/discover.js`, `scripts/seed.js`: the discovery CLIs
 - `seeds.example.txt`: a starter list of well-designed sites
 - `data/`: local pipeline logs, and captures when there is no Blob token (git-ignored; `SQRAP_DATA_DIR` moves it)
+- `pipeline/dedupe.js`, `scripts/dedupe-sections.js`: the wrap and duplicate-section guards, and the backfill that fixes older captures (see Clean up wrapped captures)
 - `pipeline/agent-images.js`, `scripts/backfill-agent.js`: agent-sized image tiles, written by capture and backfilled for older captures
 - `scripts/import-sqlite.js`: one-off copy of an old SQLite library and its `data/shots` into Postgres and Blob
 - `pipeline/*.js`: the capture engine (browser, page prep, robots/opt-out checks, sections, subpage links); `scripts/capture.js` is its CLI
